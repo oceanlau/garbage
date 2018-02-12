@@ -37,7 +37,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
 -   [Data types](https://beginnersbook.com/2017/08/data-types-in-java/)
 
     -   `byte`, `short`, `int`, `long`: 1, 2, 4, 8 byte(s) length integer
-    -   `float` and `double`: 4, 8 byte(s) length decimal. Always suffix float value with the "f" else compiler will consider it as double
+    -   `float` and `double`: 4, 8 byte(s) length decimal(6/7 decimal digits, 15 decimal digits). Always suffix float value with the "f" else compiler will consider it as double
         ```java
         double num1 = 22.4;
         float num2 = 22.4f;
@@ -59,7 +59,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
     -   do-while loop
 
 -   Object-Oriented Programming
-    -   Inheritance: With `extends`. Multiple inheritance is not allowed in Java.
+    -   Inheritance: With `extends`. **Multiple inheritance is not allowed** in Java.
         ```java
         class A extends B
         {
@@ -86,7 +86,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         ```
         The class that inherits **must provide the implementation of all the abstract methods of parent class else declare the subclass as abstract**. These methods cannot be abstract: Constructors, Static methods, Private methods, Methods that are declared "final".
 
-    -   Abstract Class: An abstract class outlines the methods but not necessarily implements all the methods. Cannot be instantiated.
+    -   Abstract Class: An abstract class outlines the methods but not necessarily implements all the methods. **Cannot be instantiated.**
         ```java
         abstract class A{
             abstract void myMethod();
@@ -96,3 +96,24 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         }
         ```
         A class derived from the abstract base class must implement those methods that are not implemented(means they are abstract) in the abstract class.
+
+    -   Interface: With `interface`.
+        - Can contain only constants and abstract methods.
+        - Cannot be instantiated.
+        - Can only be implemented by classes or extended by other interfaces.
+        - Java does not support Multiple Inheritance, however a class can implement more than one interfaces.
+        - All methods in an interface are implicitly public and abstract. Using the keyword abstract before each method is optional.
+        - An interface may contain final variables.
+        - When a class implements an interface it has to give the definition of all the abstract methods of interface, else it can be declared as abstract class.
+        - An interface reference can point to objects of its implementing classes.
+        ```java
+        Interface Interface1 
+        {
+            String a;
+            void b();
+        }
+        //...
+        class ClassName extends Superclass implements Interface1, Interface2
+        ```
+
+    -   Access Specifiers: `public`/`private`/`protected`/Default(Package Level scope)
