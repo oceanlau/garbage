@@ -14,7 +14,7 @@ Pick any topic you want. But I would recommend (with bias :P):
 - For data scientists or anyone who wishes to learn AI (Trending): `Python` -> `Big Data` -> `Machine Learning`
 - For those who want to build a website: `LNMP`
 - For those who want to have some fun and see immediate feedback: `Frontend`
-- For students or those who wish to find jobs: `Java` -> `Algorithms`
+- For students or those who wish to find jobs: `Java` -> `LeetCode`
 - For architects: `PowerPoint`
 - For architects who want to write some code besides powerpoints: `C++` -> `Search Engine`/`Distributed Systems`
 
@@ -84,9 +84,10 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         ```java
         abstract public void playInstrument();
         ```
-        The class that inherits **must provide the implementation of all the abstract methods of parent class else declare the subclass as abstract**. These methods cannot be abstract: Constructors, Static methods, Private methods, Methods that are declared "final".
+        - The class that inherits **must provide the implementation of all the abstract methods of parent class else declare the subclass as abstract**.
+        - These methods cannot be abstract: Constructors, Static methods, Private methods, Methods that are declared "final".
 
-    -   Abstract Class: An abstract class outlines the methods but not necessarily implements all the methods. **Cannot be instantiated.**
+    -   Abstract Class: An abstract class outlines the methods but not necessarily implements all the methods.
         ```java
         abstract class A{
             abstract void myMethod();
@@ -95,17 +96,10 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
             }
         }
         ```
-        A class derived from the abstract base class must implement those methods that are not implemented(means they are abstract) in the abstract class.
+        - **Cannot be instantiated.**
+        - A class derived from the abstract base class must implement those methods that are not implemented(means they are abstract) in the abstract class.
 
     -   Interface: With `interface`.
-        - Can contain only constants and abstract methods.
-        - Cannot be instantiated.
-        - Can only be implemented by classes or extended by other interfaces.
-        - Java does not support Multiple Inheritance, however a class can implement more than one interfaces.
-        - All methods in an interface are implicitly public and abstract. Using the keyword abstract before each method is optional.
-        - An interface may contain final variables.
-        - When a class implements an interface it has to give the definition of all the abstract methods of interface, else it can be declared as abstract class.
-        - An interface reference can point to objects of its implementing classes.
         ```java
         Interface Interface1 
         {
@@ -115,5 +109,14 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         //...
         class ClassName extends Superclass implements Interface1, Interface2
         ```
+        
+        - Can contain only constants and abstract methods.
+        - Cannot be instantiated.
+        - Can only be implemented by classes or extended by other interfaces.
+        - Java does not support Multiple Inheritance, however a class can implement more than one interfaces.
+        - All methods in an interface are implicitly public and abstract. Using the keyword abstract before each method is optional.
+        - An interface may contain final variables.
+        - When a class implements an interface it has to give the definition of all the abstract methods of interface, else it can be declared as abstract class.
+        - An interface reference can point to objects of its implementing classes.
 
     -   Access Specifiers: `public`/`private`/`protected`/Default(Package Level scope)
