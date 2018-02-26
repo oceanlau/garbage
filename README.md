@@ -43,7 +43,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         float num2 = 22.4f;
         ```
     -   `char`: 2 bytes length 
-    -   `boolean`
+    -   `boolean`: `true` and `false` with lowercase initials
     -   Non-primitive: Arrays and Strings
 
 -   "Unique" Grammer
@@ -59,6 +59,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
     -   do-while loop
 
 -   Object-Oriented Programming
+    -   `this.`
     -   Inheritance: With `extends`. **Multiple inheritance is not allowed** in Java.
         ```java
         class A extends B
