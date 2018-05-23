@@ -38,29 +38,29 @@ A few tips and tools to boost development effectiveness.
 
     [.bashrc PS1 generator](http://bashrcgenerator.com) is a good site to create useful bash prompt style. My favourite:
 
-        ```Shell
-        function git-branch-name {
-            git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3
-        }
+    ```Shell
+    function git-branch-name {
+        git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3
+    }
 
-        function git-branch-prompt {
-            local branch=`git-branch-name`
-            if [ $branch ]; then printf " [%s]" $branch; fi
-        }
-        export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\]\w\[$(tput sgr0)\]\[\033[38;5;2m\]\$(git-branch-prompt)\[$(tput sgr0)\]\[\033[38;5;14m\]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
-        ```
+    function git-branch-prompt {
+        local branch=`git-branch-name`
+        if [ $branch ]; then printf " [%s]" $branch; fi
+    }
+    export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\]\w\[$(tput sgr0)\]\[\033[38;5;2m\]\$(git-branch-prompt)\[$(tput sgr0)\]\[\033[38;5;14m\]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+    ```
 
     And some useful aliases:
 
-        ```Shell
-        alias psgrep='ps -eo pid,lstart,cmd | grep -v grep | grep --color'
-        alias grep='grep --color'
-        alias zhcn='export LANG=zh_CN.GBK;export LC_ALL=zh_CN.GBK;export LC_CTYPE=zh_CN.GBK'
-        alias enus='export LANG=en_US.UTF-8;export LC_ALL=en_US.UTF-8;export LC_CTYPE=en_US.UTF-8'
-        alias ..='cd ..'
-        alias ...='cd ..; cd ..'
-        alias ....='cd ..; cd ..; cd ..'
-        ```
+    ```Shell
+    alias psgrep='ps -eo pid,lstart,cmd | grep -v grep | grep --color'
+    alias grep='grep --color'
+    alias zhcn='export LANG=zh_CN.GBK;export LC_ALL=zh_CN.GBK;export LC_CTYPE=zh_CN.GBK'
+    alias enus='export LANG=en_US.UTF-8;export LC_ALL=en_US.UTF-8;export LC_CTYPE=en_US.UTF-8'
+    alias ..='cd ..'
+    alias ...='cd ..; cd ..'
+    alias ....='cd ..; cd ..; cd ..'
+    ```
 
 -   Vim: I use [The Ultimate vimrc](https://github.com/amix/vimrc) with some personal settings in `~/.vim_runtime/vimrcs/my_configs.vim`:
 
