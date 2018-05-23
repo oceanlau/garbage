@@ -10,7 +10,7 @@ For those working in modern "Internet" companies, or "AI" companies if you are r
 
 ## Method
 
-Pick any topic you want. But I would recommend (with bias :P):
+Pick any topic you want. But I would recommend (with bias):
 - For data scientists or anyone who wishes to learn AI (Trending): `Python` -> `Big Data` -> `Machine Learning`
 - For those who want to build a website: `LNMP`
 - For those who want to have some fun and see immediate feedback: `Frontend`
@@ -19,6 +19,58 @@ Pick any topic you want. But I would recommend (with bias :P):
 - For architects who want to write some code besides powerpoints: `C++` -> `Search Engine`/`Distributed Systems`
 
 ## Basic
+
+### Effectiveness
+
+A few tips and tools to boost development effectiveness.
+
+-   Environment: Instead of working as root with too much power and too many folders, I prefer creating several linux users to seperately manage projects when I get my hands on a new machine. 
+
+    ```Shell
+    sudo adduser ocean
+    sudo passwd ocean
+    # Then add line `ocean ALL=(ALL) ALL` in `/etc/sudoers` to enable `sudo` command
+    ```
+
+    Next time log in as 'ocean' and start messing around.
+
+-   Command Line: The simplest way to improve command line usability is to modify the `~/.bashrc` file. Always add your working directory as aliases.
+
+    [.bashrc PS1 generator](http://bashrcgenerator.com) is a good site to create useful bash prompt style. My favourite:
+
+        ```Shell
+        function git-branch-name {
+            git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3
+        }
+
+        function git-branch-prompt {
+            local branch=`git-branch-name`
+            if [ $branch ]; then printf " [%s]" $branch; fi
+        }
+        export PS1="\[\033[38;5;11m\]\u\[$(tput sgr0)\]\[\033[38;5;15m\]@\h:\[$(tput sgr0)\]\[\033[38;5;6m\]\w\[$(tput sgr0)\]\[\033[38;5;2m\]\$(git-branch-prompt)\[$(tput sgr0)\]\[\033[38;5;14m\]:\[$(tput sgr0)\]\[\033[38;5;15m\] \[$(tput sgr0)\]"
+        ```
+
+    And some useful aliases:
+
+        ```Shell
+        alias psgrep='ps -eo pid,lstart,cmd | grep -v grep | grep --color'
+        alias grep='grep --color'
+        alias zhcn='export LANG=zh_CN.GBK;export LC_ALL=zh_CN.GBK;export LC_CTYPE=zh_CN.GBK'
+        alias enus='export LANG=en_US.UTF-8;export LC_ALL=en_US.UTF-8;export LC_CTYPE=en_US.UTF-8'
+        alias ..='cd ..'
+        alias ...='cd ..; cd ..'
+        alias ....='cd ..; cd ..; cd ..'
+        ```
+
+-   Vim: I use [The Ultimate vimrc](https://github.com/amix/vimrc) with some personal settings in `~/.vim_runtime/vimrcs/my_configs.vim`:
+
+    ```Shell
+    set gcr=a:blinkon0
+    set cursorline
+    set cuc
+    ```
+
+-   Samba/FTP
 
 ### Java
 
