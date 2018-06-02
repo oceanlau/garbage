@@ -72,6 +72,11 @@ A few tips and tools to boost development effectiveness.
 
 -   Samba/FTP
 
+
+### Version Control
+
+-   `.gitignore`: [https://github.com/github/gitignore](https://github.com/github/gitignore)
+
 ### Java
 
 Grasp Java Programming in a few days with [a simple online tutorial](https://beginnersbook.com/java-tutorial-for-beginners-with-examples/).
