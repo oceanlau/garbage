@@ -60,6 +60,9 @@ A few tips and tools to boost development effectiveness.
     alias ..='cd ..'
     alias ...='cd ..; cd ..'
     alias ....='cd ..; cd ..; cd ..'
+    alias l.='ls -d .* --color=auto'
+    alias ll='ls -l --color=auto'
+    alias ls='ls --color=auto'
     ```
 
 -   Vim: I use [The Ultimate vimrc](https://github.com/amix/vimrc) with some personal settings in `~/.vim_runtime/vimrcs/my_configs.vim`:
