@@ -34,7 +34,7 @@ A few tips and tools to boost development effectiveness.
 
     Next time log in as 'ocean' and start messing around.
 
--   Command Line: The simplest way to improve command line usability is to modify the `~/.bashrc` file. Always add your working directory as aliases.
+-   Command Line: The simplest way to improve command line usability is to modify the `~/.bashrc` file. Always add your working directory as aliases or use [bashmarks](https://github.com/huyng/bashmarks).
 
     [.bashrc PS1 generator](http://bashrcgenerator.com) is a good site to create useful bash prompt style. My favourite:
 
