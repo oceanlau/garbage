@@ -75,6 +75,13 @@ A few tips and tools to boost development effectiveness.
 
 -   Samba/FTP
 
+-   Useful Commands
+
+    ```Shell
+    df -h    # 整台机器硬盘使用情况
+    du -sh * # 当前目录每个文件大小
+    ```
+
 
 ### Version Control
 
