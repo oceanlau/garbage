@@ -69,14 +69,14 @@ public class Deque<Item> implements Iterable<Item> {
         if (this.isEmpty()) {
             throw new NoSuchElementException("deque is already empty.");
         }
-        Node oldfirst = this.first;
         Item item = this.first.item;
         this.first = this.first.next;
         this.size--;
-        if (!this.isEmpty()) {
+        if (this.isEmpty()) {
+            this.last = null;
+        } else {
             this.first.previous = null;
         }
-        oldfirst = null;
         return item;
     }
     public Item removeLast()                 // remove and return the item from the end
@@ -84,14 +84,14 @@ public class Deque<Item> implements Iterable<Item> {
         if (this.isEmpty()) {
             throw new NoSuchElementException("deque is already empty.");
         }
-        Node oldlast = this.last;
         Item item = this.last.item;
         this.last = this.last.previous;
         this.size--;
-        if (!this.isEmpty()) {
+        if (this.isEmpty()) {
+            this.first = null;
+        } else {
             this.last.next = null;
         }
-        oldlast = null;
         return item;
     }
     public Iterator<Item> iterator()         // return an iterator over items in order from front to end

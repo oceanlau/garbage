@@ -8,13 +8,18 @@ public class Permutation {
         int i = 0;
         int k = Integer.parseInt(args[0]);
         while (!StdIn.isEmpty()) {
-            if (i > 0) {
-                int dice = StdRandom.uniform(i);
-                if (dice <= k) {
-                    rq.enqueue(StdIn.readString());
+            String s = StdIn.readString();
+            if (k < 1) {
+                break;
+            }
+            if (i >= k) {
+                int dice = StdRandom.uniform(i + 1);
+                if (dice < k) {
+                    rq.dequeue();
+                    rq.enqueue(s);
                 }
-            } else if (k > 0) {
-                rq.enqueue(StdIn.readString());
+            } else {
+                rq.enqueue(s);
             }
             i++;
         }
