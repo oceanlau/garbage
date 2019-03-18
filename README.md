@@ -188,3 +188,7 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
         - An interface reference can point to objects of its implementing classes.
 
     -   Access Specifiers: `public`/`private`/`protected`/Default(Package Level scope)
+
+## C++
+
+-   string null terminated: [https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal](https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal)

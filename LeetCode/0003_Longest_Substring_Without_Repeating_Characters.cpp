@@ -7,6 +7,7 @@ public:
         int substring_left_pos = 0;
         int substring_right_pos = 0;
 
+        //TODO: bad way to find the end of string
         while (s[substring_right_pos] != '\0') {
             if (char_map.find(s[substring_right_pos]) != char_map.end()) {
                 current_length = substring_right_pos - substring_left_pos;
