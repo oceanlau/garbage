@@ -26,6 +26,53 @@ public:
     }
 };
 
+// cached 
+class Solution {
+public:
+    
+    bool isMatch(string s, string p) {
+        _s = s;
+        _p = p;
+        unsigned s_len = s.length();
+        unsigned p_len = p.length();
+        _dp.resize(s_len+1, vector<short>(p_len+1, -1));    
+        _dp[s_len][p_len] = 1;
+        
+        return _getDp(0, 0) == 1;
+    }
+    
+private:
+    string _s;
+    string _p;
+    vector<vector<short>> _dp;
+    short _getDp(unsigned i, unsigned j) {
+        if (_dp[i][j] != -1) {
+            return _dp[i][j];
+        }
+        
+        if (j > _p.length() - 2) {
+            if (_s.length() - i == _p.length() - j && (_s[i] == _p[j] || '.' == _p[j])) {
+                _dp[i][j] = 1;
+                
+            } else {
+                _dp[i][j] = 0;
+            }
+            return _dp[i][j];
+        } else if ('*' == _p[j+1]) {
+            if (i != _s.length() && (_s[i] == _p[j] || '.' == _p[j])) {
+                return _getDp(i+1, j) || _getDp(i, j+2);
+            }
+            return _getDp(i, j+2);
+        } else {
+            if (i != _s.length() && (_s[i] == _p[j] || '.' == _p[j])) {
+                return _getDp(i+1, j+1);
+            }
+            _dp[i][j] = 0;
+            return _dp[i][j];
+        }
+    }
+};
+
 // mistake, partial matching is not allowed
 class Solution {
 public:
