@@ -16,7 +16,7 @@ Pick any topic you want. But I would recommend (with bias):
 - For those who want to have some fun and see immediate feedback: `Frontend`
 - For students or those who wish to find jobs: `Java` -> `LeetCode`
 - For architects: `PowerPoint`
-- For architects who want to write some code besides powerpoints: `C++` -> `Search Engine`/`Distributed Systems`
+- For architects who want to write some real code besides PowerPoints: `C++`/`Java` -> `Search Engine`/`Distributed Systems`
 
 ## Basic
 
@@ -24,7 +24,7 @@ Pick any topic you want. But I would recommend (with bias):
 
 A few tips and tools to boost development effectiveness.
 
--   Environment: Instead of working as root with too much power and too many folders, I prefer creating several linux users to seperately manage projects when I get my hands on a new machine. 
+-   Environment: Instead of working as root with too much privilege and too many folders, I prefer creating several linux users to seperately manage projects when I get my hands on a new machine. 
 
     ```Shell
     sudo adduser ocean
@@ -191,4 +191,10 @@ Grasp Java Programming in a few days with [a simple online tutorial](https://beg
 
 ## C++
 
--   string null terminated: [https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal](https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal)
+Also, start with any tutorial [like this one from cplusplus.com](http://www.cplusplus.com/doc/tutorial/). But you should realize that C++ IS HARD, because it's both old and powerful.
+
+-   Useful tips:
+    -   string null terminated: [https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal](https://stackoverflow.com/questions/4711449/what-does-the-symbol-0-mean-in-a-string-literal)
+    -   Many ways to loop on every character of a string: [https://stackoverflow.com/questions/9438209/for-every-character-in-string](https://stackoverflow.com/questions/9438209/for-every-character-in-string)
+    -   Various way to init a 2D array: [https://www.techiedelight.com/initialize-two-dimensional-vector-cpp/](https://www.techiedelight.com/initialize-two-dimensional-vector-cpp/)
+    -   String to int: [https://stackoverflow.com/questions/16826422/c-most-efficient-way-to-convert-string-to-int-faster-than-atoi](https://stackoverflow.com/questions/16826422/c-most-efficient-way-to-convert-string-to-int-faster-than-atoi), [https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c](https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c)
