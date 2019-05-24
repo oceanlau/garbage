@@ -42,3 +42,41 @@ public:
         return h;
     }
 };
+
+// Improve With Priority Queue
+
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<ListNode*, vector<ListNode*>, Compare> q;
+        
+        for (ListNode*& l : lists) {
+            if (l) {
+                q.push(l);
+            }
+        }
+        
+        ListNode* loop = NULL;
+        ListNode* h = NULL;
+        while (!q.empty()) {
+            if (h == NULL) {
+                loop = q.top();
+                h = loop;
+            } else {
+                loop->next = q.top();
+                loop = loop->next;
+            }
+            q.pop();
+            if (loop->next != NULL) {
+                q.push(loop->next);
+            }
+        }
+        return h;
+    }
+private:
+    struct Compare {
+        bool operator()(ListNode* & lhs, ListNode* & rhs) {
+            return lhs->val > rhs->val;
+        }
+    };
+};
