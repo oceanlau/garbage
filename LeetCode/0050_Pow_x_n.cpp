@@ -1,3 +1,47 @@
+//mem 8.3m
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if (n < 0) {
+            x = 1/x;
+            if (n == INT_MIN) {
+                n = - (n + 1);
+                return x * myPow(x, n);
+            }
+            n = -n;
+        } else if (n == 0) {
+            return 1;
+        }
+        
+        return n % 2 ? x * myPow(x, n-1) : myPow(x*x, n/2);
+    }
+};
+
+//mem 8.4m
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if (n < 0) {
+            x = 1/x;
+            if (n == INT_MIN) {
+                n = - (n + 1);
+                return x * myPow(x, n);
+            }
+            n = -n;
+        } else if (n == 0) {
+            return 1;
+        }
+        
+        if (n % 2) {
+            return x * myPow(x, n-1);
+        } else {
+            double tmp = myPow(x, n/2);
+            return tmp * tmp;
+        }
+    }
+};
+
+//mem 9.8m
 class Solution {
 private:
     double _x;
