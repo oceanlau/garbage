@@ -1,3 +1,50 @@
+// 80% 44%
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if (nums.size() == 0) {
+            return -1;
+        }
+        //binary search with 4 scene
+        //let last one be pivot
+        int pivot = nums[nums.size() - 1];
+        if (target == pivot) {
+            return nums.size() - 1;
+        }
+        int i = 0;
+        int j = nums.size() - 1;
+        while (i + 1 < j) {
+            int m = i + (j - i) / 2;
+            if (nums[m] == target) {
+                return m;
+            } else if (nums[m] > target && target > pivot) {
+                //larger than target, target larger than pivot, left side
+                j = m;
+            } else if ((nums[m] > target && target < pivot) || (nums[m] < target && target > pivot)) {
+                //larger than target, target smaller than pivot, if larger than pivot, right, if smaller, left
+                //smaller than target, target larger than pivot, if larget than pivot, right, if smaller, left
+                // since no deuplicate, otherwise?
+                if (nums[m] > pivot) {
+                    i = m;
+                } else {
+                    j = m;
+                }
+            //} else if (ums[m] < target && target < pivot){
+            } else {
+                //smaller than target, target smaller than pivot, right side
+                i = m;
+            }
+        }
+        if (nums[i] == target) {
+            return i;
+        } else if (nums[j] == target) {
+            return j;
+        } else {
+            return -1;
+        }
+    }
+};
+
 class Solution {
 private:
     int _find(const vector<int>& nums, int pivot, int left, int right, int target) {
