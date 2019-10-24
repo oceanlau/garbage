@@ -1,3 +1,62 @@
+// 60% 95%
+class Solution {
+public:
+    bool search(vector<int>& nums, int target) {
+        if (nums.size() == 0) {
+            return false;
+        }
+        //binary search with 4 scene
+        //let last one be pivot
+        int pivot = nums[nums.size() - 1];
+        if (target == pivot) {
+            return true;
+        }
+        int i = 0;
+        int j = nums.size() - 1;
+        if (i + 1 < j) {
+            //Avoid left == right == mid case. Break left == right equality
+            j --;
+            while (i + 1 < j && nums[j] == nums[j+1]) {
+                j --;
+            }
+            pivot = nums[j];
+            if (target == pivot) {
+                return true;
+            }
+            while (i + 1 < j) {
+                int m = i + (j - i) / 2;
+                if (nums[m] == target) {
+                    return true;
+                } else if (nums[m] > target && target > pivot) {
+                    //larger than target, target larger than pivot, left side
+                    j = m;
+                } else if ((nums[m] > target && target < pivot) || (nums[m] < target && target > pivot)) {
+                    //larger than target, target smaller than pivot, if larger than pivot, right, if smaller, left
+                    //smaller than target, target larger than pivot, if larget than pivot, right, if smaller, left
+                    // since no deuplicate, otherwise?
+                    if (nums[m] > pivot) {
+                        i = m;
+                    } else {
+                        j = m;
+                    }
+                //} else if (ums[m] < target && target < pivot){
+                } else {
+                    //smaller than target, target smaller than pivot, right side
+                    i = m;
+                }
+            }
+        }
+        
+        if (nums[i] == target) {
+            return true;
+        } else if (nums[j] == target) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+};
+
 //60% 60%
 class Solution {
 private:
