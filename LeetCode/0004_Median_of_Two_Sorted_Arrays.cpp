@@ -1,3 +1,118 @@
+// Much cleaner. 90% 100%
+class Solution {
+private:
+    int _find(vector<int>& nums1, vector<int>& nums2, int start1, int start2, int k) {
+        while(true) {
+            // When? [[2],[1,3,4,5,6]]
+            if (start1 >= nums1.size()) {
+                // suppose k == 1, just look for the starter element
+                return nums2[start2 + k - 1];
+            }
+            if (start2 >= nums2.size()) {
+                return nums1[start1 + k - 1];
+            }
+            if (k == 1) {
+                return min(nums1[start1], nums2[start2]);
+            }
+            //Careful here. When k <= 3, each should contribute only 1 (starter) element.
+            int guess1 = start1 + k/2 - 1;
+            int guess2 = start2 + k/2 - 1;
+            if (guess2 >= nums2.size() || (guess1 < nums1.size() && nums1[guess1] < nums2[guess2])) {
+                // skip k/2 element, when k <= 3, skip starter
+                start1 += k/2;
+            } else {
+                start2 += k/2;
+            }
+            k -= k/2;
+        }
+    }
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int s1 = nums1.size();
+        int s2 = nums2.size();
+        int s = s1 + s2;
+        if (s % 2 == 1) {
+            return _find(nums1, nums2, 0, 0, s/2 + 1);
+        } else {
+            return (_find(nums1, nums2, 0, 0, s/2) + _find(nums1, nums2, 0, 0, s/2 + 1)) / 2.0;
+        }
+    }
+};
+
+// 40% 40%, too complicated
+class Solution {
+private:
+    vector<int> _findkth(vector<int>& nums1, vector<int>& nums2, int start1, int start2, int kth) {
+        //Much simpler if kth start with 1!
+        if (start1 >= nums1.size()) {
+            return vector<int> {-1, start2 + kth};
+        }
+        if (start2 >= nums2.size()) {
+            return vector<int> {start1 + kth, -1};
+        }
+        if (kth == 0) {
+            return vector<int> {start1, start2};
+        }
+        int guess1 = start1 + kth / 2;
+        int guess2 = start2 + kth / 2;
+        //Careful! Boundry case
+        if (guess2 >= nums2.size() || (guess1 < nums1.size() && nums1[guess1] < nums2[guess2])) {
+            //Careful! At least get rid of one result
+            //Cant use guess1+1 for all. May skip the correct answer ([1], [2,3,4,5])
+            if (kth / 2 == 0) {
+                return _findkth(nums1, nums2, guess1 + 1, start2, kth - 1);
+            } else {
+                return _findkth(nums1, nums2, guess1, start2, kth - kth / 2);
+            }
+        } else {
+            if (kth / 2 == 0) {
+                return _findkth(nums1, nums2, start1, guess2 + 1, kth - 1);
+            } else {
+                return _findkth(nums1, nums2, start1, guess2, kth - kth / 2);
+            }
+        }
+    }
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int s1 = nums1.size();
+        int s2 = nums2.size();
+        int s = s1 + s2;
+        vector<int> target_indexes;
+        if (s % 2 == 1) {
+            target_indexes = _findkth(nums1, nums2, 0, 0, s / 2);
+            if (target_indexes[0] == -1) {
+                return nums2[target_indexes[1]];
+            } else if (target_indexes[1] == -1) {
+                return nums1[target_indexes[0]];
+            } else {
+                return min(nums1[target_indexes[0]], nums2[target_indexes[1]]);
+            }
+        } else {
+            target_indexes = _findkth(nums1, nums2, 0, 0, s / 2 - 1);
+            if (target_indexes[0] == -1) {
+                // To get a double arithmetic result. At least one of the ints must be explicitly casted to a double.
+                return (nums2[target_indexes[1]] + nums2[target_indexes[1] + 1]) / 2.0;
+            } else if (target_indexes[1] == -1) {
+                return (nums1[target_indexes[0]] + nums1[target_indexes[0] + 1]) / 2.0;
+            } else if (nums1[target_indexes[0]] == min(nums1[target_indexes[0]], nums2[target_indexes[1]])){
+                if (target_indexes[0] + 1 >= nums1.size()) {
+                    return (nums1[target_indexes[0]] + nums2[target_indexes[1]]) / 2.0;
+                } else {
+                    return (nums1[target_indexes[0]] + min(nums1[target_indexes[0] + 1], nums2[target_indexes[1]])) / 2.0;
+                }
+            } else {
+                if (target_indexes[1] + 1 >= nums2.size()) {
+                    return (nums2[target_indexes[1]] + nums1[target_indexes[0]]) / 2.0;
+                } else {
+                    return (nums2[target_indexes[1]] + min(nums1[target_indexes[0]], nums2[target_indexes[1] + 1])) / 2.0;
+                }
+                
+            }
+        }
+    }
+};
+
+
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
