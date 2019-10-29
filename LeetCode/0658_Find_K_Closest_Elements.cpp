@@ -31,6 +31,7 @@ public:
         int j = idx + 1;
         // if j-idx < idx-i, push j, j++. else push i, i-- until j-i == k or k-1
         // k always smaller than length of the array. One less edge to worry about.
+        // i j idx not included!
         while (j - i <= k) {
             if (i < 0) {
                 j ++;

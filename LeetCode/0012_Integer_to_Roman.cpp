@@ -1,3 +1,44 @@
+// 7% 36%
+class Solution {
+private:
+    vector<vector<char>> _roman = {
+        {'I', 'V', 'X'},
+        {'X', 'L', 'C'},
+        {'C', 'D', 'M'},
+        {'M', 'M', 'M'}
+    };
+    
+    string _build (int input, int lvl) {
+        stringstream ss;
+        if (input == 4) {
+            ss << _roman[lvl][0] << _roman[lvl][1];
+        } else if (input == 9) {
+            ss << _roman[lvl][0] << _roman[lvl][2];
+        } else {
+            if (input >= 5) {
+                ss << _roman[lvl][1];
+                input -= 5;
+            }
+            while (input > 0) {
+                ss << _roman[lvl][0];
+                input--;
+            }
+        }
+        return ss.str();
+    }
+    
+public:
+    string intToRoman(int num) {
+        string s = "";
+        int lvl = 0;
+        while (num != 0) {
+            s = _build(num % 10, lvl++) + s;
+            num /= 10;
+        }
+        return s;
+    }
+};
+
 class Solution {
 public:
     string intToRoman(int num) {

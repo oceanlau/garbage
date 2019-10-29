@@ -1,3 +1,105 @@
+//43% 35%
+class LRUCache {
+private:
+    list<pair<int, int>> _cache_val;
+    unordered_map<int, list<pair<int, int>>::iterator> _cache_map;
+    int _capacity;
+    int _current = 0;
+public:
+    LRUCache(int capacity) {
+        _capacity = capacity;
+    }
+    
+    int get(int key) {
+        if (_cache_map.find(key) != _cache_map.end()) {
+            //_cache_val.splice(_cache_val.begin(), _cache_val, _cache_map[key]);// smart way
+            // normal way:
+            pair<int, int> cache_item {_cache_map[key]->first, _cache_map[key]->second};
+            _cache_val.erase(_cache_map[key]);
+            _cache_val.push_front(cache_item);
+            //Dont forget to reassign map! Otherwise get heap-use-after-free
+            _cache_map[key] = _cache_val.begin();
+            return cache_item.second;
+        } else {
+            return -1;
+        }
+    }
+    
+    void put(int key, int value) {
+        if (_cache_map.find(key) != _cache_map.end()) {
+            _cache_map[key]->second = value;
+            //_cache_val.splice(_cache_val.begin(), _cache_val, _cache_map[key]);// smart way
+            // normal way:
+            pair<int, int> cache_item {_cache_map[key]->first, _cache_map[key]->second};
+            _cache_val.erase(_cache_map[key]);
+            _cache_val.push_front(cache_item);
+            //Dont forget to reassign map! Otherwise get heap-use-after-free
+            _cache_map[key] = _cache_val.begin();
+        } else {
+            if (_current >= _capacity) {
+                _cache_map.erase(_cache_val.back().first);
+                _cache_val.pop_back();
+            } else {
+                _current ++;
+            }
+            _cache_val.push_front(pair<int, int> {key, value});
+            _cache_map[key] = _cache_val.begin();
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
+//95% 90
+class LRUCache {
+private:
+    list<pair<int, int>> _cache_val;
+    unordered_map<int, list<pair<int, int>>::iterator> _cache_map;
+    int _capacity;
+    int _current = 0;
+public:
+    LRUCache(int capacity) {
+        _capacity = capacity;
+    }
+    
+    int get(int key) {
+        if (_cache_map.find(key) != _cache_map.end()) {
+            _cache_val.splice(_cache_val.begin(), _cache_val, _cache_map[key]);// smart way
+            return _cache_map[key]->second;
+        } else {
+            return -1;
+        }
+    }
+    
+    void put(int key, int value) {
+        if (_cache_map.find(key) != _cache_map.end()) {
+            _cache_map[key]->second = value;
+            _cache_val.splice(_cache_val.begin(), _cache_val, _cache_map[key]);// smart way
+        } else {
+            if (_current >= _capacity) {
+                _cache_map.erase(_cache_val.back().first);
+                _cache_val.pop_back();
+            } else {
+                _current ++;
+            }
+            _cache_val.push_front(pair<int, int> {key, value});
+            _cache_map[key] = _cache_val.begin();
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
 // Remember the usage of std::pair/std::list/std::unordered_map
 // std::list
 //     with std::pair
