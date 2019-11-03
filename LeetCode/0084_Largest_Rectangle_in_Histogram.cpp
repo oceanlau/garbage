@@ -1,3 +1,30 @@
+//stack, 87% 53%
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        int largest = 0;
+        stack<int> ascend;
+        heights.push_back(0);
+        for (int i = 0; i < heights.size(); i++) {
+            while (!ascend.empty() && heights[i] < heights[ascend.top()]) {
+                int candidate_pos = ascend.top();
+                ascend.pop();
+                int width = 0;
+                // Tricky here! Think of i as the left btm corner pos of the pillar
+                if (ascend.empty()) {
+                    width = i;
+                } else {
+                    // The ascend.top() one doesnt really count
+                    width = i - ascend.top() - 1;
+                }
+                largest = max(largest, width * heights[candidate_pos]);
+            }
+            ascend.push(i);
+        }
+        return largest;
+    }
+};
+
 //stack, 51% 69%
 class Solution {
 public:
