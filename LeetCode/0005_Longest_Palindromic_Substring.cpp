@@ -1,3 +1,44 @@
+//45% 13%
+class Solution {
+private:
+    vector<int> _expand(string s, int i, int l, int r) {
+        vector<int> longest{i, l};//l is init len by coincidence
+        for (int d = 0; d < s.length(); d++) {
+            if (i - (l + d) < 0) {
+                break;
+            }
+            if (i + (r + d) >= s.length()) {
+                break;
+            }
+            if (s[i - (l + d)] != s[i + (r + d)]) {
+                break;
+            }
+            longest[0] = i - (l + d);
+            longest[1] = l + r + 2*d + 1;
+        }
+        return longest;
+    }
+public:
+    string longestPalindrome(string s) {
+        if (s.length() == 0) {
+            return "";
+        }
+        vector<int> longest(2, 0);
+        for (int i = 0; i < s.length(); i++) {
+            vector<int> longest_odd = _expand(s, i, 1, 1);
+            vector<int> longest_even = _expand(s, i, 0, 1);
+            if (longest_odd[1] > longest_even[1]) {
+                if (longest_odd[1] > longest[1]) {
+                    longest = longest_odd;
+                }
+            } else if (longest_even[1] > longest[1]){
+                longest = longest_even;
+            }
+        }
+        return s.substr(longest[0], longest[1]);
+    }
+};
+
 // Solution 1: intuitive
 class Solution {
 public:

@@ -1,3 +1,42 @@
+//copied....
+class Solution {
+public:
+    int calculate(string s) {
+        stack<int> nums;
+        int num = 0;
+        char last_sign = '+';
+        for (int i = 0 ; i < s.length(); i++) {
+            char c = s[i];
+            if (isdigit(c)) {
+                num = num*10 + (c - '0');
+            }
+            if (i == s.length() - 1 || (!isdigit(c) && c != ' ')) {
+                if (last_sign == '+') {
+                    nums.push(num);
+                } else if (last_sign == '-') {
+                    nums.push(-num);
+                } else {
+                    if (last_sign == '*') {
+                        num = nums.top() * num;
+                    } else {
+                        num = nums.top() / num;
+                    }
+                    nums.pop();
+                    nums.push(num);
+                }
+                last_sign = c;
+                num = 0;
+            }
+            
+        }
+        int sum = 0;
+        while (!nums.empty()) {
+            sum += nums.top();
+            nums.pop();
+        }
+        return sum;
+    }
+};
 //unclean code 99% 82%, inorder read
 class Solution {
 public:

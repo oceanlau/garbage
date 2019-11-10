@@ -1,3 +1,39 @@
+//
+class Solution {
+public:
+    int calculate(string s) {
+        int result = 0;
+        int cur = 0;
+        int sign = 1;
+        stack<int> ops;
+        for (const char c : s) {
+            if (isdigit(c)) {
+                cur = cur*10 + (c - '0');
+            } else {
+                result += sign*cur;
+                cur = 0;
+                if (c == '+') {
+                    sign = 1;
+                } else if (c == '-') {
+                    sign = -1;
+                } else if (c == '(') {
+                    ops.push(result);
+                    ops.push(sign);
+                    result = 0;
+                    sign = 1;
+                } else if (c == ')') {
+                    result = ops.top() * result;
+                    ops.pop();
+                    result += ops.top();
+                    ops.pop();
+                }
+            }
+        }
+        result += sign*cur;
+        return result;
+    }
+};
+
 // reverse processing. Also avoid -1->-4 trick. The sum could be negative!
 class Solution {
 public:

@@ -9,6 +9,47 @@
 class Solution {
 public:
     ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+        ListNode* head = NULL;
+        ListNode* cur = NULL;
+        while(l1 != NULL || l2 != NULL) {
+            if (l1 == NULL || (l1 != NULL && l2 != NULL && l2->val < l1->val)) {
+                if (head == NULL) {
+                    head = l2;
+                    cur = head;
+                } else {
+                    cur->next = l2;
+                    cur = cur->next;
+                }
+                l2 = l2->next;
+            } else {
+                if (head == NULL) {
+                    head = l1;
+                    cur = head;
+                } else {
+                    cur->next = l1;
+                    cur = cur->next;
+                }
+                l1 = l1->next;
+            } 
+        }
+        if (cur != NULL) {
+            cur->next = NULL;
+        }
+        return head;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
         // error without NULL
         ListNode* h = NULL;
         ListNode* loop = NULL;
