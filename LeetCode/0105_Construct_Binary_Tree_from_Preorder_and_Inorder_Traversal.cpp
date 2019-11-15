@@ -1,3 +1,40 @@
+//92% 23%
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    int _build(TreeNode*& node, vector<int>& preorder, int p_idx, vector<int>& inorder, int i_start, int i_end) {
+        if (p_idx >= preorder.size()) {
+            return p_idx;
+        }
+        int pivot_val = preorder[p_idx++];
+        node = new TreeNode(pivot_val);
+        auto it = find(inorder.begin() + i_start, inorder.begin() + i_end + 1, pivot_val);
+        int pivot_pos = it - inorder.begin();
+        if (pivot_pos > i_start) {
+            p_idx = _build(node->left, preorder, p_idx, inorder, i_start, pivot_pos - 1);
+        }
+        if (pivot_pos < i_end) {
+            p_idx = _build(node->right, preorder, p_idx, inorder, pivot_pos + 1, i_end);
+        }
+        //Careful
+        return p_idx;
+    }
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        TreeNode* root = NULL;
+        _build(root, preorder, 0, inorder, 0, inorder.size() - 1);
+        return root;
+    }
+};
+
 // 80% 95%
 /**
  * Definition for a binary tree node.

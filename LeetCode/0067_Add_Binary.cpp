@@ -1,3 +1,40 @@
+//80% 83%
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int carry = 0;
+        if (a.length() < b.length()) {
+            swap(a, b);
+        }
+        for (int i = a.length() - 1, j = b.length() - 1; i >= 0 || j >= 0; i--, j--) {
+            int sum = 0;
+            if (i >= 0 && a[i] == '1') {
+                sum += 1;
+            }
+            if (j >= 0 && b[j] == '1') {
+                sum += 1;
+            }
+            sum += carry;
+            if (sum == 3) {
+                carry = 1;
+                a[i] = '1';
+            } else if (sum == 2) {
+                carry = 1;
+                a[i] = '0';
+            } else if (sum == 1) {
+                carry = 0;
+                a[i] = '1';
+            } else {
+                carry = 0;
+                a[i] = '0';
+            }
+        }
+        if (carry) {
+            a = '1' + a;
+        }
+        return a;
+    }
+};
 class Solution {
 public:
     string addBinary(string a, string b) {
