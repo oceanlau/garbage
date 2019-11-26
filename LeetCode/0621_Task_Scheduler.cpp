@@ -1,3 +1,34 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        //max freq task first:
+        //A -- n -- A -- n -- A B
+        //countOfMaxFreq + countOfTaskTypeWithSameMaxFreq +
+        //max( (countOfMaxFreq-1)*n, remainingTaskCount ) // include other taskTypeWithSameMaxFreq, -1 each
+        unordered_map<char, int> taskFreq;
+        int maxFreq = 0;
+        char taskWithMaxFreq;
+        for(const char task : tasks) {
+            if (++taskFreq[task] > maxFreq) {
+                maxFreq = taskFreq[task];
+                taskWithMaxFreq = task;
+            }
+        }
+        taskFreq[taskWithMaxFreq] = 0;
+        int sameMaxFreq = 0;
+        int remaining = 0;
+        for(auto kv : taskFreq) {
+            if (kv.second == maxFreq) {
+                sameMaxFreq++;
+                remaining += (kv.second - 1);
+            } else {
+                remaining += kv.second;
+            }
+        }
+        return maxFreq + sameMaxFreq + max( (maxFreq - 1) * n, remaining );
+    }
+};
+
 //speed2, no faster than speed 1
 class Solution {
 public:
