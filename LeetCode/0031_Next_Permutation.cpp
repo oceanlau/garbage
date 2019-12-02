@@ -1,6 +1,32 @@
 class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
+        int target = -1;
+        for (int i = nums.size() - 1; i > 0; i--) {
+            if (nums[i - 1] < nums[i]) {
+                target = i - 1;
+                break;
+            }
+        }
+        if (target == -1) {
+            reverse(nums.begin(), nums.end());
+            return;
+        }
+        for (int i = nums.size() - 1; i > target; i--) {
+            if (nums[i]  > nums[target]) {
+                swap(nums[i], nums[target]);
+                break;
+            }
+        }
+        reverse(nums.begin() + target + 1, nums.end());
+        return;
+        
+    }
+};
+
+class Solution {
+public:
+    void nextPermutation(vector<int>& nums) {
         int n = nums.size() - 1;
         if (n <= 0) {
             return;

@@ -1,3 +1,40 @@
+class Solution {
+private:
+    int partition(vector<vector<int>>& points, int l, int r) {
+        int p_val = points[r][0] * points[r][0] + points[r][1] * points[r][1];
+        int pivot = l;
+        for (int i = l; i < r; i++) {
+            if (points[i][0] * points[i][0] + points[i][1] * points[i][1] <= p_val) {
+                swap(points[pivot], points[i]);
+                pivot ++;
+            }
+        }
+        swap(points[pivot], points[r]);
+        return pivot;
+    }
+public:
+    vector<vector<int>> kClosest(vector<vector<int>>& points, int K) {
+        if (K <= 0) {
+            return {};
+        }
+        if (K >= points.size()) {
+            return points;
+        }
+        int l = 0;
+        int r = points.size() - 1;
+        while (r > l) {
+            int idx = partition(points, l, r);
+            if (idx + 1 == K) {
+                return vector<vector<int>> (points.begin(), points.begin() + K);
+            } else if (idx + 1 < K) {
+                l = idx + 1;
+            } else {
+                r = idx - 1;
+            }
+        }
+        return vector<vector<int>> (points.begin(), points.begin() + K);
+    }
+};
 // 49% 95%
 class Solution {
 public:
