@@ -1,3 +1,27 @@
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
+        // walk through all meetings, push each into min heap (by end time)
+        // compare each start time with end times in heap. clear all previous meetings
+        // max heap size is the answer
+        priority_queue<int> endtimes;
+        int ans = 0;
+        for (int i = 0; i < intervals.size(); i++) {
+            while (!endtimes.empty()) {
+                if (-endtimes.top() <= intervals[i][0]) {
+                    endtimes.pop();
+                } else {
+                    break;
+                }
+            }
+            endtimes.push(-intervals[i][1]);
+            ans = max(ans, (int)endtimes.size());
+        }
+        return ans;
+    }
+};
+
 // PQ of next available end time 75% 100%
 class Solution {
 public:

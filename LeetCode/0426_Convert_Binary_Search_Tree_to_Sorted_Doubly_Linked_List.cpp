@@ -1,3 +1,58 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+        left = NULL;
+        right = NULL;
+    }
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
+class Solution {
+private:
+    void _dfs(Node* node, Node*& DLL_root, Node*& DLL_last) {
+        if (node->left) {
+            _dfs(node->left, DLL_root, DLL_last);
+        }
+        if (DLL_root == NULL) {
+            DLL_root = node;
+        }
+        if (DLL_last) {
+            DLL_last->right = node;
+            node->left = DLL_last;
+        }
+        DLL_last = node;
+        if (node->right) {
+            _dfs(node->right, DLL_root, DLL_last);
+        }
+    }
+public:
+    Node* treeToDoublyList(Node* root) {
+        if (root == NULL) {
+            return NULL;
+        }
+        Node* DLL_root = NULL;
+        Node* DLL_last = NULL;
+        _dfs(root, DLL_root, DLL_last);
+        DLL_root->left = DLL_last;
+        DLL_last->right = DLL_root;
+        return DLL_root;
+    }
+};
+
 //60% 10%
 /*
 // Definition for a Node.
