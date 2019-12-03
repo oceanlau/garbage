@@ -1,3 +1,46 @@
+//86% 97%
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        // BFS, so no loop, also make sure it is shortest (early stopping)
+        // try each char at every BFS step
+        unordered_set<string> candidates(wordList.begin(), wordList.end());//O(n)
+        if (!candidates.count(endWord)) {
+            return 0;
+        }
+        queue<string> nodes;
+        nodes.push(beginWord);
+        int steps = 0;
+        // O(n)
+        while (!nodes.empty()) {
+            steps ++;
+            int nodes_size = nodes.size();
+            while (nodes_size > 0) {
+                string candidate = nodes.front();
+                if (candidate == endWord) {
+                    return steps;
+                }
+                nodes.pop();
+                for (int i = 0; i < candidate.length(); i++) { // O(str_len)
+                    string tmp = candidate;
+                    char c = 'a';
+                    while (c <= 'z') { //O(26)
+                        tmp[i] = c;
+                        if (candidates.count(tmp)) {
+                            nodes.push(tmp);
+                            candidates.erase(tmp);
+                        }
+                        c ++;
+                    }
+                }
+                nodes_size --;
+            }
+        }
+        return 0;
+        
+    }
+};
+
 // Use candidate instead of blacklist. 1 Less find. 5% 43%
 class Solution {
 public:
