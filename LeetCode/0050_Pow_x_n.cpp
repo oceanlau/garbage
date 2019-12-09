@@ -1,3 +1,51 @@
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if (n < 0) {
+            n = -(n + 1);
+            return myPow(1/x, n) / x;
+        }
+        if (n == 0) {
+            return 1;
+        }
+        double result = 1;
+        while (n) {
+            if (n % 2) {
+                result *= x;
+            }
+            x *= x;
+            n /= 2;
+        }
+        return result;
+    }
+};
+
+class Solution {
+public:
+    double myPow(double x, int n) {
+        if (x == 0) {
+            return 0;
+        }
+        if (n < 0) {
+            // in case it is INT_MIN
+            n = -(n + 1);
+            return myPow(1/x, n) / x;
+        }
+        if (n == 0) {
+            return 1;
+        }
+        if (n == 1) {
+            return x;
+        }
+        double half = myPow(x, n/2);
+        if (n % 2) {
+            return x * half * half;
+        } else {
+            return half * half;
+        }
+    }
+};
+
 //mem 8.3m
 class Solution {
 public:

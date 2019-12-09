@@ -1,3 +1,25 @@
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        // 像sliding window
+        // 用map记录char index
+        // 每一步，先更新start位置为max(start, map[s[i]])，再更新max_len
+        // 注意，为了算第一个char， start要从-1开始
+        int max_len = 0;
+        int start = -1;
+        unordered_map<char, int> loc;
+        for (int i = 0; i < s.length(); i++) {
+            if (loc.count(s[i])) {
+                start = max(start, loc[s[i]]);
+            }
+            loc[s[i]] = i;
+            max_len = max(max_len, i - start);
+        }
+        return max_len;
+    }
+};
+
 class Solution {
 public:
     int lengthOfLongestSubstring(string s) {

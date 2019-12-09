@@ -1,3 +1,17 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        unordered_map<int, int> loc;
+        for (int i = 0; i < nums.size(); i++) {
+            if (loc.count(target - nums[i])) {
+                return {loc[target-nums[i]], i};
+            }
+            loc[nums[i]] = i;
+        }
+        return {};
+    }
+};
+
 /*
  * Solution 1: HashMap
  * Solution 2: Sort

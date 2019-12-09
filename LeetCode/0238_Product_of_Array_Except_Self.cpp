@@ -1,6 +1,33 @@
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
+        vector<int> products (nums.size(), 1);
+        vector<int> res (nums.size(), 1);
+        for (int i = 0; i < nums.size(); i++){
+            if (i == 0) {
+                products[i] = nums[i];
+            } else {
+                products[i] = products[i-1] * nums[i];
+            }
+        }
+        for (int i = nums.size() - 1; i >= 0; i--) {
+            if (i == nums.size() - 1) {
+                res[i] = products[i - 1];
+                products[i] = nums[i];
+            } else if (i == 0) {
+                res[i] = products[i + 1];
+            } else {
+                products[i] = products[i+1] * nums[i];
+                res[i] = products[i - 1] * products[i + 1];
+            }
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
         if (nums.size() == 1) {
             return {0};
         }
