@@ -1,3 +1,56 @@
+class LRUCache {
+private:
+    int _capacity;
+    unordered_map<int, list<pair<int, int>>::iterator> _map; // k to list item
+    list<pair<int, int>> _storage; // list of pairs of kv
+public:
+    LRUCache(int capacity) {
+        //put O(1) find & remove O(1) add at the head, list 
+        //get O(1) map
+        _capacity = capacity;
+        
+    }
+    
+    int get(int key) {
+        // map (key - list item - val)
+        // if exists, remove the item add to head
+        int val = -1;
+        if (_map.count(key)) {
+            val = _map[key]->second;
+            _storage.splice(_storage.begin(), _storage, _map[key]);
+        }
+        return val;
+    }
+    
+    void put(int key, int value) {
+        //map(key - list item)
+        // if exists, update item, remove the item add to head
+        // if not, new item at the head
+        //        if capacity full
+        //           remove the last item, remove map key
+        if (_map.count(key)) {
+            _map[key]->second = value;
+            _storage.splice(_storage.begin(), _storage, _map[key]);
+        } else {
+            _storage.push_front(make_pair(key, value));
+            _map[key] = _storage.begin();
+            _capacity --;
+            if (_capacity < 0) {
+                _map.erase(_storage.back().first);
+                _storage.pop_back();
+                _capacity ++;
+            }
+        }
+    }
+};
+
+/**
+ * Your LRUCache object will be instantiated and called as such:
+ * LRUCache* obj = new LRUCache(capacity);
+ * int param_1 = obj->get(key);
+ * obj->put(key,value);
+ */
+
 //43% 35%
 class LRUCache {
 private:
