@@ -2,6 +2,23 @@ class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
+        priority_queue<int, vector<int>, greater<int>> sessions;
+        int rooms = 0;
+        for (int i = 0; i < intervals.size(); i++) {
+            while (sessions.size() != 0 && intervals[i][0] >= sessions.top()) {
+                sessions.pop();
+            }
+            sessions.push(intervals[i][1]);
+            rooms = max(rooms, (int)sessions.size());
+        }
+        return rooms;
+    }
+};
+
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
+        sort(intervals.begin(), intervals.end());
         // walk through all meetings, push each into min heap (by end time)
         // compare each start time with end times in heap. clear all previous meetings
         // max heap size is the answer

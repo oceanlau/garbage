@@ -1,3 +1,88 @@
+struct Node {
+    unordered_map<char, Node*> children;
+    int cnt = 0;
+    string str = "";
+};
+
+class AutocompleteSystem {
+private:
+    Node* _trie = new Node();
+    Node* _cur = _trie;
+    string _cur_str = "";
+    void _add_to_trie(string sentence, int time) {
+        Node* cur = _trie;
+        for (const char c : sentence) {
+            if (!cur->children.count(c)) {
+                cur->children[c] = new Node();
+            }
+            cur = cur->children[c];
+        }
+        cur->cnt += time;
+        cur->str = sentence;
+    }
+    vector<string> _complete(Node* root) {
+        auto cmp = [](const pair<string, int>& l, const pair<string, int>& r){
+            if (l.second == r.second) {
+                return l.first < r.first;
+            } else {
+                return l.second > r.second;
+            }
+        };
+        priority_queue<pair<string, int>, vector<pair<string, int>>, decltype(cmp)> top3(cmp);
+        stack<Node*> visited;
+        visited.push(root);
+        while (visited.size() > 0) {
+            Node* cur = visited.top();
+            visited.pop();
+            if (cur->cnt > 0) {
+                top3.push(make_pair(cur->str, cur->cnt));
+                if (top3.size() > 3) {
+                    top3.pop();
+                }
+            }
+            for (const auto& kv : cur->children) {
+                visited.push(kv.second);
+            }
+        }
+        vector<string> res;
+        while (top3.size() > 0) {
+            res.push_back(top3.top().first);
+            top3.pop();
+        }
+        reverse(res.begin(), res.end());
+        return res;
+    }
+public:
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times) {
+        for (int i = 0; i < sentences.size(); i++) {
+            _add_to_trie(sentences[i], times[i]);
+        }
+    }
+    
+    vector<string> input(char c) {
+        if (c == '#') {
+            _cur->str = _cur_str;
+            _cur->cnt++;
+            _cur = _trie;
+            _cur_str = "";
+            return {};
+        } else {
+            if (!_cur->children.count(c)) {
+                _cur->children[c] = new Node();
+            }
+            _cur = _cur->children[c];
+            _cur_str += c;
+            return _complete(_cur);
+        }
+    }
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
+
 //trie+sort, 16% 14%, heavy string concat
 struct TrieNode {
     int time = 0;
