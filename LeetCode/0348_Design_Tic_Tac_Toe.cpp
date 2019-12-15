@@ -1,5 +1,56 @@
 class TicTacToe {
 private:
+    vector<int> _row_counter;
+    vector<int> _col_counter;
+    int _1st_diag_counter = 0;
+    int _2nd_diag_counter = 0;
+    int _n = 0;
+public:
+    /** Initialize your data structure here. */
+    TicTacToe(int n) {
+        _n = n;
+        _row_counter = vector<int>(n, 0);
+        _col_counter = vector<int>(n, 0);
+    }
+    
+    /** Player {player} makes a move at ({row}, {col}).
+        @param row The row of the board.
+        @param col The column of the board.
+        @param player The player, can be either 1 or 2.
+        @return The current winning condition, can be either:
+                0: No one wins.
+                1: Player 1 wins.
+                2: Player 2 wins. */
+    int move(int row, int col, int player) {
+        int add = player == 1 ? 1 : -1;
+        _row_counter[row] += add;
+        _col_counter[col] += add;
+        if (row == col) {
+            _1st_diag_counter += add;
+        }
+        if (_n - 1 - col == row) {
+            _2nd_diag_counter += add;
+        }
+        if (abs(_row_counter[row]) == _n
+            || abs(_col_counter[col]) == _n
+            || abs(_1st_diag_counter) == _n
+            || abs(_2nd_diag_counter) == _n
+           ) {
+            return player == 1 ? 1 : 2;
+        } else {
+            return 0;
+        }
+    }
+};
+
+/**
+ * Your TicTacToe object will be instantiated and called as such:
+ * TicTacToe* obj = new TicTacToe(n);
+ * int param_1 = obj->move(row,col,player);
+ */
+
+class TicTacToe {
+private:
     vector<pair<int, int>> _rows;
     vector<pair<int, int>> _cols;
     pair<int, int> _main_diag = make_pair(0, 0);

@@ -1,3 +1,44 @@
+class Solution {
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.length() + 1, false);
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (dp[j] && dict.count(s.substr(j, i - j))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        if (!dp[s.length()]) {
+            return {};
+        }
+        unordered_map<int, vector<string>> dp_strs;
+        dp_strs[0] = {""};
+        for (int i = 1; i <= s.length(); i++) {
+            if (!dp[i]) {
+                continue;
+            }
+            dp_strs[i] = {};
+            for (int j = i - 1; j >= 0; j--) {
+                string word = s.substr(j, i - j);
+                if (dp[j] && dict.count(word)) {
+                    for (const string& part : dp_strs[j]) {
+                        if (part != "") {
+                            dp_strs[i].push_back(part + " " + word);
+                        } else {
+                            dp_strs[i].push_back(word);
+                        }
+                    }
+                }
+            }
+        }
+        return dp_strs[s.length()];
+    }
+};
+
 //solve the problem twice... still got 99% 97%
 class Solution {
 public:

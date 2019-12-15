@@ -1,3 +1,33 @@
+class Solution {
+public:
+    string mostCommonWord(string paragraph, vector<string>& banned) {
+        unordered_set<string> blacklist(banned.begin(), banned.end());
+        for (char& c : paragraph) {
+            if (isalpha(c)) {
+                c = tolower(c);
+            } else {
+                c = ' ';
+            }
+        }
+        stringstream ss(paragraph);
+        string word;
+        unordered_map<string, int> freq;
+        string max_freq_w = "";
+        int max_freq = 0;
+        while (getline(ss, word, ' ')) {
+            if (word == "") {
+                continue;
+            }
+            freq[word]++;
+            if (!blacklist.count(word) && freq[word] > max_freq) {
+                max_freq = freq[word];
+                max_freq_w = word;
+            }
+        }
+        return max_freq_w;
+    }
+};
+
 //96% 92%
 class Solution {
 public:
