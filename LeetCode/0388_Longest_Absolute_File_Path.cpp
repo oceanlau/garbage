@@ -1,6 +1,49 @@
 class Solution {
 public:
     int lengthLongestPath(string input) {
+        // 顺序读
+        // [lv1 len, lv2 len, file len] cur len
+        // [lv1 len, lv2-2 len, lv3-2 len, file len] cur len
+        // 不对 用presum
+        vector<int> lens(1,0);
+        int max_len = 0;
+        int dir_lvl = 0;
+        bool is_file = false;
+        int name_len = 0;
+        //dont forget the last invisible \n!
+        for (int i = 0; i <= input.length(); i++) {
+            char c;
+            if (i < input.length()) {
+                c = input[i];
+            }
+            if (i == input.length() || c == '\n') {
+                lens[dir_lvl] = name_len;
+                lens[dir_lvl] += dir_lvl > 0 ? lens[dir_lvl - 1] + 1 : 0;
+                if (is_file) {
+                    max_len = max(max_len, lens[dir_lvl]);
+                }
+                dir_lvl = 0;
+                is_file = false;
+                name_len = 0;
+            } else if (c == '\t') {
+                dir_lvl ++;
+                if (dir_lvl >= lens.size()) {
+                    lens.push_back(0);
+                }
+            } else {
+                if (c == '.') {
+                    is_file = true;
+                }
+                name_len ++;
+            }
+        }
+        return max_len;
+    }
+};
+
+class Solution {
+public:
+    int lengthLongestPath(string input) {
         vector<int> len_presums;
         int max_len = 0;
         int lvl= 0;

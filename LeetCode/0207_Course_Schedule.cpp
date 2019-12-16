@@ -1,4 +1,42 @@
 class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> edges(numCourses, vector<int> {});
+        vector<int> indegrees(numCourses, 0);
+        for (const vector<int>& pr : prerequisites) {
+            edges[pr[1]].push_back(pr[0]);
+            indegrees[pr[0]]++;
+        }
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i] == 0) {
+                q.push(i);
+            }
+        }
+        while (q.size() > 0) {
+            int q_size = q.size();
+            while (q_size > 0) {
+                int cur = q.front();
+                q.pop();
+                for (const int& i : edges[cur]) {
+                    if (--indegrees[i] == 0) {
+                        q.push(i);
+                    }
+                }
+                q_size --;
+            }
+        }
+        
+        for (int i = 0; i < numCourses; i++) {
+            if (indegrees[i] > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
+class Solution {
 private:
     bool _dfs(vector<vector<int>>& edges, int i, vector<bool>& parents, vector<bool>& visited) {
         parents[i] = true;
