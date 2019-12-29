@@ -1,3 +1,96 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    /*
+    bool _dfs(TreeNode* root, TreeNode* last_dfs, TreeNode* target) {
+        if ()
+    }*/
+    TreeNode* _lca_find(stack<TreeNode*>& ancestors, TreeNode* target) {
+        TreeNode* last_dfs = NULL;
+        while(!ancestors.empty()) {
+            
+            /*
+            if (_dfs(ancestors.top(), last_dfs, target)) {
+                return ancestors.top();
+            }*/
+            TreeNode* cur = ancestors.top();
+            stack<TreeNode*> nodes;
+            while (cur) {
+                if (cur == target) {
+                    return ancestors.top();
+                }
+                nodes.push(cur);
+                if (cur->left != last_dfs) {
+                    cur = cur->left;
+                } else {
+                    cur = NULL;
+                }
+            }
+            while (!nodes.empty()) {
+                cur = nodes.top();
+                nodes.pop();
+                if (cur->right != last_dfs) {
+                    cur = cur->right;
+                    while (cur) {
+                        if (cur == target) {
+                            return ancestors.top();
+                        }
+                        nodes.push(cur);
+                        cur = cur->left;
+                    }
+                }
+            }
+                
+            last_dfs = ancestors.top();
+            ancestors.pop();
+        }
+        return NULL;
+    }
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        //naive way, find two, add parent pointers in the process, reverse find root while recording a map # solution 2
+        //dont use parent pointers, use a stack or other container to record the path to one element, then pop each one and find the next #like solution 3
+        //other, simple recursive with two flag! like solution 1
+        //recursive super simple! https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/discuss/65225/4-lines-C%2B%2BJavaPythonRuby
+        if (root == p || root == q) {
+            return root;
+        }
+        stack<TreeNode*> ancestors;
+        while (root) {
+            ancestors.push(root);
+            if (root == p) {
+                return _lca_find(ancestors, q);
+            } else if (root == q) {
+                return _lca_find(ancestors, p);
+            }
+            root = root->left;
+        }
+        while (!ancestors.empty()) {
+            TreeNode* cur = ancestors.top();
+            ancestors.pop();
+            TreeNode* new_cur = cur->right;
+            while (new_cur) {
+                ancestors.push(new_cur);
+                if (new_cur == p) {
+                    return _lca_find(ancestors, q);
+                } else if (new_cur == q) {
+                    return _lca_find(ancestors, p);
+                }
+                new_cur = new_cur->left;
+            }
+        }
+        return NULL;
+    }
+};
+
 //40% 90%
 /**
  * Definition for a binary tree node.
