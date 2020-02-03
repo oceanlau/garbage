@@ -1,3 +1,21 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int begin_pos = 0;
+        unordered_map<char, int> pos;
+        int longest = 0;
+        for (int i = 0; i < s.length(); i++) {
+            if (pos.count(s[i])) {
+                if (pos[s[i]] >= begin_pos) {
+                    begin_pos = pos[s[i]] + 1;
+                }
+            }
+            pos[s[i]] = i;
+            longest = max(longest, i - begin_pos + 1);
+        }
+        return longest;
+    }
+};
 
 class Solution {
 public:

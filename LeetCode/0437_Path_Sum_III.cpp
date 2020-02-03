@@ -1,3 +1,40 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    int _dfs(unordered_map<int, int>& presum, TreeNode* cur, int last_sum, int sum) {
+        if (cur == NULL) {
+            return 0;
+        }
+        int num = 0;
+        last_sum += cur->val;
+        if (presum[last_sum - sum] > 0) {
+            num += presum[last_sum - sum];
+        }
+        presum[last_sum] ++;
+        num += _dfs(presum, cur->left, last_sum, sum);
+        num += _dfs(presum, cur->right, last_sum, sum);
+        presum[last_sum] --;
+        return num;
+    }
+public:
+    int pathSum(TreeNode* root, int sum) {
+        //presum可能出现多次，所以不能用unordered_set，要用counter
+        //unordered_set<int> presum;
+        
+        // super careful here! Dont forget the 0 starting from root!
+        unordered_map<int, int> presum {{0, 1}};
+        return _dfs(presum, root, 0, sum);
+    }
+};
+
 // 97% 19%
 /**
  * Definition for a binary tree node.

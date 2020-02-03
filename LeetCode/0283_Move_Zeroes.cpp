@@ -1,6 +1,18 @@
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
+        int pos_0 = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] != 0) {
+                swap(nums[i], nums[pos_0++]);
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
         // Two pointers. Zero element, and first non-element
         int i = 0;
         int j = 0;
