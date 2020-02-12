@@ -78,14 +78,51 @@ A few tips and tools to boost development effectiveness.
 -   Useful Commands
 
     ```Shell
-    df -h    # 整台机器硬盘使用情况
-    du -sh * # 当前目录每个文件大小
+    df -h    # Machine overall disk usage
+    du -sh * # File and folder size at current folder
     ```
 
 
 ### Version Control
 
--   `.gitignore`: [https://github.com/github/gitignore](https://github.com/github/gitignore)
+-   Install git: `sudo yum install git` If you are using CentOS, other checkout [git download page](https://git-scm.com/downloads)
+
+-   Setting up git:
+
+    ```Shell
+    # remove --global if you are configuring different user for different project.
+    git config --global user.name "Your Name"
+    git config --global user.email "you@example.com"
+    git config --list
+    ```
+
+-   Github user: There are two kinds of url to clone your project: HTTPS and SSH. I recommend (the SSH way)[https://help.github.com/en/github/using-git/which-remote-url-should-i-use#cloning-with-ssh-urls] since it helps you type your Github password less in the future:
+
+    -   Get your local SSH keys:
+
+    ```Shell
+    ls -al ~/.ssh # check if you already have one
+    # if not:
+    ssh-keygen -t rsa -b 4096 -C "your_github_email@example.com" # and hit enter all the way
+    ```
+
+    -   Add your private SSH key to the ssh-agent:
+    
+    ```Shell
+    eval "$(ssh-agent -s)"
+    ssh-add ~/.ssh/id_rsa
+    ```
+
+    -   Add your public SSH key to your Github account:
+
+    ```Shell
+    cat ~/.ssh/id_rsa.pub
+    # Then copy the content
+    # and add to Github: Settings -> SSH and GPG keys -> click New SSH key -> put in the 'key' field->click Add SSH key
+    ```
+
+
+-   For each project, use a `.gitignore` file to avoid submitting sensitive/large/unwanted files to git: [https://github.com/github/gitignore](https://github.com/github/gitignore)
 
 ### Java
 
