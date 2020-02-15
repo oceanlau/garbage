@@ -14,11 +14,114 @@ To make your modifications work, use `php artisan config:cache` to recache it.
 
 ## Developing for Laravel
 
+Like many other web frameworks, Laravel renders a page or API with four main modules: The first one (jargon: **route**) matches the url to a handler module. The handler module (jargon: **controller**) is where you write the core business logic for the page or API. It could call a data module (jargon: **model**) for data from databases or other storages. Finally it sends the processed data to the last module (jargon: **view**) which formats and generates a response. Of course there are many other modules, classes and libraries supporting these four. But we'll focus on these first.
+
 ### Develop Web Pages
+
+-   Show your page: First we define the url and the corresponding handler class/method at `routes/web.php`:
+
+    ```PHP
+    Route::get('test', 'TestController@index');
+    // Laravel also supports adding a function instead of handling class
+    // This one returns a view module without any logic.
+    Route::get('/', function () {
+        return view('welcome');
+    });
+    ```
+
+    Now for our `TestController`:
+    ```bash
+    # Generate controller file using this command
+    php artisan make:controller TestController
+
+    vi app/Http/Controllers/TestController.php
+    ```
+
+    ```PHP
+    class TestController extends Controller
+    {
+        //Router TestController@index goes here
+        public function index()
+        {
+            // Simply return a view module
+            return view('test');
+        }
+    }
+    ```
+
+    Finally we write our new view module `test`:
+
+    ```bash
+    # Create test view file
+    vi resources/views/test.blade.php
+    ```
+
+    And just put in any valid HTML code.
+
+    ```PHP
+    <!DOCTYPE html>
+    <html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Hello</title>
+    </head>
+    <body>
+    Testing.
+    </body>
+    </html>
+    ```
+
+    You can run the Laravel built-in server locally using command `php artisan serve`. If you are developing on your local machine with a browser, you can go to `http://127.0.0.1:8000/test` and see your page. Otherwise using command `curl http://127.0.0.1:8000/test` to see your server output.
+
+-   Get your data:
+
+-   Front end: It's going to take a long time introducing the modern front end technology stack. If not interested, you can use old-fashion HTML/CSS/JS in Laravel like this:
+
+    ```PHP
+    ```
+
+    If you do have the patience to learn, Laravel has the most popular front end frameworks (Bootstrap, Vue, React) and module bundler (Webpack) builtin for us. So you can easily reap the benefit:
+
+    ```bash
+    # Install the front end package prepared by Laravel
+    # This command sometimes takes up to a few minuts
+    composer require laravel/ui --dev
+
+    # Generate basic scaffolding. Choose one.
+    php artisan ui bootstrap
+    php artisan ui vue
+    php artisan ui react
+
+    # Install the scaffolding
+    npm install
+    ```
+
+    Every time you modifies JS or SASS, run `npm run dev` to generate final JS and SASS assets.
+
+-   Handling user: Usually if you are letting user posting content on your site, you need to implement register, login, verification, password reset, session and logout the whole package. How to implement all of these is beyond the scope of this article. Luckily Laravel has these all built-in for us. Using the command below will generate all the code, including route, view, controller and model, for us:
+
+    ```bash
+     # If you haven't already
+    composer require laravel/ui --dev
+
+    # Generate login / registration scaffolding. Choose one.
+    php artisan ui bootstrap --auth
+    php artisan ui vue --auth
+    php artisan ui react --auth
+
+    # Install the scaffolding
+    npm install
+    # Generate final assets
+    npm run dev
+    ```
+
+    If you are curious about how they are implemented, you can show all the routes in your app now using command `php artisan route:list`. (They hid them behind a `Auth::routes();` function call so you won't see them at `routes/web.php`). Their controller code are at [https://github.com/laravel/framework/blob/6.x/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php](https://github.com/laravel/framework/blob/6.x/src/Illuminate/Foundation/Auth/AuthenticatesUsers.php)
+
+    You can control where your app jumps to after login at `app/Http/Providers/RouteServiceProvider.php` `public const HOME = '/home';`.
 
 ### Develop APIs
 
--   Request Validation: create a request class and put our validation code in there:
+-   Request validation: create a request class and put our validation code there:
 
     ```bash
     # Create a request class
@@ -28,13 +131,15 @@ To make your modifications work, use `php artisan config:cache` to recache it.
     ```
 
     ```PHP
-    # Authorization code here. You can access $this->user(), $this->{PARAMETER_NAME}, $this->route, your model class, etc. to check user privilege. Return false causes a 4xx HTTP error.# todo
+    // Authorization check code here. You can access $this->user(), $this->{PARAMETER_NAME},
+    // $this->route, your model class, etc. to check user privilege.
     public function authorize()
     {
         return $this->user()->name == $this->author;
     }
 
-    # Request parameter check rules here. Validation rules provided by Laravel should be enough: https://laravel.com/docs/master/validation#available-validation-rules
+    // Request parameter check rules here.
+    // Validation rules provided by Laravel should be enough: https://laravel.com/docs/master/validation#available-validation-rules
     public function rules()
     {
         return [
@@ -44,7 +149,7 @@ To make your modifications work, use `php artisan config:cache` to recache it.
         ]
     }
 
-    # Customize validation error messages here.
+    // Customize validation error messages here.
     public function messages()
     {
         return [
@@ -53,7 +158,7 @@ To make your modifications work, use `php artisan config:cache` to recache it.
     }
     ```
 
-    Finally, put it to work by replace the request class in your controller `app/Http/Controllers/NoteController.php`:
+    Finally, put it to work by replacing the request class in your controller `app/Http/Controllers/NoteController.php`:
 
     ```PHP
     <?php
@@ -69,7 +174,7 @@ To make your modifications work, use `php artisan config:cache` to recache it.
     }
     ```
 
--   Force JSON: Laravel has prewritten some API code for us, but did not enforce a JSON reponse. Since nowadays it would be strange to most clients that an API returns a HTML page instead of a JSON object, for most of us we'd better enforce JSON reponses on API calls ourselves.
+-   Force JSON response: Laravel has prewritten some API code for us, but did not enforce a JSON reponse. Since nowadays it would be strange to most clients that an API returns a HTML page instead of a JSON object, for most of us we'd better enforce JSON reponses on API calls ourselves.
 
     Obviously it would be a bad idea to force Laravel to return JSON on every kind of request. Surely We can return JSON from our controller code. But when there is an exception, including validation failure and authentication failure, the default way of Laravel handling it is still returning HTML.
 
@@ -141,7 +246,8 @@ To make your modifications work, use `php artisan config:cache` to recache it.
             if ($exception instanceof \Illuminate\Validation\ValidationException) {
                 $msg = $exception->getMessage();
                 $http_code = 422;
-            } else if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException || $exception instanceof \Illuminate\Auth\AuthenticationException) {
+            } else if ($exception instanceof \Illuminate\Auth\Access\AuthorizationException
+                || $exception instanceof \Illuminate\Auth\AuthenticationException) {
                 $msg = $exception->getMessage();
                 $http_code = 403;
             } else if ($exception instanceof \PDOException) {
@@ -152,7 +258,7 @@ To make your modifications work, use `php artisan config:cache` to recache it.
             }
 
             return response()->json([
-                'stats' => $status,
+                'status' => $status,
                 'msg' => $msg,
                 'data' => []
             ], $http_code);
@@ -195,5 +301,3 @@ To make your modifications work, use `php artisan config:cache` to recache it.
     # If you regret your last modification
     php artisan migrate:rollback --step=1
     ```
-
-
