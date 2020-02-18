@@ -9,6 +9,42 @@
  */
 class Solution {
 private:
+    int _max_path_sum_include(TreeNode* node, int& max_sum) {
+        if (node == NULL) {
+            return 0;
+        }
+        int l = _max_path_sum_include(node->left, max_sum);
+        int r = _max_path_sum_include(node->right, max_sum);
+        if (l < 0) {
+            l = 0;
+        }
+        if (r < 0) {
+            r = 0;
+        }
+        max_sum = max(l + node->val, max_sum);
+        max_sum = max(r + node->val, max_sum);
+        max_sum = max(l + r + node->val, max_sum);
+        return max(l, r) + node->val;
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        int max_sum = root->val;
+        _max_path_sum_include(root, max_sum);
+        return max_sum;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
     int max_sum_with_node(TreeNode* node, int& max_sum) {
         if (node == NULL) {
             return 0;
