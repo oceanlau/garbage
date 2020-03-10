@@ -119,3 +119,33 @@ More detail:
 
 ## Index Compression
 
+-   Dictionary Compression: Focusing on compressing term string
+    -   Dictionary as a string: Instead of giving fixed-width length to terms, we first concat terms into a single long string in order of inverted index and record only the position of each term.
+    -   Blocked Storage: Instead of recording all the positions of terms, we record every *k*th term position and keep each term length in front of each term in the concated string. When walking down the B+ tree in search of a term, we found the *k* length section the term is in and then do a linear scan.
+    -   Front coding: When concatenating terms in order, omit same prefixes and use some special symbols and numbers representing suffixes length.
+-   Postings Compression: TODO
+
+## Ranked Retrieval
+
+-   Jaccard Coefficient: \|query terms AND doc terms\| / \|query terms OR doc terms\|. But it does not consider term frequency, rarity (informative) and document length.
+-   Term-Document frequency matrix: Recall the Term-Document incidence matrix. Instead of putting binary number in the cell, we count how many times a term appears in a document.
+    -   Bag of words model: A document is represented by a vector of word counts. It does not consider order of words.
+    -   Notice that relevance does not increase proportionally with term frequency. So we could use some transformation to discount the effect of term frequency:
+
+    Sublinear Transformation:
+
+    ![TF_SublinearTransformation](./assets/TF_SublinearTransformation.png)
+
+    BM25 Transformation:
+
+    ![TF_BM25Transformation](./assets/TF_BM25Transformation.png)
+
+    -   Query document scoring:
+
+    Define log frequency weight of term t in d:
+
+    ![w_{t,d}=\begin{cases}1+\log{tf_{t,d}}, & \text{if} tf_{t,d} \gt 0 \\0, & \text{otherwise}\end{cases}](https://render.githubusercontent.com/render/math?math=w_%7Bt%2Cd%7D%3D%5Cbegin%7Bcases%7D1%2B%5Clog%7Btf_%7Bt%2Cd%7D%7D%2C%20%26%20%5Ctext%7Bif%7D%20tf_%7Bt%2Cd%7D%20%5Cgt%200%20%5C%5C0%2C%20%26%20%5Ctext%7Botherwise%7D%5Cend%7Bcases%7D)
+
+    Score = ![\sum_{t \in q \cap d} (1+\log{tf_{t,d}})](https://render.githubusercontent.com/render/math?math=%5Csum_%7Bt%20%5Cin%20q%20%5Ccap%20d%7D%20(1%2B%5Clog%7Btf_%7Bt%2Cd%7D%7D))
+
+
