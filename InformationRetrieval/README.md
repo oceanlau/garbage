@@ -1,6 +1,6 @@
 # Information Retrieval
 
-This note mainly focuses on text information retrieval. It is based on JHU's, Stanford's and ETHzurich's information retrieval course.
+This note mainly focuses on text information retrieval. It is based on JHU's, ETHzurich's and Stanford's information retrieval course.
 
 ## Overview
 
@@ -33,6 +33,8 @@ More detail:
 
 ## Boolean Retrieval
 
+0. First we need to scan each document and extract (docId, term) pairs from each document. Now we need a efficient way to lookup docId given terms.
+
 1. Intuition: Build a Term-Document incidence matrix
 
     <table>
@@ -60,7 +62,7 @@ More detail:
             <tr>
                 <th>term1</th>
                 <td></td>
-                <td></td>
+                <td>...</td>
                 <td></td>
                 <td></td>
             </tr>
@@ -68,7 +70,7 @@ More detail:
                 <th>...</th>
                 <td></td>
                 <td></td>
-                <td></td>
+                <td>...</td>
                 <td></td>
             </tr>
             <tr>
@@ -89,7 +91,7 @@ More detail:
 
 2. Instead, we use Inverted Index.
 
-    ![Inverted_Index][./assets/Inverted_Index.png]
+    ![Inverted_Index](./assets/Inverted_Index.png)
 
 3. Do boolean operations on terms with AND, OR, NOT operators. Eg: {doc result} = f(term0 OR (term1 AND NOT term2)).
 
@@ -98,6 +100,22 @@ More detail:
 ## Index Construction
 
 -   Hash Table, B+ Tree 
+-   First step is to scan each document and extract (docId, term) pairs from each document. But the number of pairs may be too large to fit into memory or to sort in disk. So how to build large inverted index efficiently?
+    -   Block sort-based Indexing:
+        -   Keep a termId-term table on the fly or in batch, to reduce (docId, term) pair size
+        -   Divide documents into chunks. Chunk by chunk, pull from disk into memory. Extract t pair of (docId, termId). T in total. Time complexity is O(T).
+        -   Sort the pairs by termId_docId and merge them with termId as the key. Then write merged termId-docIds back into disk. O(TlogT) in total.
+        -   Open all chunks on disk simultaneously. Read line by line and merge and write to final inverted index. O(T) in total. Because it is disk operation so O(T) becomes dominant.
+    -   Single-pass in memory Indexing:
+        -   Divide documents into chunks. Chunk by chunk, read each document and build term-docIds map on the fly. Still we assume t pair of (docId, termId). T in total. D documents. Time complexity is O(T) because docId is already in order.
+        -   Sort the map by term. Then write back into disk. O(DlogD) in total.
+        -   Same as Block sort-based Indexing. O(T) still dominates.
+-   Distributed indexing: Use MapReduce.
+        -   mapper: Extract pairs from document
+        -   reducer: Get all pairs of one (or more) term(s). Sort by docId and write merged term-docIds into disk.
+-   Dynamic indexing: To efficiently get incremental changes.
+    -   Main index plus a incremental auxiliary index, which is periodically merged into main index. The cost of merge is associated with the number of indexes. The more the better. In reality we often choose a compromise between the two extreme. For example logarithmic merge indexes (detail omitted here).
+    -   Dual main index switching.
 
-
+## Index Compression
 
