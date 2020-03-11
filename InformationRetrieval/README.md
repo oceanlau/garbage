@@ -54,7 +54,7 @@ More detail:
             <tr>
                 <th rowspan=4>terms</th>
                 <th>term0</th>
-                <td>w(term0, doc0)</td>
+                <td>is_in(term0, doc0)</td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -78,7 +78,7 @@ More detail:
                 <td></td>
                 <td></td>
                 <td></td>
-                <td>w(term|V|, doc|d|)</td>
+                <td>is_in(term|V|, doc|d|)</td>
             </tr>
         </tbody>
     </table>
@@ -97,7 +97,7 @@ More detail:
 
     Small optimization: Reorder terms of boolean operation in increasing document frequency (how many document this term appears in) to reduce unneccessary works.
 
-## Index Construction
+### Index Construction
 
 -   Hash Table, B+ Tree 
 -   First step is to scan each document and extract (docId, term) pairs from each document. But the number of pairs may be too large to fit into memory or to sort in disk. So how to build large inverted index efficiently?
@@ -117,7 +117,7 @@ More detail:
     -   Main index plus a incremental auxiliary index, which is periodically merged into main index. The cost of merge is associated with the number of indexes. The more the better. In reality we often choose a compromise between the two extreme. For example logarithmic merge indexes (detail omitted here).
     -   Dual main index switching.
 
-## Index Compression
+### Index Compression
 
 -   Dictionary Compression: Focusing on compressing term string
     -   Dictionary as a string: Instead of giving fixed-width length to terms, we first concat terms into a single long string in order of inverted index and record only the position of each term.
@@ -140,12 +140,80 @@ More detail:
 
     ![TF_BM25Transformation](./assets/TF_BM25Transformation.png)
 
-    -   Query document scoring:
+-   Query document scoring: Considering term frequency.
 
     Define log frequency weight of term t in d:
 
     ![w_{t,d}=\begin{cases}1+\log{tf_{t,d}}, & \text{if} tf_{t,d} \gt 0 \\0, & \text{otherwise}\end{cases}](https://render.githubusercontent.com/render/math?math=w_%7Bt%2Cd%7D%3D%5Cbegin%7Bcases%7D1%2B%5Clog%7Btf_%7Bt%2Cd%7D%7D%2C%20%26%20%5Ctext%7Bif%7D%20tf_%7Bt%2Cd%7D%20%5Cgt%200%20%5C%5C0%2C%20%26%20%5Ctext%7Botherwise%7D%5Cend%7Bcases%7D)
 
-    Score = ![\sum_{t \in q \cap d} (1+\log{tf_{t,d}})](https://render.githubusercontent.com/render/math?math=%5Csum_%7Bt%20%5Cin%20q%20%5Ccap%20d%7D%20(1%2B%5Clog%7Btf_%7Bt%2Cd%7D%7D))
+    ![\text{Score} = \sum_{t \in q \cap d} (1+\log{tf_{t,d}})](https://render.githubusercontent.com/render/math?math=%5Ctext%7BScore%7D%20%3D%20%5Csum_%7Bt%20%5Cin%20q%20%5Ccap%20d%7D%20(1%2B%5Clog%7Btf_%7Bt%2Cd%7D%7D))
 
+-   idf: Considering rarity (informative). It only starts working when there are two or more terms in a query.
 
+    ![df_t](https://render.githubusercontent.com/render/math?math=df_t) is the number of document that contain t. Minimum set to 1.
+
+    ![idf_t=\log{(N/df_t)}](https://render.githubusercontent.com/render/math?math=idf_t%3D%5Clog%7B(N%2Fdf_t)%7D)
+
+    Use log to dampen the effect of idf.
+
+    Summing up, we have tf-idf model:
+
+    TODO
+
+    Score = 
+
+### Vector Space Model
+
+-   tf-idf weight matrix: Each cell is now a tf-idf score.
+
+    <table>
+        <thead>
+            <tr>
+                <th colspan=2 rowspan=2></th>
+                <th colspan=4>documents</th>
+            </tr>
+            <tr>
+                <th>doc0</th>
+                <th>doc1</th>
+                <th>...</th>
+                <th>doc|d|</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <th rowspan=4>terms</th>
+                <th>term0</th>
+                <td>tf_idf(term0, doc0)</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>term1</th>
+                <td></td>
+                <td>...</td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>...</th>
+                <td></td>
+                <td></td>
+                <td>...</td>
+                <td></td>
+            </tr>
+            <tr>
+                <th>term|V|</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>tf_idf(term|V|, doc|d|)</td>
+            </tr>
+        </tbody>
+    </table>
+
+-   Each document can now be represented by a high dimentional vector (a column). In boolean retrieval model, each vector is filled with binary values. In naive bag of words model, each vector is filled with term frequency as values. In tf-idf model, each vector is filled with tf-idf scores.
+
+## Skipped Contents:
+
+-   Ranked Retrieval: Parametric search, learning weights
