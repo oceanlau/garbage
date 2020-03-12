@@ -97,7 +97,7 @@ More detail:
 
     Small optimization: Reorder terms of boolean operation in increasing document frequency (how many document this term appears in) to reduce unneccessary works.
 
-### Index Construction
+## Index Construction
 
 -   Hash Table, B+ Tree 
 -   First step is to scan each document and extract (docId, term) pairs from each document. But the number of pairs may be too large to fit into memory or to sort in disk. So how to build large inverted index efficiently?
@@ -117,7 +117,7 @@ More detail:
     -   Main index plus a incremental auxiliary index, which is periodically merged into main index. The cost of merge is associated with the number of indexes. The more the better. In reality we often choose a compromise between the two extreme. For example logarithmic merge indexes (detail omitted here).
     -   Dual main index switching.
 
-### Index Compression
+## Index Compression
 
 -   Dictionary Compression: Focusing on compressing term string
     -   Dictionary as a string: Instead of giving fixed-width length to terms, we first concat terms into a single long string in order of inverted index and record only the position of each term.
@@ -127,6 +127,7 @@ More detail:
 
 ## Ranked Retrieval
 
+-   Find documents based on score and we can control the number of most relevent documents to show in the end.
 -   Jaccard Coefficient: \|query terms AND doc terms\| / \|query terms OR doc terms\|. But it does not consider term frequency, rarity (informative) and document length.
 -   Term-Document frequency matrix: Recall the Term-Document incidence matrix. Instead of putting binary number in the cell, we count how many times a term appears in a document.
     -   Bag of words model: A document is represented by a vector of word counts. It does not consider order of words.
@@ -212,8 +213,24 @@ More detail:
         </tbody>
     </table>
 
--   Each document can now be represented by a high dimentional vector (a column). In boolean retrieval model, each vector is filled with binary values. In naive bag of words model, each vector is filled with term frequency as values. In tf-idf model, each vector is filled with tf-idf scores.
+-   Each document can now be represented by a high dimentional vector (a column). In boolean retrieval model, each vector is filled with binary values. In naive bag of words model, each vector is filled with term frequency as values. In tf-idf model, each vector is filled with tf-idf values.
 
-## Skipped Contents:
+-   Now we can represent query as a same kind of vector, then give each document a score based on the similarity between the query vector and the document vector. Because we care more about the distribution of terms than raw value in the vector, we use cosine similarity instead of Euclidean distance.
+
+-   Same reason as in Boolean Retrieval, we actually do not use table but use inverted index. So to calculate cosine similarity between the query and documents, we iterate postings of each query term and accumulate a score for each document. The terms not presented in the query are not traversed at all since they would be 0 anyway. Then we noramlize the scores by dividing the length of query vector and the corresponding document vector length. Finally we extract the top scoring documents we needed.
+
+    This algorithm is described in detail below:
+
+    ![VSM_NaiveScore](./assets/VSM_NaiveScore.png)
+
+-   Optimization:
+
+    -   Tf-idf is a floating point number which takes up a lot of space. Since all idf values of a term is the same, we can actually store the idf value at the postings list head and only keep the tf values in the postings.
+    -   All scores are normalized by the length of query vector, so we can just omit this part.
+    -   To find the top documents, we either use QuickSelect, or use Min Heap to only keep the number of the documents we wanted on the fly.
+
+
+
+## Skipped Contents (for now):
 
 -   Ranked Retrieval: Parametric search, learning weights
