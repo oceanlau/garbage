@@ -93,6 +93,8 @@ More detail:
 
     ![Inverted_Index](./assets/Inverted_Index.png)
 
+    Notice that the documents are ordered by docId. This allows us to do quick intersection.
+
 3. Do boolean operations on terms with AND, OR, NOT operators. Eg: {doc result} = f(term0 OR (term1 AND NOT term2)).
 
     Small optimization: Reorder terms of boolean operation in increasing document frequency (how many document this term appears in) to reduce unneccessary works.
@@ -221,16 +223,71 @@ More detail:
 
     This algorithm is described in detail below:
 
-    ![VSM_NaiveScore](./assets/VSM_NaiveScore.png)
+    <img src="./assets/VSM_NaiveScore.png" width="380">
+
+    If we loop through query terms one-by-one to accumulate document scores, it is called term-at-a-time algorithm. Else we could open all terms postings together like the intersection algorithm in boolean retrieval and iterate postings by the order of docIds. Then we are accumulating scores document by document. This is called document-at-a-time algorithm.
 
 -   Optimization:
 
-    -   Tf-idf is a floating point number which takes up a lot of space. Since all idf values of a term is the same, we can actually store the idf value at the postings list head and only keep the tf values in the postings.
+    -   Tf-idf is a floating point number which takes up a lot of space. Since all idf values of a term is the same, we can actually store the idf value at the postings list head and only keep the tf values in the postings. 
+
+    ![VSM_InvertedIndex](./assets/VSM_InvertedIndex.png)
+
     -   All scores are normalized by the length of query vector, so we can just omit this part.
+    -   We only need to compute the length of documents query terms appear in.
     -   To find the top documents, we either use QuickSelect, or use Min Heap to only keep the number of the documents we wanted on the fly.
 
+-   Variants of tf-idf:
+
+    ![VSM_TfidfVariants](./assets/VSM_TfidfVariants.png)
+
+    Also you can use different weighting schemes on query and document.
+
+-   Furthur Optimization, with approximation:
+
+    -   Query terms tf are usually 1, so we can omit them.
+    -   Idf are the same for query term and document term, we can change the scoring scheme and leaves only document term idf.
+
+    Summing up, we have the following:
+
+    ![VSM_Optimized](./assets/VSM_Optimized.png)
+
+### Optimization and Other Scoring Methods
+
+From exact top k document retrieval to inexact top k.
+
+-   Index elimination
+    -   Leave only postings lists with high idf.
+    -   Leave only documents which contain a large number of terms.
+-   Champion lists: For each postings list, leave only corresponding r documents with high tf value. Each term could contribute different number of 'champion' document according to our custom settings. In the end we could compute scores for documents in the union of all champion lists.
+
+    One potential problem here is that the postings would be sorted by tf values instead of docIds. This should make our quick intersection or document-at-a-time algorithm impossible. So we could keep a separate inverted index ordered by docIds.
+
+    -   Static quality score: Suppose each document has a static quality score irrelevant to the query and it is used in the final scoring, for example PageRank score that evaluates page importance or authority. Maybe something like final_score = static_score + cosine_similarity. We then could find 'champion' documents by these two ways:
+
+        1.  Sory by static_score + max tf-idf value of the document. We have a global champion list of documents.
+
+            This also poses the problem of postings order, which are now in the order of this static sorting score instead of docIds. This is supposed to make our quick intersection or document-at-a-time algorithm impossible. But in fact, as long as all documents in postings lists share an universal ordering scheme, we can still do it in one pass!
+
+        2.  Sort by static_score + tf-idf. We have a champion list for each term.
+
+            This is a direct combination of static quality score and champion list. We would need to keep a separate inverted index ordered by docIds in order to use quick intersection or document-at-a-time algorithm. 
+
+    -   Tiered indexes: If r is chosen too small, we may find no documents at all in the end. We could keep multiple backup champion lists and fallback to them when we could not find enough k documents.
+
+-   Impact ordering: We sort postings lists by idf and sort each postings by static_score + tf like in the champion list. Then we accumulate documents scores in order until new scores are below threshold or we have accumulated more than enough documents. Notice we can only use term-at-a-time algorithm in this manner.
+
+    ![Optimization_ImpactOrdering](./assets/Optimization_ImpactOrdering.png)
+
+-   Cluster pruning: Pick a subset (maybe square root of the number of all documents) of documents randomly as leaders and do one round of k-means to cluster all documents around these leaders. When we are computing scores we only compute for documents in the cloest cluster to the query vector.
+
+    Of course we try other variant methods like doing more rounds of k-means or assign documents to more than one leader.
+
+-   Query term proximity: Users prefer docs in which query terms occur within close proximity of each other. This is a very different scoring methods from discussed above that requires a custom scoring module.
+
+-   Query parser and custom scoring: In fact, modern search engine often uses a combination of retrieval methods to get different results and aggregating scores from multiple custom scoring methods to rank the different results.
 
 
 ## Skipped Contents (for now):
 
--   Ranked Retrieval: Parametric search, learning weights
+-   Ranked Retrieval: Parametric search, learning weights, safe ranking (in lecture 10 of Stanford)
