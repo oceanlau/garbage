@@ -137,11 +137,11 @@ More detail:
 
     Sublinear Transformation:
 
-    ![TF_SublinearTransformation](./assets/TF_SublinearTransformation.png)
+    <img alt="TF_SublinearTransformation" src="./assets/TF_SublinearTransformation.png" width="600">
 
     BM25 Transformation:
 
-    ![TF_BM25Transformation](./assets/TF_BM25Transformation.png)
+    <img alt="TF_BM25Transformation" src="./assets/TF_BM25Transformation.png" width="600">
 
 -   Query document scoring: Considering term frequency.
 
@@ -223,7 +223,7 @@ More detail:
 
     This algorithm is described in detail below:
 
-    <img src="./assets/VSM_NaiveScore.png" width="380">
+    <img alt="VSM_NaiveScore" src="./assets/VSM_NaiveScore.png" width="400">
 
     If we loop through query terms one-by-one to accumulate document scores, it is called term-at-a-time algorithm. Else we could open all terms postings together like the intersection algorithm in boolean retrieval and iterate postings by the order of docIds. Then we are accumulating scores document by document. This is called document-at-a-time algorithm.
 
@@ -231,7 +231,7 @@ More detail:
 
     -   Tf-idf is a floating point number which takes up a lot of space. Since all idf values of a term is the same, we can actually store the idf value at the postings list head and only keep the tf values in the postings. 
 
-    ![VSM_InvertedIndex](./assets/VSM_InvertedIndex.png)
+    <img alt="VSM_InvertedIndex" src="./assets/VSM_InvertedIndex.png" width="600">
 
     -   All scores are normalized by the length of query vector, so we can just omit this part.
     -   We only need to compute the length of documents query terms appear in.
@@ -239,7 +239,7 @@ More detail:
 
 -   Variants of tf-idf:
 
-    ![VSM_TfidfVariants](./assets/VSM_TfidfVariants.png)
+    <img alt="VSM_TfidfVariants" src="./assets/VSM_TfidfVariants.png" width="700">
 
     Also you can use different weighting schemes on query and document.
 
@@ -250,7 +250,7 @@ More detail:
 
     Summing up, we have the following:
 
-    ![VSM_Optimized](./assets/VSM_Optimized.png)
+    <img alt="VSM_Optimized" src="./assets/VSM_Optimized.png" width="600">
 
 ### Optimization and Other Scoring Methods
 
@@ -277,7 +277,7 @@ From exact top k document retrieval to inexact top k.
 
 -   Impact ordering: We sort postings lists by idf and sort each postings by static_score + tf like in the champion list. Then we accumulate documents scores in order until new scores are below threshold or we have accumulated more than enough documents. Notice we can only use term-at-a-time algorithm in this manner.
 
-    ![Optimization_ImpactOrdering](./assets/Optimization_ImpactOrdering.png)
+    <img alt="Optimization_ImpactOrdering" src="./assets/Optimization_ImpactOrdering.png" width="400">
 
 -   Cluster pruning: Pick a subset (maybe square root of the number of all documents) of documents randomly as leaders and do one round of k-means to cluster all documents around these leaders. When we are computing scores we only compute for documents in the cloest cluster to the query vector.
 
