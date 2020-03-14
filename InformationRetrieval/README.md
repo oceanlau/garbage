@@ -13,7 +13,7 @@ More detail:
     -   Text preprocessing, Clustering, Information Extraction (Named Entity, Relation, Topic Models, etc.)
     -   Forward Index, Inverted Index
 -   Search: Querying content (Search engine) or filtering content (Recommendation system). Not different that much.
-    -   Querying: Boolean Retrieval, Vector Space Model, Probabilistic Model
+    -   Querying: Boolean Retrieval, Vector Space Model, Probabilistic Model, Learning to Rank
     -   Filtering: Content Filtering, Collaborative Filtering, Also use Querying methods
     -   Ranking: Scoring, Link Analysis
 -   User: Content presentation
@@ -277,16 +277,30 @@ From exact top k document retrieval to inexact top k.
 
 -   Impact ordering: We sort postings lists by idf and sort each postings by static_score + tf like in the champion list. Then we accumulate documents scores in order until new scores are below threshold or we have accumulated more than enough documents. Notice we can only use term-at-a-time algorithm in this manner.
 
-    <img alt="Optimization_ImpactOrdering" src="./assets/Optimization_ImpactOrdering.png" width="400">
+    <img alt="Optimization_ImpactOrdering" src="./assets/Optimization_ImpactOrdering.png" width="500">
 
 -   Cluster pruning: Pick a subset (maybe square root of the number of all documents) of documents randomly as leaders and do one round of k-means to cluster all documents around these leaders. When we are computing scores we only compute for documents in the cloest cluster to the query vector.
 
-    Of course we try other variant methods like doing more rounds of k-means or assign documents to more than one leader.
+    Of course we can try other variant methods like doing more rounds of k-means or assigning documents to more than one leader.
 
 -   Query term proximity: Users prefer docs in which query terms occur within close proximity of each other. This is a very different scoring methods from discussed above that requires a custom scoring module.
 
 -   Query parser and custom scoring: In fact, modern search engine often uses a combination of retrieval methods to get different results and aggregating scores from multiple custom scoring methods to rank the different results.
 
+### Probabilistic Model
+
+In traditional IR systems, matching between each document and query is attempted in a semantically imprecise space of index terms. Probabilities provide a principled foundation for uncertain reasoning. The principle is to return documents by decreasing order of relevance probabilities.
+
+#### Binary Independence Model
+
+TODO: Using naive bayes assumption
+
+#### (Okapi)BM25
+
+Assumptions: TODO
+
+Best Match 25, since 1994. Its goal is to be sensitive to term frequency and document
+length while not adding too many parameters.
 
 ## Skipped Contents (for now):
 
