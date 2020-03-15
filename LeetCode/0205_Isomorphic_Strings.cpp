@@ -1,3 +1,20 @@
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int m[256] = {0};
+        bool used[256] = {false};
+        for (int i = 0; i < s.length(); i++) {
+            if (m[s[i]] == 0 && used[t[i]] == false) {
+                m[s[i]] = t[i] + 1;
+                used[t[i]] = true;
+            } else if (m[s[i]] != t[i] + 1) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 // 51% 46%
 class Solution {
 public:

@@ -1,6 +1,42 @@
 class Solution {
 public:
     int myAtoi(string str) {
+        int sign = 0;
+        int before = 0;
+        for (int i = 0; i < str.length(); i++) {
+            if (str[i] == ' ') {
+                if (sign != 0) {
+                    break;
+                }
+            } else if (str[i] == '-' || str[i] == '+') {
+                if (sign != 0) {
+                    break;
+                }
+                sign = str[i] == '-' ? -1 : 1;
+            } else if (str[i] < '0' || str[i] > '9') {
+                break;
+            } else {
+                if (sign == 0) {
+                    sign = 1;
+                }
+                int num = str[i] - '0';
+                if (before > INT_MAX / 10 || (before == INT_MAX / 10 && num > INT_MAX % 10)) {
+                    if (sign == 1) {
+                        return INT_MAX;
+                    }
+                    return INT_MIN;
+                }
+                before = before * 10 + num;
+            }
+        }
+        return sign * before;
+    }
+};
+
+
+class Solution {
+public:
+    int myAtoi(string str) {
         short sign = 1;
         unsigned long long r = 0;
         bool must_be_digit = false;

@@ -1,6 +1,25 @@
 class Solution {
 public:
     bool wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> wordSet(wordDict.begin(), wordDict.end());
+        vector<bool> dp(s.length() + 1, false);
+        dp[0] = true;
+        for (int i = 1; i < s.length() + 1; i++) {
+            for (int j = i; j >= 0; j--) {
+                // i - j careful!
+                if (dp[j] && wordSet.count(s.substr(j, i - j))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+};
+
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
         unordered_set<string> dict(wordDict.begin(), wordDict.end());
         vector<bool> dp(s.length() + 1, false);
         dp[0] = true;

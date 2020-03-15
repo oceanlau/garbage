@@ -1,6 +1,29 @@
 class Solution {
 public:
     double myPow(double x, int n) {
+        if (n == 0) {
+            return 1;
+        } else if (n < 0) {
+            if (n == INT_MIN) {
+                n++;
+                n = -n;
+                return 1/(x * myPow(x, n));
+            }
+            n = -n;
+            return 1/myPow(x, n);
+        } else if (n % 2 == 1){
+            n --;
+            double half = myPow(x, n/2);
+            return x * half * half;
+        }
+        double half = myPow(x, n/2);
+        return half * half;
+    }
+};
+
+class Solution {
+public:
+    double myPow(double x, int n) {
         if (n < 0) {
             n = -(n + 1);
             return myPow(1/x, n) / x;

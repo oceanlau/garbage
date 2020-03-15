@@ -1,3 +1,29 @@
+class Solution {
+public:
+    int largestRectangleArea(vector<int>& heights) {
+        //mono inc stack of pos
+        stack<int> higher_pos;
+        int largetst = 0;
+        heights.push_back(0);
+        for (int i = 0; i < heights.size(); i++) {
+            while (higher_pos.size() > 0) {
+                int last_pos = higher_pos.top();
+                if (heights[i] < heights[last_pos]) {
+                    higher_pos.pop();
+                    //super tricky edge!
+                    int left_pos = higher_pos.size() == 0 ? -1 : higher_pos.top();
+                    //super tricky edge!
+                    largetst = max(largetst, (i - left_pos - 1)*heights[last_pos]);
+                } else {
+                    break;
+                }
+            }
+            higher_pos.push(i);
+        }
+        return largetst;
+    }
+};
+
 //stack, 87% 53%
 class Solution {
 public:
