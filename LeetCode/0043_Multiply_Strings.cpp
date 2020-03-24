@@ -1,6 +1,46 @@
 class Solution {
 public:
     string multiply(string num1, string num2) {
+        if (num1 == "0" || num2 == "0") {
+            return "0";
+        }
+        if (num1.length() < num2.length()) {
+            swap(num1, num2);
+        }
+        string res = "";
+        int sum = 0;
+        int num1_left = num1.length() - 1;
+        int num1_right = num1_left;
+        int num2_left = num2.length() - 1;
+        int num2_right = num2_left;
+        bool expanding_left_participant = num1_left != 0;
+        while (num2_right >= 0) {
+            for (int i = num1_left, j = num2_right; i <= num1_right && j >= max(0, num2_left); i++, j--) {
+                sum += (num1[i] - '0') * (num2[j] - '0');
+            }
+            res = to_string(sum % 10) + res;
+            sum /= 10;
+            if (expanding_left_participant) {
+                num1_left --;
+                num2_left --;
+                if (num1_left == 0) {
+                    expanding_left_participant = false;
+                }
+            } else {
+                num1_right --;
+                num2_right --;
+            }
+        }
+        if (sum > 0) {
+            res = to_string(sum) + res;
+        }
+        return res;
+    }
+};
+
+class Solution {
+public:
+    string multiply(string num1, string num2) {
         string res = "0";
         if (num1 == "0" || num2 == "0") {
             return res;

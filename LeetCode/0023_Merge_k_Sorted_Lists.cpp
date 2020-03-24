@@ -9,6 +9,42 @@
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
+        priority_queue<pair<int, ListNode*>> pq;
+        for (const auto& node : lists) {
+            if (node) {
+                pq.emplace(-node->val, node);
+            }
+        }
+        ListNode* head = NULL;
+        ListNode* node = NULL;
+        while (!pq.empty()) {
+            if (head == NULL) {
+                head = pq.top().second;
+                node = head;
+            } else {
+                node->next = pq.top().second;
+                node = node->next;
+            }
+            pq.pop();
+            if (node->next) {
+                pq.emplace(-node->next->val, node->next);
+            }
+        }
+        return head;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
         // sps vector size N, list length L
         // naive, O(LN*N)
         // min heap, O(LN*log N)

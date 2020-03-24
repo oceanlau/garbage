@@ -1,3 +1,46 @@
+class Solution {
+public:
+    int search(vector<int>& nums, int target) {
+        if (nums.size() == 0) {
+            return -1;
+        }
+        int pivot = nums[0];
+        if (pivot == target) {
+            return 0;
+        }
+        int l = 0;
+        int r = nums.size() - 1;
+        while (r - l > 1) { // nums[mid] would not equal pivot
+            int mid = l + (r - l) / 2;
+            if (nums[mid] == target) {
+                return mid;
+            } else if (nums[mid] > target && nums[mid] > pivot) {
+                if (target > pivot) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else if (nums[mid] > target && nums[mid] < pivot) {
+                r = mid - 1;
+            } else if (nums[mid] < target && nums[mid] > pivot) {
+                l = mid + 1;
+            } else {
+                if (target > pivot) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            }
+        }
+        if (nums[l] == target) {
+            return l;
+        } else if (nums[r] == target) {
+            return r;
+        }
+        return -1;
+    }
+};
+
 // 80% 44%
 class Solution {
 public:

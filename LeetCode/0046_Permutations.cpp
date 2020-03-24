@@ -1,5 +1,30 @@
 class Solution {
 private:
+    void _bt(vector<int>& nums, int i, vector<int>& permutation, vector<vector<int>>& permutations) {
+        if (permutation.size() == nums.size()) {
+            permutations.push_back(permutation);
+            return;
+        }
+        for (int j = i; j < nums.size(); j++) {
+            swap(nums[j], nums[i]);
+            permutation.push_back(nums[i]);
+            _bt(nums, i+1, permutation, permutations);
+            permutation.pop_back();
+            swap(nums[j], nums[i]);
+        }
+    }
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<int> permutation;
+        vector<vector<int>> permutations;
+        int i = 0;
+        _bt(nums, i, permutation, permutations);
+        return permutations;
+    }
+};
+
+class Solution {
+private:
     void _bt(vector<int>& nums, int start, vector<vector<int>>& res) {
         if (start == nums.size()) {
             res.push_back(nums);
