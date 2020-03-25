@@ -1,3 +1,36 @@
+class Solution {
+public:
+    int trap(vector<int>& height) {
+        if (height.size() < 3) {
+            return 0;
+        }
+        int water = 0;
+        vector<int> left_limit(height.size(), 0);
+        vector<int> right_limit(height.size(), 0);
+        left_limit[0] = height[0];
+        for (int i = 1; i < height.size(); i++) {
+            if (height[i] > left_limit[i-1]) {
+                left_limit[i] = height[i];
+            } else {
+                left_limit[i] = left_limit[i-1];
+            }
+        }
+        right_limit[height.size() - 1] = height[height.size() - 1];
+        for (int i = height.size() - 2; i >= 0; i--) {
+            if (height[i] > right_limit[i+1]) {
+                right_limit[i] = height[i];
+            } else {
+                right_limit[i] = right_limit[i+1];
+            }
+            int cur_water = min(left_limit[i], right_limit[i]) - height[i];
+            if (cur_water > 0) {
+                water += cur_water;
+            }
+        }
+        return water;
+    }
+};
+
 // two pointer
 class Solution {
 public:
