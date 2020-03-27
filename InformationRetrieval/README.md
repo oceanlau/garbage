@@ -312,7 +312,7 @@ Binary: documents and queries are represented as binary incidence vectors of ter
 
     <img alt="BIM5" src="./assets/BIM5.png" width="500">
 
--   RSV: Finally we have the retrieval status value for ranking:
+-   BIM RSV: Finally we have the retrieval status value for ranking:
 
     <img alt="BIM6" src="./assets/BIM6.png" width="500">
 
@@ -367,9 +367,28 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     <img alt="BM25_2Poisson" src="./assets/BM25_2Poisson.png" width="500">
 
-    Here is the graph for ![c^{elite}\_i({tf}\_i)](https://render.githubusercontent.com/render/math?math=c%5E%7Belite%7D_i(%7Btf%7D_i)):
+    But there are too many unknown parameters. Here we have a look at the graph for ![c^{elite}\_i({tf}\_i)](https://render.githubusercontent.com/render/math?math=c%5E%7Belite%7D_i(%7Btf%7D_i)):
 
     <img alt="BM25_c^elite_i" src="./assets/BM25_c^elite_i.png" width="500">
+
+-   Elite RSV: We can approximate ![c^{elite}\_i({tf}\_i)](https://render.githubusercontent.com/render/math?math=c%5E%7Belite%7D_i(%7Btf%7D_i)) with the Saturation function: ![\frac{\mathit{tf}}{k_1 + \mathit{tf}}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7B%5Cmathit%7Btf%7D%7D%7Bk_1%20%2B%20%5Cmathit%7Btf%7D%7D)
+
+    <img alt="BM25_Sat" src="./assets/BM25_Sat.png" width="500">
+
+    We usually add a ![k_1+1](https://render.githubusercontent.com/render/math?math=k_1%2B1) to the numerator to provide a lower bound 1 to this function.
+
+    Finally we consider the document length by normalizing the term frequency with a length normalization component:
+
+    <img alt="BM25_LenNorm" src="./assets/BM25_LenNorm.png" width="500">
+
+-   Using the ![c^{elite}\_i({tf}\_i)](https://render.githubusercontent.com/render/math?math=c%5E%7Belite%7D_i(%7Btf%7D_i)) with length normalization component and ![c^{\text{BIM}}\_i](https://render.githubusercontent.com/render/math?math=c%5E%7B%5Ctext%7BBIM%7D%7D_i). We get BM25 model:
+
+    <img alt="BM25_model1" src="./assets/BM25_model1.png" width="500">
+
+    <img alt="BM25_model2" src="./assets/BM25_model2.png" width="500">
+
+    -   BM25F: Considering different zones of the document, use a weighted variant of term frequency and document length.
+    -   Adding non-textual feature: derive a simmilar RSV for the feature and add to BM25 RSV.
 
 
 
