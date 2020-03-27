@@ -295,7 +295,7 @@ In traditional IR systems, matching between each document and query is attempted
 
 Binary: documents and queries are represented as binary incidence vectors of terms (**x** and **q**) like in boolean retrieval.  Independence: Using naive bayes assumption, assuming terms occur in documents independently. Using the principle of probability ranking, we need to rank documents according to **p(R=1|q,x)**.
 
--   The math (from Stanford's slide): Using odds and Bayes' Rule, we rank documents by odds:
+-   The math (skip this if you want to): Using odds and Bayes' Rule, we rank documents by odds:
 
     <img alt="BIM1" src="./assets/BIM1.png" width="500">
 
@@ -312,7 +312,7 @@ Binary: documents and queries are represented as binary incidence vectors of ter
 
     <img alt="BIM5" src="./assets/BIM5.png" width="500">
 
-    Finally we have the retrieval status value for ranking:
+-   RSV: Finally we have the retrieval status value for ranking:
 
     <img alt="BIM6" src="./assets/BIM6.png" width="500">
 
@@ -355,7 +355,25 @@ Binary: documents and queries are represented as binary incidence vectors of ter
 #### BM25
 
 Best Match 25, since 1994. Its goal is to be sensitive to term frequency and document
-length while not adding too many parameters.
+length while not adding too many parameters. It relaxes the assumption of term independence and boolean representation of term/document/query/relevance above. It also takes into consideration of document length. 
+
+-   Background (skip this if you want to): Assuming a generative model. Words are drawn from vocabulary using a multinomial distribution. So the term frequency obeys binomial distribution. Assuming documents are very long compared to a term, we use Poisson distribution to approximate binomial distribution (see why is it legit [here](https://math.stackexchange.com/a/1050233)). But with this model, we cannot predict topic-specific terms that appear a lot in some documents and not once in others. So we introduce another binary hidden variable Eliteness between document and term frequency to describe if a term matches the topic of the document.
+
+    Similar to BIM, we derive a retrieval status value by considering term frequency:
+
+    <img alt="BM25_RSV" src="./assets/BM25_RSV.png" width="500">
+
+    Combined with our Poisson term frequency model, we get the 2-Poisson model for term frequency:
+
+    <img alt="BM25_2Poisson" src="./assets/BM25_2Poisson.png" width="500">
+
+    Here is the graph for ![c^{elite}\_i({tf}\_i)](https://render.githubusercontent.com/render/math?math=c%5E%7Belite%7D_i(%7Btf%7D_i)):
+
+    <img alt="BM25_c^elite_i" src="./assets/BM25_c^elite_i.png" width="500">
+
+
+
+
 
 ## Skipped Contents (for now):
 
