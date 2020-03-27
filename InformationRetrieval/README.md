@@ -293,11 +293,66 @@ In traditional IR systems, matching between each document and query is attempted
 
 #### Binary Independence Model
 
-TODO: Using naive bayes assumption
+Binary: documents and queries are represented as binary incidence vectors of terms (**x** and **q**) like in boolean retrieval.  Independence: Using naive bayes assumption, assuming terms occur in documents independently. Using the principle of probability ranking, we need to rank documents according to **p(R=1|q,x)**.
 
-#### (Okapi)BM25
+-   The math (from Stanford's slide): Using odds and Bayes' Rule, we rank documents by odds:
 
-Assumptions: TODO
+    <img alt="BIM1" src="./assets/BIM1.png" width="500">
+
+    Since we are only interested in ranking, factors unrelated to documents can be ignored:
+
+    
+    <img alt="BIM2" src="./assets/BIM2.png" width="500">
+
+    <img alt="BIM3" src="./assets/BIM3.png" width="500">
+
+    Here **p** is the probability of a term appearing in a document relevant to the query. **r** is the probability of a term appearing in a nonrelevant document.
+
+    <img alt="BIM4" src="./assets/BIM4.png" width="500">
+
+    <img alt="BIM5" src="./assets/BIM5.png" width="500">
+
+    Finally we have the retrieval status value for ranking:
+
+    <img alt="BIM6" src="./assets/BIM6.png" width="500">
+
+    In this equation, we let ![c_i](https://render.githubusercontent.com/render/math?math=c_i) be the log odds ratios. Then:
+
+    ![c_i = \log \frac{p_i(1-r_i)}{r_i(1-p_i)} = \log \frac{p_i}{1-p_i} + \log \frac{1-r_i}{r_i}](https://render.githubusercontent.com/render/math?math=c_i%20%3D%20%5Clog%20%5Cfrac%7Bp_i(1-r_i)%7D%7Br_i(1-p_i)%7D%20%3D%20%5Clog%20%5Cfrac%7Bp_i%7D%7B1-p_i%7D%20%2B%20%5Clog%20%5Cfrac%7B1-r_i%7D%7Br_i%7D)
+
+    ![\frac{p_i}{1-p_i}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7Bp_i%7D%7B1-p_i%7D) is the odds of the term appearing if the document is relevant. ![\frac{r_i}{1-r_i}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7Br_i%7D%7B1-r_i%7D) is odds of the term appearing if the document is nonrelevant. The log odds ratio is the ratio of these two odds. So more likely a term appears in a relevant document, larger the this ratio. This is why the retrieval status value could act as term weight. And the sum is document score.
+
+-   Estimating ![c_i](https://render.githubusercontent.com/render/math?math=c_i).
+
+    -    Maximum likelihood estimate: In theory, we can count from the whole document collection to get ![p_i](https://render.githubusercontent.com/render/math?math=p_i) and ![r_i](https://render.githubusercontent.com/render/math?math=r_i):
+
+    <img alt="BIM_MLE" src="./assets/BIM_MLE.png" width="500">
+
+    This called Maximum likelihood estimate. We can also use smoothing to avoid dividing zero and gives some probability to events we haven't seen in the document. A simple way is to add a small pseudocounts to each observed count. These pseudocounts act as a Bayesian prior and denotes the strength of our (small) belief in uniformity. This is call maximum a posterior estimation.
+
+    -   Estimating ![r_i](https://render.githubusercontent.com/render/math?math=r_i) in practice: Assuming relevant documents are a very small percentage of the collection:
+
+    <img alt="BIM_IDF" src="./assets/BIM_IDF.png" width="500">
+
+    -   Estimating ![p_i](https://render.githubusercontent.com/render/math?math=p_i) in practice: There are three ways:
+
+        -   Relevance feedback: Use the frequency of term in know relevant documents.
+        -   Just give it a constant 0.5. Only IDF is left in retrieval status value.
+        -   From collection level statistics, ![\frac{n_i}{N}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7Bn_i%7D%7BN%7D).
+
+    -   Relevance feedback: TODO
+
+-   Summary of assumptions in BIM:
+
+    -   Relevance of each document is independent of others
+    -   Naive Bayes Assumption: Term are independent of each other given query and document relevance
+    -   Terms not in the query are equally likely in relevant and irrelevant documents. They don't affect outcome.
+    -   Boolean representation of term/document/query/relevance
+    -   Estimating ![p_i](https://render.githubusercontent.com/render/math?math=p_i): query words appear half of the relevant documents
+    -   Estimating ![r_i](https://render.githubusercontent.com/render/math?math=r_i): Most documents are not relevant given query. |non-relevant| ≈ |doc. collection|
+
+
+#### BM25
 
 Best Match 25, since 1994. Its goal is to be sensitive to term frequency and document
 length while not adding too many parameters.
@@ -305,3 +360,4 @@ length while not adding too many parameters.
 ## Skipped Contents (for now):
 
 -   Ranked Retrieval: Parametric search, learning weights, safe ranking (in lecture 10 of Stanford)
+-   Relevance feedback
