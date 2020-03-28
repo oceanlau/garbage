@@ -390,9 +390,21 @@ length while not adding too many parameters. It relaxes the assumption of term i
     -   BM25F: Considering different zones of the document, use a weighted variant of term frequency and document length.
     -   Adding non-textual feature: derive a simmilar RSV for the feature and add to BM25 RSV.
 
+## Evaluation Metrics
 
+-   Binary Assessments
 
+    -   Precision: fraction of retrieved docs that are relevant = P(relevant|retrieved). Recall: fraction of relevant docs that are retrieved = P(retrieved|relevant). F1 score = 2P\*R/(P+R)
 
+    -   Presion@K: fraction of relevant docs in top K results. Mean Average Precision: first get averge of P@K from 1-st to K-th result of multiple queries then do another averge.
+
+    -   Reciprocal Score: considering the first relevalant result, it scores 1/K if at position K. Mean reciprocal rank: averge over multiple queries.
+
+-   Non Binary Assessments:
+
+    -   Discounted Cumulative Gain: given relevance socre [0, r] r > 2 of each result. Cumulative Gain at rank n is r_1 + r_2 + ... + r_n. Discounted Cumulative Gain is r_1 + r_2/log2 + r_3/log3 ... rn/logn
+
+    -   Normalized Discounted Cumulative Gain: Normalize DCG at rank n by the DCG value at rank n of the ideal ranking, which would first return the documents with the highest relevance level, then the next highest relevance level, etc. Normalization useful for contrasting queries with varying numbers of relevant results.
 
 ## Skipped Contents (for now):
 
