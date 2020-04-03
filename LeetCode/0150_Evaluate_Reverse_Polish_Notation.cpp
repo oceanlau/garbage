@@ -1,6 +1,34 @@
 class Solution {
 public:
     int evalRPN(vector<string>& tokens) {
+        stack<int> operands;
+        for (const string token : tokens) {
+            if (token == "+" || token == "-" || token == "*" || token == "/") {
+                int first = 0;
+                int second = 0;
+                second = operands.top();
+                operands.pop();
+                first = operands.top();
+                operands.pop();
+                if (token == "+") {
+                    operands.push(first + second);
+                } else if (token == "-") {
+                    operands.push(first - second);
+                } else if (token == "*") {
+                    operands.push(first * second);
+                } else if (token == "/") {
+                    operands.push(first / second);
+                }
+            } else {
+                operands.push(stoi(token));
+            }
+        }
+        return operands.top();
+    }
+};
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
         stack<int> nums;
         for (const string& token : tokens) {
             if (token == "+" || token == "-" || token == "*" || token == "/") {

@@ -1,3 +1,36 @@
+class Solution {
+public:
+    int numDecodings(string s) {
+        if (s.length() == 0) {
+            return 0;
+        }
+        //careful!
+        if (s[0] == '0') {
+            return 0;
+        }
+        int dp_2 = -1;
+        int dp_1 = 1;
+        for (int i = 1; i < s.length(); i++) {
+            int cur = 0;
+            if (s[i] >= '1' && s[i] <= '9') {
+                cur = dp_1; 
+            }
+            //careful!
+            if (s[i-1] == '1' || (s[i-1] == '2' && s[i] >= '0' && s[i] <= '6')) {
+                //careful!
+                if (dp_2 == -1) {
+                    cur += 1;
+                } else {
+                    cur += dp_2;
+                }
+            }
+            dp_2 = dp_1;
+            dp_1 = cur;
+        }
+        return dp_1;
+    }
+};
+
 // still 66%
 class Solution {
 public:
