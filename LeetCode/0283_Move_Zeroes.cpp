@@ -1,6 +1,24 @@
 class Solution {
 public:
     void moveZeroes(vector<int>& nums) {
+        int zero_idx = -1;
+        for (int i = 0; i < nums.size(); i++) {
+            if (nums[i] == 0) {
+                if (zero_idx == -1) {
+                    zero_idx = i;
+                }
+            } else {
+                if (zero_idx != -1) {
+                    swap(nums[i], nums[zero_idx++]);
+                }
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    void moveZeroes(vector<int>& nums) {
         int pos_0 = 0;
         for (int i = 0; i < nums.size(); i++) {
             if (nums[i] != 0) {

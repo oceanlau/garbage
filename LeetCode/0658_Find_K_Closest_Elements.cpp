@@ -1,3 +1,63 @@
+class Solution {
+private:
+    pair<int, int> _locate(vector<int>& arr, int& x) {
+        int i = 0;
+        int j = arr.size() - 1;
+        while (j - i > 1) {
+            int mid = i + (j - i) / 2;
+            if (arr[mid] == x) {
+                return make_pair(mid, mid);
+            } else if (arr[mid] > x) {
+                j = mid;
+            } else if (arr[mid] < x) {
+                i = mid;
+            }
+        }
+        if (arr[i] >= x) {
+            return make_pair(i, i);
+        } else if (arr[j] <= x) {
+            return make_pair(j, j);
+        } else {
+            return make_pair(i, j);
+        }
+    }
+public:
+    vector<int> findClosestElements(vector<int>& arr, int k, int x) {
+        if (k == 0) {
+            return {};
+        }
+        pair<int, int> closest_idxes = _locate(arr, x);
+        int i = closest_idxes.first;
+        int j = closest_idxes.second;
+        int l = -1;
+        int r = -1;
+        if (abs(arr[i] - x) <= abs(arr[j] - x)) {
+            l = i;
+            r = i;
+        } else {
+            l = j;
+            r = j;
+        }
+        k --;
+        while (k > 0) {
+            if (l == 0) {
+                r++;
+            } else if (r == arr.size() - 1) {
+                l--;
+            } else {
+                if (abs(arr[l-1] - x) <= abs(arr[r+1] - x)) {
+                    l --;
+                } else {
+                    r ++;
+                }
+            }
+            k --;
+        }
+        return vector<int> (arr.begin() + l, arr.begin() + r + 1);
+    }
+};
+
+
 // Dont push & insert. Do it in the end with the indexes. 74% 66%
 class Solution {
 private:

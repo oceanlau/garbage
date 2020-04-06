@@ -1,3 +1,39 @@
+class Solution {
+private:
+    vector<vector<char>> _symbol = {
+        {'I', 'V'},
+        {'X', 'L'},
+        {'C', 'D'},
+        {'M'},
+    };
+public:
+    string intToRoman(int num) {
+        int i = 0;
+        string res;
+        while (num != 0) {
+            int cur = num % 10;
+            string cur_str;
+            if (cur < 4) {
+                cur_str = string(cur, _symbol[i][0]);
+            } else if (cur == 4) {
+                cur_str += _symbol[i][0];
+                cur_str += _symbol[i][1];
+            } else if (cur == 5) {
+                cur_str = _symbol[i][1];
+            } else if (cur == 9) {
+                cur_str += _symbol[i][0];
+                cur_str += _symbol[i+1][0];
+            } else {
+                cur_str = _symbol[i][1] + string(cur - 5, _symbol[i][0]);
+            }
+            res = cur_str + res;
+            i ++;
+            num /= 10;
+        }
+        return res;
+    }
+};
+
 // 7% 36%
 class Solution {
 private:

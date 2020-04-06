@@ -2,6 +2,28 @@ class Solution {
 public:
     int maxSubArray(vector<int>& nums) {
         if (nums.size() == 0) {
+            return 0;
+        }
+        int min_sum_before = nums[0];
+        int cul_sum = nums[0];
+        int max_sum = nums[0];
+        for (int i = 1; i < nums.size(); i++) {
+            cul_sum += nums[i];
+            max_sum = max(cul_sum - min_sum_before, max_sum);
+            if (cul_sum < min_sum_before) {
+                min_sum_before = cul_sum;
+            }
+            max_sum = max(cul_sum, max_sum);
+            max_sum = max(nums[i], max_sum);
+        }
+        return max_sum;
+    }
+};
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if (nums.size() == 0) {
             return INT_MIN;
         }
         //careful 不能初始化为0！
