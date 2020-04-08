@@ -1,3 +1,47 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& matrix) {
+        if (matrix.size() == 0) {
+            return {};
+        }
+        int M = matrix.size();
+        int N = matrix[0].size();
+        vector<int> res;
+        bool up = true;
+        pair<int, int> pos = {0, 0};
+        while(pos.first >= 0 && pos.first < M && pos.second >= 0 && pos.second < N) {
+            res.push_back(matrix[pos.first][pos.second]);
+            if (up) {
+                if (pos.first - 1 < 0 || pos.second + 1 >= N) {
+                    up = false;
+                    if (pos.second + 1 >= N) {
+                        pos.first ++;
+                    } else {
+                        pos.second ++;
+                    }
+                } else {
+                    pos.first --;
+                    pos.second ++;
+                }
+            } else {
+                if (pos.first + 1 >= M || pos.second - 1 < 0) {
+                    up = true;
+                    if (pos.first + 1 >= M) {
+                        pos.second ++;
+                    } else {
+                        pos.first ++;
+                    }
+                } else {
+                    pos.first ++;
+                    pos.second --;
+                }
+            }
+        }
+        return res;
+    }
+};
+
+
 // Iterative
 
 // Recursive 53% 28%

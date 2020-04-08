@@ -9,6 +9,59 @@
  */
 class Solution {
 private:
+    // return max length of dec and inc path starting from current node.
+    pair<int, int> _get_lens(TreeNode* node, int& peak) {
+        if (node == NULL) {
+            return {0,0};
+        }
+        pair<int, int> cur = {1,1};
+        pair<int, int> left = _get_lens(node->left, peak);
+        pair<int, int> right = _get_lens(node->right, peak);
+        //considering current node, reset left and right
+        if (node->left) {
+            if (node->val - node->left->val != 1) {
+                left.first = 0;
+            }
+            if (node->left->val - node->val != 1) {
+                left.second = 0;
+            }
+        }
+        if (node->right) {
+            if (node->val - node->right->val != 1) {
+                right.first = 0;
+            }
+            if (node->right->val - node->val != 1) {
+                right.second = 0;
+            }
+        }
+        cur.first = max(left.first + 1, right.first + 1);
+        cur.second = max(left.second + 1, right.second + 1);
+        int cur3 = max(left.first + 1 + right.second, left.second + 1 + right.first);
+        peak = max(peak, cur.first);
+        peak = max(peak, cur.second);
+        peak = max(peak, cur3);
+        return cur;
+    }
+public:
+    int longestConsecutive(TreeNode* root) {
+        int peak = 0;
+        _get_lens(root, peak);
+        return peak;
+    }
+};
+
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
     pair<int, int> _dfs(TreeNode* node, int& longest) {
         pair<int, int> dp(1, 1);// longest inc and dec path from this node
         pair<int, int> child_dp(0, 0);

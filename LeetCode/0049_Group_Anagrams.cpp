@@ -1,3 +1,22 @@
+class Solution {
+public:
+    vector<vector<string>> groupAnagrams(vector<string>& strs) {
+        unordered_map<string, vector<string>> groups;
+        for (const string& str : strs) {
+            string key(26, '0');
+            for (const char& c : str) {
+                key[c - 'a'] += 1;
+            }
+            groups[key].push_back(str);
+        }
+        vector<vector<string>> results;
+        for (const auto& p : groups) {
+            results.push_back(p.second);
+        }
+        return results;
+    }
+};
+
 // O(n) 90%  O(n) 31%
 class Solution {
 public:
