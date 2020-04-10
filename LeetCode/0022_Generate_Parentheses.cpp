@@ -1,3 +1,26 @@
+class Solution {
+private:
+    void _bt(vector<string>& results, string cur, int r_allowed, int l, int r) {
+        if (l == r && r == 0) {
+            results.push_back(cur);
+            return;
+        }
+        if (l > 0) {
+            _bt(results, cur + '(', r_allowed + 1, l - 1, r);
+        }
+        if (r > 0 && r_allowed > 0) {
+            _bt(results, cur + ')', r_allowed - 1, l, r - 1);
+        }
+    }
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> results;
+        string cur = "";
+        _bt(results, cur, 0, n, n);
+        return results;
+    }
+};
+
 // Right Answer
 class Solution {
 public:

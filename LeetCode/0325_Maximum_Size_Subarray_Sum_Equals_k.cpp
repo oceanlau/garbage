@@ -1,6 +1,26 @@
 class Solution {
 public:
     int maxSubArrayLen(vector<int>& nums, int k) {
+        unordered_map<int, int> cumulative_sum;
+        int sum = 0;
+        cumulative_sum[sum] = -1;
+        int len = 0;
+        for (int i = 0; i < nums.size(); i++) {
+            sum += nums[i];
+            if (cumulative_sum.count(sum - k)) {
+                len = max(len, i - cumulative_sum[sum - k]);
+            }
+            if (!cumulative_sum.count(sum)) {
+                cumulative_sum[sum] = i;
+            }
+        }
+        return len;
+    }
+};
+
+class Solution {
+public:
+    int maxSubArrayLen(vector<int>& nums, int k) {
         int res = 0;
         int sum = 0;
         unordered_map<int, int> sum_to_pos {{0, -1}};

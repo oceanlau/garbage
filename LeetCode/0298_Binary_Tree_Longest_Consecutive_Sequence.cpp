@@ -9,6 +9,47 @@
  */
 class Solution {
 private:
+    int longestConsecutiveIncluding(TreeNode* node, int& peak) {
+        if (!node) {
+            return 0;
+        }
+        int l = 1;
+        if (node->left) {
+            l += longestConsecutiveIncluding(node->left, peak);
+            if (node->left->val - node->val != 1) {
+                l = 1;
+            }
+        }
+        int r = 1;
+        if (node->right) {
+            r += longestConsecutiveIncluding(node->right, peak);
+            if (node->right->val - node->val != 1) {
+                r = 1;
+            }
+        }
+        peak = max(peak, l);
+        peak = max(peak, r);
+        return max(l, r);
+    }
+public:
+    int longestConsecutive(TreeNode* root) {
+        int peak = 0;
+        longestConsecutiveIncluding(root, peak);
+        return peak;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
     int _dfs(TreeNode* node, int len) {
         if (node == NULL) {
             return 0;

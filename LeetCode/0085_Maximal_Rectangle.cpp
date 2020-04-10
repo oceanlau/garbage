@@ -1,3 +1,45 @@
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int h = matrix.size();
+        if (h == 0) {
+            return 0;
+        }
+        int w = matrix[0].size();
+        for (int j = 0; j < w; j++) {
+            for (int i = 1; i < h; i++) {
+                if (matrix[i][j] > '0') {
+                    matrix[i][j] += matrix[i-1][j] - '0';
+                }
+            }
+        }
+        // mono inc stack to find max area base on each row
+        int maxsize = 0;
+        for (int i = 0; i < h; i++) {
+            stack<int> leftbounds;
+            for (int j = 0; j <= w; j++) {
+                int cur_height = 0;
+                if (j < w) {
+                    cur_height = matrix[i][j] - '0';
+                }
+                while (!leftbounds.empty() && cur_height <= matrix[i][leftbounds.top()] - '0') {
+                    int last_height = matrix[i][leftbounds.top()] - '0';
+                    leftbounds.pop();
+                    //careful!
+                    int left = 0;
+                    if (!leftbounds.empty()) {
+                        //careful!
+                        left = leftbounds.top() + 1;
+                    }
+                    maxsize = max(maxsize, (j - left) * last_height);
+                }
+                leftbounds.push(j);
+            }
+        }
+        return maxsize;
+    }
+};
+
 //94% 55%
 class Solution {
 private:
