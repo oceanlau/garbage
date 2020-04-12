@@ -1,3 +1,41 @@
+class Solution {
+private:
+    void _bt(vector<int>& candidates, int start, vector<vector<int>>& combs, vector<int>& comb, int sum, int& target) {
+        if (sum == target) {
+            combs.push_back(comb);
+            return;
+        }
+        for (int i = start; i < candidates.size(); i++) {
+            sum += candidates[i];
+            if (sum > target) {
+                return;
+            }
+            comb.push_back(candidates[i]);
+            _bt(candidates, i, combs, comb, sum, target);
+            sum -= candidates[i];
+            comb.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> comb;
+        vector<vector<int>> combs;
+        sort(candidates.begin(), candidates.end());
+        int sum = 0;
+        for (int i = 0; i < candidates.size(); i++) {
+            sum += candidates[i];
+            if (sum > target) {
+                break;
+            }
+            comb.push_back(candidates[i]);
+            _bt(candidates, i, combs, comb, sum, target);
+            sum -= candidates[i];
+            comb.pop_back();
+        }
+        return combs;
+    }
+};
+
 // bt
 class Solution {
 private:
