@@ -1,6 +1,34 @@
 class Solution {
 public:
     int threeSumClosest(vector<int>& nums, int target) {
+        sort(nums.begin(), nums.end());
+        int closest_diff = INT_MAX;
+        int closest_val = 0;
+        for (int i = 0; i < nums.size() - 2; i++) {
+            int j = i + 1;
+            int k = nums.size() - 1;
+            while (j < k) {
+                int cur = nums[i] + nums[j] + nums[k];
+                if (abs(target - cur) < closest_diff) {
+                    closest_diff = abs(target - cur);
+                    closest_val = cur;
+                }
+                if (cur < target) {
+                    j ++;
+                } else if (cur > target) {
+                    k --;
+                } else {
+                    return cur;
+                }
+            }
+        }
+        return closest_val;
+    }
+};
+
+class Solution {
+public:
+    int threeSumClosest(vector<int>& nums, int target) {
         bool init_flag = true;
         int closest_distance;
         int res;

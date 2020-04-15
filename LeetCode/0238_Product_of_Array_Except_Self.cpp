@@ -1,6 +1,33 @@
 class Solution {
 public:
     vector<int> productExceptSelf(vector<int>& nums) {
+        if (nums.size() < 2) {
+            return nums;
+        }
+        vector<int> ltor = nums;
+        vector<int> rtol = nums;
+        for (int i = 1; i < ltor.size(); i++) {
+            ltor[i] *= ltor[i-1];
+        }
+        for (int i = rtol.size() - 2; i >= 0; i--) {
+            rtol[i] *= rtol[i+1];
+        }
+        for (int i = 0; i < nums.size(); i++) {
+            if (i == 0) {
+                nums[i] = rtol[i + 1];
+            } else if (i == nums.size() - 1) {
+                nums[i] = ltor[i - 1];
+            } else {
+                nums[i] = ltor[i - 1] * rtol[i + 1];
+            }
+        }
+        return nums;
+    }
+};
+
+class Solution {
+public:
+    vector<int> productExceptSelf(vector<int>& nums) {
         vector<int> products (nums.size(), 1);
         vector<int> res (nums.size(), 1);
         for (int i = 0; i < nums.size(); i++){
