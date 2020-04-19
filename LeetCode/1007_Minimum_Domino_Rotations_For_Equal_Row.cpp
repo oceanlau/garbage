@@ -1,3 +1,34 @@
+class Solution {
+private:
+    int minDominoRotate(int target, vector<int>& A, vector<int>& B) {
+        int a = 0;
+        int b = 0;
+        for (int i = 0; i < A.size(); i++) {
+            if (A[i] != target && B[i] != target) {
+                return -1;
+            }
+            if (A[i] != target) {
+                a++;
+            }
+            if (B[i] != target) {
+                b++;
+            }
+        }
+        return min(a ,b);
+    }
+public:
+    int minDominoRotations(vector<int>& A, vector<int>& B) {
+        if (A.size() == 0) {
+            return 0;
+        }
+        int match_A0 = minDominoRotate(A[0], A, B);
+        if (match_A0 != -1 || A[0] == B[0]) {
+            return match_A0;
+        }
+        return minDominoRotate(B[0], A, B);
+    }
+};
+
 //A或B，要么match A[0],要么match B[0]，分别检查
 class Solution {
 public:

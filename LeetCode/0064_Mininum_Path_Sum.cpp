@@ -2,6 +2,34 @@ class Solution {
 public:
     int minPathSum(vector<vector<int>>& grid) {
         int h = grid.size();
+        if (h == 0) {
+            return 0;
+        }
+        int w = grid[0].size();
+        vector<int> dp(w, 0);
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                if (i == 0) {
+                    if (j == 0) {
+                        dp[j] = grid[i][j];
+                    } else {
+                        dp[j] = grid[i][j] + dp[j - 1];
+                    }
+                } else if (j == 0) {
+                    dp[j] += grid[i][j];
+                } else {
+                    dp[j] = grid[i][j] + min(dp[j - 1], dp[j]);
+                }
+            }
+        }
+        return dp.back();
+    }
+};
+
+class Solution {
+public:
+    int minPathSum(vector<vector<int>>& grid) {
+        int h = grid.size();
         int w = grid[0].size();
         for (int i = 0; i < h; i++) {
             for (int j = 0; j < w; j++) {
