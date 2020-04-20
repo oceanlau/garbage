@@ -2,6 +2,58 @@ class SnapshotArray {
 private:
     vector<vector<pair<int, int>>> _storage;
     int _snap_id = 0;
+    int _first_val_let(int index, int snap_id){
+        int l = 0;
+        int r = _storage[index].size() - 1;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            if (_storage[index][mid].first == snap_id) {
+                return _storage[index][mid].second;
+            } else if (_storage[index][mid].first < snap_id) {
+                l = mid;
+            } else {
+                r = mid - 1;
+            }
+        }
+        if (_storage[index][r].first <= snap_id) {
+            return _storage[index][r].second;
+        }
+        return _storage[index][l].second;
+    }
+public:
+    SnapshotArray(int length) {
+        _storage = vector<vector<pair<int, int>>>(length, vector<pair<int, int>> {{_snap_id, 0}});
+    }
+    
+    void set(int index, int val) {
+        if (_storage[index].back().first == _snap_id) {
+            _storage[index].back().second = val;
+        } else {
+            _storage[index].emplace_back(_snap_id, val);
+        }
+    }
+    
+    int snap() {
+        return _snap_id++;
+    }
+    
+    int get(int index, int snap_id) {
+        return _first_val_let(index, snap_id);
+    }
+};
+
+/**
+ * Your SnapshotArray object will be instantiated and called as such:
+ * SnapshotArray* obj = new SnapshotArray(length);
+ * obj->set(index,val);
+ * int param_2 = obj->snap();
+ * int param_3 = obj->get(index,snap_id);
+ */
+
+class SnapshotArray {
+private:
+    vector<vector<pair<int, int>>> _storage;
+    int _snap_id = 0;
     int _bin_search(vector<pair<int, int>>& versions, int snap_id) {
         int l = 0;
         int r = versions.size() - 1;
