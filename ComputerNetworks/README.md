@@ -1,5 +1,7 @@
 # Computer Networks
 
+My summary notes from Avi and Gabe's JHU CS 414/614 Computer Networks course 2020 spring.
+
 ## Wireless
 
 ### Basics
@@ -19,3 +21,23 @@
     -   Reserving channel (optional): handling the hidden terminal problem.
 -   Frame:
     -   4 MAC addresses: receiver host or AP, sender host or AP, router interface to AP, address in ad-hoc mode. Compared to switch, AP is not transparent (Has MAC address).
+
+### 802.15 (Bluetooth)
+
+-   Infrastructure: Ad-hoc net. Master/slaves/parked(inactive) devices within a local net.
+
+### Cellular Net
+
+-   Infrastructure: Cell (Base station + mobile users), mobile switching center, etc.
+-   Combined FDMA/TDMA/CDMA to support more users
+-   2G (Voice), 3G (Voice + data), 4G (All IP)
+
+### Handling Mobility
+
+-   How:
+    -   Do nothing and let routing handle it: not scalable, too many losses.
+    -   Indirect routing (often used): Inform home agent about host's new address when host move to another network and let the home agent and foreign agent forward data to it. Longer delay.
+    -   Direct routing: Correspondent agent get the new address of a host from home agent and directly connect to it. Shorter delay but 'unfair' (too much work) to the correspondent agent.
+-   Mobile IP: Implements indirect routing above.
+-   Cellular net (GSM): Also indirect routing. Roaming address is acquired by querying the cellular net provider.
+    -   Handoff: Base stations, host and cellular net provider coordinate to serve a moving host.
