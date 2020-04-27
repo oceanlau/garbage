@@ -1,6 +1,39 @@
 class Solution {
 public:
     vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        vector<vector<int>> results;
+        int i = 0;
+        for (; i < intervals.size(); i++) {
+            if (intervals[i][1] < newInterval[0]) {
+                results.push_back(intervals[i]);
+                continue;
+            }
+            if (intervals[i][0] > newInterval[0] && intervals[i][0] > newInterval[1]) {
+                results.push_back(newInterval);
+                results.push_back(intervals[i++]);
+            } else {
+                int left = min(intervals[i][0], newInterval[0]);
+                int right = max(intervals[i][1], newInterval[1]);
+                while (++i< intervals.size() && intervals[i][0] <= right) {
+                    right = max(right, intervals[i][1]);
+                }
+                results.push_back({left, right});
+            }
+            break;
+        }
+        for (; i < intervals.size(); i++) {
+            results.push_back(intervals[i]);
+        }
+        if (results.empty() || results.back()[1] < newInterval[0]) {
+            results.push_back(newInterval);
+        }
+        return results;
+    }
+};
+
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
         vector<vector<int>> res;
         if (intervals.size() == 0) {
             res.push_back(newInterval);

@@ -1,6 +1,32 @@
 class Solution {
 public:
     int firstMissingPositive(vector<int>& nums) {
+        int runner = 0;
+        int max_num = nums.size();
+        while (runner < nums.size()) {
+            if (nums[runner] > max_num || nums[runner] <= 0) {
+                nums[runner] = -1;
+            } else if (nums[runner] > 0 && runner + 1 != nums[runner]) {//dont need to swap with itself
+                if (nums[nums[runner] - 1] == nums[runner]) { // destination already fulfilled
+                    nums[runner] = -1;
+                } else {
+                    swap(nums[nums[runner] - 1], nums[runner]);
+                    continue;
+                }
+            }
+            runner ++;
+        }
+        int missing_ptr = 0;
+        while(missing_ptr < max_num && nums[missing_ptr] != -1) {
+            missing_ptr ++;
+        }
+        return missing_ptr + 1;
+    }
+};
+
+class Solution {
+public:
+    int firstMissingPositive(vector<int>& nums) {
         for (int i = 0; i < nums.size(); i++) {
             if (i + 1 == nums[i]) {
                 continue;
