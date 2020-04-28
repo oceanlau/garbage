@@ -154,8 +154,6 @@ More detail:
 -   idf: Considering rarity (informative). It only starts working when there are two or more terms in a query.
 
     ![df_t](https://render.githubusercontent.com/render/math?math=df_t) is the number of document that contain t. Minimum set to 1.
-    
-    $$idf_t=\log{(N/df_t)}$$
 
     ![idf_t=\log{(N/df_t)}](https://render.githubusercontent.com/render/math?math=idf_t%3D%5Clog%7B(N%2Fdf_t)%7D)
 
@@ -408,7 +406,7 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     -   Normalized Discounted Cumulative Gain: Normalize DCG at rank n by the DCG value at rank n of the ideal ranking, which would first return the documents with the highest relevance level, then the next highest relevance level, etc. Normalization useful for contrasting queries with varying numbers of relevant results.
 
-## Skipped Contents (for now):
+## Skipped Contents (for now)
 
 -   Ranked Retrieval: Parametric search, learning weights, safe ranking (in lecture 10 of Stanford)
 -   Relevance feedback
