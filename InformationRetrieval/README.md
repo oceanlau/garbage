@@ -154,6 +154,8 @@ More detail:
 -   idf: Considering rarity (informative). It only starts working when there are two or more terms in a query.
 
     ![df_t](https://render.githubusercontent.com/render/math?math=df_t) is the number of document that contain t. Minimum set to 1.
+    
+    $$idf_t=\log{(N/df_t)}$$
 
     ![idf_t=\log{(N/df_t)}](https://render.githubusercontent.com/render/math?math=idf_t%3D%5Clog%7B(N%2Fdf_t)%7D)
 
