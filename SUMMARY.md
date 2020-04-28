@@ -1,13 +1,13 @@
-# General
+## General
 
-* [From 0](README.md)
+* [Noob Coding](README.md)
 
-# Languages
+## Languages
 
 * [Python](Python/README.md)
 * [PHP (Laravel)](PHP/Laravel/README.md)
 
-# Topics
+## Topics
 
 * [Information Retrieval](InformationRetrieval/README.md)
 * [Computer Networks](ComputerNetworks/README.md)
