@@ -73,7 +73,109 @@ Like many other web frameworks, Laravel renders a page or API with four main mod
 
     You can run the Laravel built-in server locally using command `php artisan serve`. If you are developing on your local machine with a browser, you can go to `http://127.0.0.1:8000/test` and see your page. Otherwise using command `curl http://127.0.0.1:8000/test` to see your server output.
 
--   Get your data:
+-   Insert your data: First we create our database table and a corresponding data module (model) to manipulate the table. Then we call this model from controller to insert data. The model of Laravel provides us with a lot of conveient APIs to manipulate data tables without writing SQL.
+
+    1. To post data to a url, simply add this to `routes/web.php`:
+
+    ```PHP
+    Route::post('note', 'NoteController@store');
+    ```
+
+    2. Create our controller:
+
+    ```bash
+    # Generate controller file using this command
+    php artisan make:controller NoteController
+
+    vi app/Http/Controllers/NoteController.php
+    ```
+
+    ```PHP
+    public function store(Request $request) {
+        // We are using model Note.
+        // This create API is provided by Laravel.
+        $note = Note::create([
+            'title' => $request->title,
+            'author' => $request->author,
+            'content' => $request->content,
+        ]);
+
+        // Assume the request is ajax, we respond with a JSON.
+        return response()->json([
+            'status' => 0,
+            'msg' => '',
+            'data' => $note
+        ], 201);
+        
+        // If it is a form submit, we can also redirect user to a page.
+        // Below we direct the user back to where he/she came from.
+        // return back()->withInput();
+    }
+    ```
+
+    3. Create our table and model. Laravel provide scripts (jargon:**migration**) to create tables for us.
+
+    ```bash
+    # -m tells Laravel to create model for us at the same time
+    php artisan make:migration Note -m
+
+    vi database/migrations/DATETIME_create_notes_table.php
+    ```
+
+    ```PHP
+    public function up()
+    {
+        Schema::create('notes', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->string('title', 100)->default('');
+            $table->string('author', 100)->default('');
+            $table->string('content', 800)->default('');
+            $table->timestamps();
+        });
+    }
+
+    public function down()
+    {
+        Schema::dropIfExists('notes');
+    }
+    ```
+
+    ```bash
+    # Run your scripts (all of them) to create the table
+    php artisan migrate
+
+    # Now edit our model file
+    vi app/Note.php
+    ```
+
+    ```PHP
+    // Add the column names that were used in Note::create at our controller
+    // Otherwise Laravel won't let us insert like that
+    protected $fillable = ['title', 'author', 'content'];
+    ```
+
+    Now if we post something to our url, you can see the result.
+
+    ```bash
+    ```
+
+-   Retrieve your data: Similarly, we edit our route and controller file:
+
+    ```PHP
+    // routes/web.php
+    // In case your url path is long, we can give it a name like this.
+    // So we can easily get this url string anywhere in our app.
+    Route::get('note', 'NoteController@showNotes')->name('note');
+    ```
+
+    ```PHP
+    // app/Http/Controllers/NoteController.php
+    ```
+
+-   Update your data: The only difference from create and retrieve process is the model API we use in our controller:
+
+    ```PHP
+    ```
 
 -   Front end: It's going to take a long time introducing the modern front end technology stack. If not interested, you can use old-fashion HTML/CSS/JS in Laravel like this:
 
@@ -97,6 +199,8 @@ Like many other web frameworks, Laravel renders a page or API with four main mod
     ```
 
     Every time you modifies JS or SASS, run `npm run dev` to generate final JS and SASS assets.
+
+-   Pagination:
 
 -   Handling user: Usually if you are letting user posting content on your site, you need to implement register, login, verification, password reset, session and logout the whole package. How to implement all of these is beyond the scope of this article. Luckily Laravel has these all built-in for us. Using the command below will generate all the code, including route, view, controller and model, for us:
 
@@ -296,7 +400,7 @@ Like many other web frameworks, Laravel renders a page or API with four main mod
     This script grammar is listed here: [https://laravel.com/docs/master/migrations](https://laravel.com/docs/master/migrations). Remember it is best to implement the `down` method in case you need to rollback your modification in the future.
 
     ```bash
-    # Run your script (all of it)
+    # Run your scripts (all of them)
     php artisan migrate
     # If you regret your last modification
     php artisan migrate:rollback --step=1

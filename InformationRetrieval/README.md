@@ -396,7 +396,7 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     -   Precision: fraction of retrieved docs that are relevant = P(relevant|retrieved). Recall: fraction of relevant docs that are retrieved = P(retrieved|relevant). F1 score = 2P\*R/(P+R)
 
-    -   Presion@K: fraction of relevant docs in top K results. Mean Average Precision: first get averge of P@K from 1-st to K-th result of multiple queries then do another averge.
+    -   Presion@K: fraction of relevant docs in top K results. Mean Average Precision: first get averge of P@K from 1st to Kth result of multiple queries then do another averge. Similarly we have Recall@K. By looking at the recall and precision of 1st to Kth result we can draw a Precision-recall graph.
 
     -   Reciprocal Score: considering the first relevalant result, it scores 1/K if at position K. Mean reciprocal rank: averge over multiple queries.
 

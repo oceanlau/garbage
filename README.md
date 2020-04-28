@@ -26,7 +26,7 @@ A few tips and tools to boost development effectiveness.
 
 -   Environment: Instead of working as root with too much privilege and too many folders, I prefer creating several linux users to seperately manage projects when I get my hands on a new machine. 
 
-    ```Shell
+    ```bash
     sudo adduser ocean
     sudo passwd ocean
     # Then add line `ocean ALL=(ALL) ALL` in `/etc/sudoers` to enable `sudo` command
@@ -38,7 +38,7 @@ A few tips and tools to boost development effectiveness.
 
     [.bashrc PS1 generator](http://bashrcgenerator.com) is a good site to create useful bash prompt style. My favourite:
 
-    ```Shell
+    ```bash
     function git-branch-name {
         git symbolic-ref HEAD 2>/dev/null | cut -d"/" -f 3
     }
@@ -52,7 +52,7 @@ A few tips and tools to boost development effectiveness.
 
     And some useful aliases:
 
-    ```Shell
+    ```bash
     alias psgrep='ps -eo pid,lstart,cmd | grep -v grep | grep --color'
     alias grep='grep --color'
     alias zhcn='export LANG=zh_CN.GBK;export LC_ALL=zh_CN.GBK;export LC_CTYPE=zh_CN.GBK'
@@ -63,11 +63,16 @@ A few tips and tools to boost development effectiveness.
     alias l.='ls -d .* --color=auto'
     alias ll='ls -l --color=auto'
     alias ls='ls --color=auto'
+
+    # This pull or push from master branch. You might need to change this.
+    alias pull='git pull origin master'
+    alias push='git push origin master'
+    alias cm='git commit -m '
     ```
 
 -   Vim: I use [The Ultimate vimrc](https://github.com/amix/vimrc) with some personal settings in `~/.vim_runtime/vimrcs/my_configs.vim`:
 
-    ```Shell
+    ```bash
     set gcr=a:blinkon0
     set cursorline
     set cuc
@@ -77,7 +82,7 @@ A few tips and tools to boost development effectiveness.
 
 -   Useful Commands
 
-    ```Shell
+    ```bash
     df -h    # Machine overall disk usage
     du -sh * # File and folder size at current folder
     ```
@@ -89,7 +94,7 @@ A few tips and tools to boost development effectiveness.
 
 -   Setting up git:
 
-    ```Shell
+    ```bash
     # remove --global if you are configuring different user for different project.
     git config --global user.name "Your Name"
     git config --global user.email "you@example.com"
@@ -100,7 +105,7 @@ A few tips and tools to boost development effectiveness.
 
     -   Get your local SSH keys:
 
-    ```Shell
+    ```bash
     ls -al ~/.ssh # check if you already have one
     # if not:
     ssh-keygen -t rsa -b 4096 -C "your_github_email@example.com" # and hit enter all the way
@@ -108,14 +113,14 @@ A few tips and tools to boost development effectiveness.
 
     -   Add your private SSH key to the ssh-agent:
     
-    ```Shell
+    ```bash
     eval "$(ssh-agent -s)"
     ssh-add ~/.ssh/id_rsa
     ```
 
     -   Add your public SSH key to your Github account:
 
-    ```Shell
+    ```bash
     cat ~/.ssh/id_rsa.pub
     # Then copy the content
     # and add to Github: Settings -> SSH and GPG keys -> click New SSH key -> put in the 'key' field->click Add SSH key
@@ -123,6 +128,12 @@ A few tips and tools to boost development effectiveness.
 
 
 -   For each project, use a `.gitignore` file to avoid submitting sensitive/large/unwanted files to git: [https://github.com/github/gitignore](https://github.com/github/gitignore)
+
+### Github
+
+-   How to insert equation on github:
+    -   [https://alexanderrodin.com/github-latex-markdown/](https://alexanderrodin.com/github-latex-markdown/), [https://gist.github.com/a-rodin/fef3f543412d6e1ec5b6cf55bf197d7b](https://gist.github.com/a-rodin/fef3f543412d6e1ec5b6cf55bf197d7b)
+    -   [https://stackoverflow.com/questions/11256433/how-to-show-math-equations-in-general-githubs-markdownnot-githubs-blog](https://stackoverflow.com/questions/11256433/how-to-show-math-equations-in-general-githubs-markdownnot-githubs-blog)
 
 ### Java
 
