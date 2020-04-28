@@ -1,8 +1,8 @@
-# garbage, for now
+# Noob Coding
 
-## Aim
+Work in progress :construction_worker:. Now live on [https://www.noobcoding.com/](https://www.noobcoding.com/)!
 
-For those working in modern "Internet" companies, or "AI" companies if you are reading this several years from now. I aim to:
+## Goal
 
 - **Teach:** Try to develop a fast-learning process to help others grasp programming as quickly as possible. Focuses on speedrun so it does not guarantee insightful knowledge and is by no means comprehensive. However, some interesting stuff would be provided marked optional.
 - **Teach Myself:** Should be able to review or preview many important topics in our industry.
