@@ -1,4 +1,4 @@
-## General
+# Summary
 
 * [Noob Coding](README.md)
 
