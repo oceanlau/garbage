@@ -1,6 +1,6 @@
 # Noob Coding
 
-Work in progress :construction_worker:. Now live on [https://www.noobcoding.com/](https://www.noobcoding.com/)!
+Work in progress. Now live on [https://www.noobcoding.com/](https://www.noobcoding.com/)!
 
 ## Goal
 
