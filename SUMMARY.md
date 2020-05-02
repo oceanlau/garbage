@@ -10,4 +10,5 @@
 ## Topics
 
 * [Information Retrieval](InformationRetrieval/README.md)
+* [Parallel Programming](ParallelProgramming/README.md)
 * [Computer Networks](ComputerNetworks/README.md)

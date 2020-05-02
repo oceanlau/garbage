@@ -1,6 +1,6 @@
 # Noob Coding
 
-Work in progress. Now live on [https://www.noobcoding.com/](https://www.noobcoding.com/)!
+This is the repo of my notes. Now live on [https://www.noobcoding.com/](https://www.noobcoding.com/)!
 
 ## Goal
 
