@@ -339,21 +339,21 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     ![BM25_2Poisson](./assets/BM25_2Poisson.png)
 
-    But there are too many unknown parameters. Here we have a look at the graph for $c^{elite}\_i({tf}\_i)$:
+    But there are too many unknown parameters. Here we have a look at the graph for $$c^{elite}\_i({tf}\_i)$$:
 
     ![BM25_c^elite_i](./assets/BM25_c^elite_i.png)
 
--   Elite RSV: We can approximate $c^{elite}\_i({tf}\_i)$ with the Saturation function: $\frac{\mathit{tf}}{k_1 + \mathit{tf}}$
+-   Elite RSV: We can approximate $$c^{elite}\_i({tf}\_i)$$ with the Saturation function: $$\frac{\mathit{tf}}{k_1 + \mathit{tf}}$$
 
     ![BM25_Sat](./assets/BM25_Sat.png)
 
-    We usually add a $k_1+1$ to the numerator to provide a lower bound 1 to this function.
+    We usually add a $$k_1+1$$ to the numerator to provide a lower bound 1 to this function.
 
     Finally we consider the document length by normalizing the term frequency with a length normalization component:
 
     ![BM25_LenNorm](./assets/BM25_LenNorm.png)
 
--   Using the $c^{elite}\_i({tf}\_i)$ with length normalization component and $c^{\text{BIM}}\_i$. We get BM25 model:
+-   Using the $$c^{elite}\_i({tf}\_i)$$ with length normalization component and $$c^{\text{BIM}}\_i$$. We get BM25 model:
 
     ![BM25_model1](./assets/BM25_model1.png)
 
@@ -362,11 +362,11 @@ length while not adding too many parameters. It relaxes the assumption of term i
     -   BM25F: Considering different zones of the document, use a weighted variant of term frequency and document length.
     -   Adding non-textual feature: derive a simmilar RSV for the feature and add to BM25 RSV.
 
--   Some advice on choosing $k_1$ and $b$ from Elastic: For Lucene and ElasticSearch, the default is $k_1=1.2, b=0.75$. Usually good enough for most cases.
+-   Some advice on choosing $$k_1$$ and $$b$$ from Elastic: For Lucene and ElasticSearch, the default is $$k_1=1.2, b=0.75$$. Usually good enough for most cases.
 
-    -   $k_1 (0-3)$: Do you want terms to be saturated, so that the system wouldn't focus only on a few high-freqency terms? If yes, make $k_1$ smaller so that large term frequency number would contribute relatively less than when $k_1$ is large. However for long documents, you may want a large $k_1$ since all term frequencies are large and you need to find the most relative ones.
+    -   $$k_1 (0-3)$$: Do you want terms to be saturated, so that the system wouldn't focus only on a few high-freqency terms? If yes, make $$k_1$$ smaller so that large term frequency number would contribute relatively less than when $$k_1$$ is large. However for long documents, you may want a large $k_1$ since all term frequencies are large and you need to find the most relative ones.
 
-    -   $b (0-1)$: Do you want to penalize lengthy documents? If yes, make $b$ larger so that some lengthy documents that covers a lot of topics (maybe spam) would appear less. For some lengthy engineering specification or patents, there may be no reason to penalize their length.
+    -   $$b (0-1)$$: Do you want to penalize lengthy documents? If yes, make $$b$$ larger so that some lengthy documents that covers a lot of topics (maybe spam) would appear less. For some lengthy engineering specification or patents, there may be no reason to penalize their length.
 
 ## Evaluation Metrics
 

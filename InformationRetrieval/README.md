@@ -1,6 +1,6 @@
 # Information Retrieval
 
-This note mainly focuses on text information retrieval. It is mainly based on JHU's, ETHzurich's and [Stanford's](http://web.stanford.edu/class/cs276/) information retrieval course.
+This note mainly focuses on text information retrieval. It is mainly based on JHU's, [ETHzurich's](https://www.systems.ethz.ch/courses/spring2018/informationretrieval) and [Stanford's](http://web.stanford.edu/class/cs276/) information retrieval course.
 
 ## Overview
 
