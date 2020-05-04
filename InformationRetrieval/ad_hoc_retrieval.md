@@ -272,7 +272,6 @@ Binary: documents and queries are represented as binary incidence vectors of ter
     ![BIM1](./assets/BIM1.png)
 
     Since we are only interested in ranking, factors unrelated to documents can be ignored:
-
     
     ![BIM2](./assets/BIM2.png)
 
