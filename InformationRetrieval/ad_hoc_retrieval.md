@@ -269,30 +269,30 @@ Binary: documents and queries are represented as binary incidence vectors of ter
 
 -   The math (skip this if you want to): Using odds and Bayes' Rule, we rank documents by odds:
 
-    <img alt="BIM1" src="./assets/BIM1.png" width="500">
+    ![BIM1](./assets/BIM1.png)
 
     Since we are only interested in ranking, factors unrelated to documents can be ignored:
 
     
-    <img alt="BIM2" src="./assets/BIM2.png" width="500">
+    ![BIM2](./assets/BIM2.png)
 
-    <img alt="BIM3" src="./assets/BIM3.png" width="500">
+    ![BIM3](./assets/BIM3.png)
 
     Here **p** is the probability of a term appearing in a document relevant to the query. **r** is the probability of a term appearing in a nonrelevant document.
 
-    <img alt="BIM4" src="./assets/BIM4.png" width="500">
+    ![BIM4](./assets/BIM4.png)
 
-    <img alt="BIM5" src="./assets/BIM5.png" width="500">
+    ![BIM5](./assets/BIM5.png)
 
 -   BIM RSV: Finally we have the retrieval status value for ranking:
 
-    <img alt="BIM6" src="./assets/BIM6.png" width="500">
+    ![BIM6](./assets/BIM6.png)
 
-    In this equation, we let ![c_i](https://render.githubusercontent.com/render/math?math=c_i) be the log odds ratios. Then:
+    In this equation, we let $$c_i$$ be the log odds ratios. Then:
 
-    ![c_i = \log \frac{p_i(1-r_i)}{r_i(1-p_i)} = \log \frac{p_i}{1-p_i} + \log \frac{1-r_i}{r_i}](https://render.githubusercontent.com/render/math?math=c_i%20%3D%20%5Clog%20%5Cfrac%7Bp_i(1-r_i)%7D%7Br_i(1-p_i)%7D%20%3D%20%5Clog%20%5Cfrac%7Bp_i%7D%7B1-p_i%7D%20%2B%20%5Clog%20%5Cfrac%7B1-r_i%7D%7Br_i%7D)
+    $$c_i = \log \frac{p_i(1-r_i)}{r_i(1-p_i)} = \log \frac{p_i}{1-p_i} + \log \frac{1-r_i}{r_i}$$
 
-    ![\frac{p_i}{1-p_i}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7Bp_i%7D%7B1-p_i%7D) is the odds of the term appearing if the document is relevant. ![\frac{r_i}{1-r_i}](https://render.githubusercontent.com/render/math?math=%5Cfrac%7Br_i%7D%7B1-r_i%7D) is odds of the term appearing if the document is nonrelevant. The log odds ratio is the ratio of these two odds. So more likely a term appears in a relevant document, larger the this ratio. This is why the retrieval status value could act as term weight. And the sum is document score.
+    $$\frac{p_i}{1-p_i}$$ is the odds of the term appearing if the document is relevant. $$\frac{r_i}{1-r_i}$$ is odds of the term appearing if the document is nonrelevant. The log odds ratio is the ratio of these two odds. So more likely a term appears in a relevant document, larger the this ratio. This is why the retrieval status value could act as term weight. And the sum is document score.
 
 -   Estimating ![c_i](https://render.githubusercontent.com/render/math?math=c_i).
 
@@ -359,14 +359,14 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     ![BM25_model2](./assets/BM25_model2.png)
 
-    -   BM25F: Considering different zones of the document, use a weighted variant of term frequency and document length.
+    -   BM25F: Considering different zones of the document, use a weighted variant of term frequency. This would also affect document length which is the sum of term frequency.
     -   Adding non-textual feature: derive a simmilar RSV for the feature and add to BM25 RSV.
 
 -   Some advice on choosing $$k_1$$ and $$b$$ from Elastic: For Lucene and ElasticSearch, the default is $$k_1=1.2, b=0.75$$. Usually good enough for most cases.
 
-    -   $$k_1 (0-3)$$: Do you want terms to be saturated, so that the system wouldn't focus only on a few high-freqency terms? If yes, make $$$k_1$$ smaller so that large term frequency number would contribute relatively less than when $$k_1$$ is large. However for long documents, you may want a large $$k_1$$ since all term frequencies are large and you need to find the most relative ones.
+    -   $$k_1$$(0-3): Do you want terms to be saturated, so that the system wouldn't focus only on a few high-freqency terms? If yes, make $$$k_1$$ smaller so that large term frequency number would contribute relatively less than when $$k_1$$ is large. However for long documents, you may want a large $$k_1$$ since all term frequencies are large and you need to find the most relative ones.
 
-    -   $$b (0-1)$$: Do you want to penalize lengthy documents? If yes, make $$b$$ larger so that some lengthy documents that covers a lot of topics (maybe spam) would appear less. For some lengthy engineering specification or patents, there may be no reason to penalize their length.
+    -   $$b$$(0-1): Do you want to penalize lengthy documents? If yes, make $$b$$ larger so that some lengthy documents that covers a lot of topics (maybe spam) would appear less. For some lengthy engineering specification or patents, there may be no reason to penalize their length.
 
 ## Evaluation Metrics
 
