@@ -247,3 +247,7 @@ Also, start with any tutorial [like this one from cplusplus.com](http://www.cplu
     -   Various way to init a 2D array: [https://www.techiedelight.com/initialize-two-dimensional-vector-cpp/](https://www.techiedelight.com/initialize-two-dimensional-vector-cpp/)
     -   String to int: [https://stackoverflow.com/questions/16826422/c-most-efficient-way-to-convert-string-to-int-faster-than-atoi](https://stackoverflow.com/questions/16826422/c-most-efficient-way-to-convert-string-to-int-faster-than-atoi), [https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c](https://stackoverflow.com/questions/194465/how-to-parse-a-string-to-an-int-in-c)
     -   There is no empty char: [https://stackoverflow.com/questions/18410234/how-does-one-represent-the-empty-char](https://stackoverflow.com/questions/18410234/how-does-one-represent-the-empty-char)
+
+## Full Stack Dev
+
+-   Limit on url length (that affects the lengths of your GET uri and parameters unless you know what you are doing): unbounded. But being less than 2000 char would be most compatible. [source](https://stackoverflow.com/questions/417142/what-is-the-maximum-length-of-a-url-in-different-browsers).

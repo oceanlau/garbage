@@ -1,6 +1,7 @@
 ## Dictionary
 
 -   Check key exists in dictionary `dict`: `if key in dict:`
+-   How to iterate: [a good tutorial](https://realpython.com/iterate-through-dictionary-python/).
 
 ## String
 

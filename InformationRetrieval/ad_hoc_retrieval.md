@@ -139,7 +139,7 @@ This part we dicuss the fundamental techniques of retrieval when the system is p
 
 ### Vector Space Model
 
--   tf-idf weight matrix: Each cell is now a tf-idf score.
+-   Intuition: tf-idf weight matrix. Each cell is now a tf-idf score.
 
     <table>
         <thead>
@@ -187,17 +187,19 @@ This part we dicuss the fundamental techniques of retrieval when the system is p
         </tbody>
     </table>
 
--   Each document can now be represented by a high dimentional vector (a column). In boolean retrieval model, each vector is filled with binary values. In naive bag of words model, each vector is filled with term frequency as values. In tf-idf model, each vector is filled with tf-idf values.
+    Each document can now be represented by a high dimentional vector (a column). In boolean retrieval model, each vector is filled with binary values. In naive bag of words model, each vector is filled with term frequency as values. In tf-idf model, each vector is filled with tf-idf values.
 
--   Now we can represent query as a same kind of vector, then give each document a score based on the similarity between the query vector and the document vector. Because we care more about the distribution of terms than raw value in the vector, we use cosine similarity instead of Euclidean distance.
+-   Scoring method: Now we can represent query as a same kind of vector, then give each document a score based on the similarity between the query vector and the document vector. Because we care more about the distribution of terms than raw value in the vector, we use cosine similarity instead of Euclidean distance.
 
--   Same reason as in Boolean Retrieval, we actually do not use table but use inverted index. So to calculate cosine similarity between the query and documents, we iterate postings of each query term and accumulate a score for each document. The terms not presented in the query are not traversed at all since they would be 0 anyway. Then we noramlize the scores by dividing the length of query vector and the corresponding document vector length. Finally we extract the top scoring documents we needed.
+-   Implementation: The naive implement is to compute a score between the query and each document. But that would be too slow (same reason as in Boolean Retrieval). We actually do not use table but use inverted index. So to calculate cosine similarity between the query and documents, we iterate postings of each query term and accumulate a score for each document. The terms not presented in the query are not traversed at all since they would be 0 anyway. Then we noramlize the scores by dividing the length of query vector and the corresponding document vector length. Finally we extract the top scoring documents we needed.
 
     This algorithm is described in detail below:
 
     <img alt="VSM_NaiveScore" src="./assets/VSM_NaiveScore.png" width="400">
 
     If we loop through query terms one-by-one to accumulate document scores, it is called term-at-a-time algorithm. Else we could open all terms postings together like the intersection algorithm in boolean retrieval and iterate postings by the order of docIds. Then we are accumulating scores document by document. This is called document-at-a-time algorithm.
+
+    Note sometimes in practice, VSM is only used in the providing a score for ranking instead of actual retrieval. In Lucene, other models like boolean retrieval is used to retrieve a subset of documents before VSM is applied. (In this way, you may be able choose the naive VSM implementation if dev time is limited to you.)
 
 -   Optimization:
 
@@ -373,13 +375,13 @@ length while not adding too many parameters. It relaxes the assumption of term i
 
     -   Precision: fraction of retrieved docs that are relevant = P(relevant|retrieved). Recall: fraction of relevant docs that are retrieved = P(retrieved|relevant). F1 score = 2P\*R/(P+R)
 
-    -   Presion@K: fraction of relevant docs in top K results. Mean Average Precision: first get averge of P@K from 1st to Kth result of multiple queries then do another averge. Similarly we have Recall@K. By looking at the recall and precision of 1st to Kth result we can draw a Precision-recall graph.
+    -   Precision@K: fraction of relevant docs in top K results. Mean Average Precision: first get averge of P@K from 1st to Kth result of multiple queries then do another averge. Similarly we have Recall@K. By looking at the recall and precision of 1st to Kth result we can draw a Precision-recall graph.
 
     -   Reciprocal Score: considering the first relevalant result, it scores 1/K if at position K. Mean reciprocal rank: averge over multiple queries.
 
 -   Non Binary Assessments:
 
-    -   Discounted Cumulative Gain: given relevance socre [0, r] r > 2 of each result. Cumulative Gain at rank n is r_1 + r_2 + ... + r_n. Discounted Cumulative Gain is r_1 + r_2/log2 + r_3/log3 ... rn/logn
+    -   Discounted Cumulative Gain: given relevance socre [0, r] r > 2 of each result. Cumulative Gain at rank n is $$r_1 + r_2 + ... + r_n$$. Discounted Cumulative Gain is $$r_1 + r_2/\log 2 + r_3/\log 3 ... r_n/\log n$$
 
     -   Normalized Discounted Cumulative Gain: Normalize DCG at rank n by the DCG value at rank n of the ideal ranking, which would first return the documents with the highest relevance level, then the next highest relevance level, etc. Normalization useful for contrasting queries with varying numbers of relevant results.
 
