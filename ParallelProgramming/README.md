@@ -2,6 +2,47 @@
 
 My notes after taking Randal Burns's JHU CS 601.320/420/620 Parallel Programming course.
 
+## Amdahl's Law
+
+1. Speedup
+
+   $$Speedup = \frac{T(1)}{T(n)}$$
+
+   T(1) = time to execute task on a single resource. T(n) = time to execute task on n resources.
+
+2. Amdahl's Law: theoretical speedup of the whole task is limited to the fraction can be improved
+
+   $$Speedup = \frac{1}{1-p+\frac{p}{s}}$$
+
+   - $$p$$ is the Amdahl's number, the proportion of execution time that benefits from improved resources, i.e. the parallel part
+   - $$(1-p)$$ is the portion that does not benefit. i.e. the serial part
+   - $$s$$ is the speedup of the optimized part. It is equivalent to the number of resources $$n$$.
+
+   ![amdahl](./assets/amdahl.png)
+
+   Speedup graph:
+
+   ![speedup_graph](./assets/speedup_graph.png)
+
+   Speedup upper limit is $$\frac{1}{1-p+\frac{p}{\infty}} = \frac{1}{1-p}$$
+
+   - Estimating scalability based on the original implementation of the serial program
+   - Estimating Amdahl's number, the proportion of the parts that can be parallel
+
+3. Parallel Efficiency: Measures the efficiency of putting in more resources
+
+   $$E = \frac{S(n)}{n} = \frac{T(1)}{nT(n)}$$
+
+   ![parallel_efficiency](./assets/parallel_efficiency.png)
+
+## OpenMP
+
+1. OpenMP is a parallel programming environment that can easily bring parallelism to a serial program. It supports both master/slave and fork/join execution model. Its fundamental principle is block parallelism (parallelize a block and run multiple instances of the block with parallel threads). It is often used for loop parallelism by simply adding a directive line ontop the loop code block.
+
+  - Merit: Incremental parallelism, simple to use, portable
+  - Limitations: hard to manage memory usage, no distributed capabilities, no parallel I/O
+
+
 ## MapReduce (Hadoop and GFS)
 
 [MapReduce](https://static.googleusercontent.com/media/research.google.com/en//archive/mapreduce-osdi04.pdf) is **a programming model** that is easily parallelized. Google's original implementation runs ontop GFS. The open-source Hadoop! implementation runs on HDFS. Some details worth mentioning:
@@ -24,7 +65,7 @@ My notes after taking Randal Burns's JHU CS 601.320/420/620 Parallel Programming
 
 ## Resilient Distributed Datasets (Spark)
 
-Note for:[https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf](https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf)
+Notes for [https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf](https://www.usenix.org/system/files/conference/nsdi12/nsdi12-final138.pdf)
 
 RDD is **a distributed memory abstraction** that lets programmers perform **in-memory** computations on large clusters. It is implemented in Spark at Berkeley. They use Scala because it is concise and efficiency (static typing). It is functional and RDD does not require it.
 
@@ -44,3 +85,5 @@ RDD is **a distributed memory abstraction** that lets programmers perform **in-m
 4. Implementations:
    - Job Scheduling: When an action is runned, scheduler generate a DAG of stages **separated by shuffle which is required in wide dependencies**. Tasks are assigned to machines based on data locality. In the original implementation, intermediate records are materialized just like MapReduce for wide dependencies.
    - Checkpointing: Though not required, user may choose to checkpoint if the lineage is too long or there are wide dependencies.
+
+## GPU
