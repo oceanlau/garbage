@@ -3,6 +3,64 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+private:
+    void reverseGroup(ListNode* node, int& k, ListNode*& seg_head, ListNode*& next_seg_head) {
+        ListNode* prev = NULL;
+        ListNode* next = NULL;
+        while (node && k > 0) {
+            next = node->next;
+            node->next = prev;
+            prev = node;
+            node = next;
+            k --;
+        }
+        seg_head = prev;
+        next_seg_head = node;
+    }
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode* node = head;
+        head = NULL;
+        ListNode* last_seg_end = NULL;
+        ListNode* seg_head = NULL;
+        ListNode* next_seg_head = NULL;
+        do {
+            int _k = k;
+            reverseGroup(node, _k, seg_head, next_seg_head);
+            if (_k == 0) {
+                if (!head) {
+                    head = seg_head;
+                } else {
+                    last_seg_end->next = seg_head;
+                }
+                last_seg_end = node;
+                node = next_seg_head;
+            } else {
+                _k = k - _k;
+                reverseGroup(seg_head, _k, seg_head, next_seg_head);
+                if (!head) {
+                    return seg_head;
+                } else {
+                    last_seg_end->next = seg_head;
+                    return head;
+                }
+            }
+        } while (node);
+        return head;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */

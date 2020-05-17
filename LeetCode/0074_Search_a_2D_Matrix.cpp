@@ -1,3 +1,36 @@
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int m = matrix.size();
+        if (m == 0) {
+            return false;
+        }
+        int n = matrix[0].size();
+        if (n == 0) {
+            return false;
+        }
+        int l = 0;
+        int r = m * n - 1;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            if (matrix[mid / n][mid % n] == target) {
+                return true;
+            } else if (matrix[mid / n][mid % n] > target) {
+                r = mid - 1;
+            } else {
+                l = mid + 1;
+            }
+        }
+        if (matrix[l / n][l % n] == target) {
+            return true;
+        }
+        if (matrix[r / n][r % n] == target) {
+            return true;
+        }
+        return false;
+    }
+};
+
 // 94% 51%
 class Solution {
 private:

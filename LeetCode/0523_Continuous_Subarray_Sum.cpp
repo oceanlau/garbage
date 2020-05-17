@@ -1,6 +1,27 @@
 class Solution {
 public:
     bool checkSubarraySum(vector<int>& nums, int k) {
+        unordered_set<int> remainders;
+        int cul_sum = 0;
+        //size must > 0
+        // if there are only two els. need a 0 at the beginning
+        int prev_remainder = 0;
+        for (const int num : nums) {
+            cul_sum += num;
+            int remainder = (k == 0) ? cul_sum : cul_sum % k;
+            if (remainders.count(remainder)) {
+                return true;
+            }
+            remainders.insert(prev_remainder);
+            prev_remainder = remainder;
+        }
+        return false;
+    }
+};
+
+class Solution {
+public:
+    bool checkSubarraySum(vector<int>& nums, int k) {
         if (nums.size() <= 1) {
             return false;
         }

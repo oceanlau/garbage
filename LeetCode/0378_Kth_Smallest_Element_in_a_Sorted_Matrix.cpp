@@ -1,5 +1,58 @@
 class Solution {
 private:
+    vector<int> smallerThan(vector<vector<int>>& matrix, int pivot) {
+        int n = matrix.size();
+        int i = n - 1;
+        int j = 0;
+        int k = 0;
+        int lesser = matrix[0][0];
+        int larger = matrix[n-1][n-1];
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] <= pivot) {
+                lesser = max(lesser, matrix[i][j]);
+                j ++;
+            } else {
+                larger = min(larger, matrix[i][j]);
+                //careful 
+                k += j;
+                i --;
+            }
+        }
+        //careful!
+        if (j == n) {
+            k += (i + 1) * j;
+        }
+        return {k, lesser, larger};
+    }
+public:
+    int kthSmallest(vector<vector<int>>& matrix, int k) {
+        int n = matrix.size();
+        int l = matrix[0][0];
+        int r = matrix[n - 1][n - 1];
+        vector<int> res;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            res = smallerThan(matrix, mid);
+            if (res[0] == k) {
+                return res[1];
+            } else if (res[0] > k) {
+                r = res[1];
+            } else {
+                l = res[2];
+            }
+        }
+        res = smallerThan(matrix, l);
+        //careful! >=
+        if (res[0] >= k) {
+            return res[1];
+        }
+        res = smallerThan(matrix, r);
+        return res[1];
+    }
+};
+
+class Solution {
+private:
     int _countSmaller(vector<vector<int>>& matrix, int mid){
         int n = matrix.size();
         int row = n - 1;

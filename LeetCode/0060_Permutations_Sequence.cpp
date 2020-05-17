@@ -1,3 +1,29 @@
+class Solution {
+public:
+    string getPermutation(int n, int k) {
+        vector<int> factorial(n, 1);
+        list<int> numbers {1};
+        for (int i = 1; i < n; i++) {
+            factorial[i] = i * factorial[i-1];
+            numbers.push_back(i + 1);
+        }
+        string res = "";
+        //careful!
+        k --;
+        while (n > 0) {
+            auto it = numbers.begin();
+            advance(it, k / (factorial[n - 1]));
+            res += to_string(*it);
+            numbers.erase(it);
+            if (k >= factorial[n - 1]) {
+                k %= factorial[n - 1];
+            }
+            n --;
+        }
+        return res;
+    }
+};
+
 // 0ms, poor mem though
 class Solution {
 private:

@@ -1,3 +1,49 @@
+class Solution {
+private:
+    int expand(string& s, int i, int j, string& longests) {
+        int len = 0;
+        if (i == j) {
+            len = 1;
+            i --;
+            j ++;
+        }
+        while (i >= 0 && j < s.length() && s[i] == s[j]) {
+            i --;
+            j ++;
+            len += 2;
+        }
+        if (i + 1 < s.length()) {
+            longests = s.substr(i + 1, len);
+        } else {
+            longests = "";
+        }
+        return len;
+    }
+public:
+    string longestPalindrome(string s) {
+        if (s.length() == 0) {
+            return "";
+        }
+        int longest = 0;
+        string longests = "";
+        for (int i = 0; i < s.length() - longest / 2; i++) {
+            string tmp_longest_str = "";
+            int tmp_len = 0;
+            tmp_len = expand(s, i, i, tmp_longest_str);
+            if (tmp_len > longest) {
+                longest = tmp_len;
+                longests = tmp_longest_str;
+            }
+            tmp_len = expand(s, i, i + 1, tmp_longest_str);
+            if (tmp_len > longest) {
+                longest = tmp_len;
+                longests = tmp_longest_str;
+            }
+        }
+        return longests;
+    }
+};
+
 //45% 13%
 class Solution {
 private:

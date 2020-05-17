@@ -3,6 +3,49 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseBetween(ListNode* head, int m, int n) {
+        ListNode* seg1_end = head;
+        ListNode* seg2_end = head;
+        int _m = m;
+        while (_m > 1) {
+            if (_m - 1 > 1) {
+                seg1_end = seg1_end->next;
+            }
+            seg2_end = seg2_end->next;
+            _m --;
+        }
+        int _n = n - m + 1;
+        ListNode* seg2_prev = NULL;
+        ListNode* seg2_node = seg2_end;
+        ListNode* seg2_next = NULL;
+        while (_n > 0) {
+            seg2_next = seg2_node->next;
+            seg2_node->next = seg2_prev;
+            seg2_prev = seg2_node;
+            seg2_node = seg2_next;
+            _n --;
+        }
+        seg2_end->next = seg2_node;
+        if (m > 1) {
+            seg1_end->next = seg2_prev;
+            return head;
+        }
+        return seg2_prev;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */

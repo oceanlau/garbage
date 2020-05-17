@@ -1,3 +1,49 @@
+// Other solutions ============================================================
+// Even cleaner. Instead of getting rid of els in nums2 when els in nums1 are not enough, we use a min to get rid of the one we want.
+// Perfect case would be each vector contributes half into the final answer
+// But maybe one array could contribute more than others
+// So when doing bin search, we could only get rid of the half, with smaller mid value, at one time
+// and then update nth and find a new nth result
+
+// Also, we need to consider odd even.
+class Solution {
+private:
+    int find(vector<int>& nums1, int start1, vector<int>& nums2, int start2, int nth) {
+        // stopping cases
+        // nth = 1 (no contrib if /2) or no contribution from one of the vectors
+        if (start1 >= nums1.size()) {
+            return nums2[start2 + nth - 1];
+        }
+        if (start2 >= nums2.size()) {
+            return nums1[start1 + nth - 1];
+        }
+        if (nth == 1) {
+            return min(nums1[start1], nums2[start2]);
+        }
+        
+        // the amount at most a vector could contribute
+        int contrib1 = min((int)nums1.size() - start1, nth / 2);
+        int contrib2 = min((int)nums2.size() - start2, nth / 2);
+        if (nums1[start1 + contrib1 - 1] <= nums2[start2 + contrib2 - 1]) {
+            start1 += contrib1;
+            nth -= contrib1;
+        } else {
+            start2 += contrib2;
+            nth -= contrib2;
+        }
+        return find(nums1, start1, nums2, start2, nth);
+    }
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int total = nums1.size() + nums2.size();
+        if (total % 2 == 0) {
+            return (find(nums1, 0, nums2, 0, total / 2) + find(nums1, 0, nums2, 0, total / 2 + 1)) / 2.0;
+        }
+        return find(nums1, 0, nums2, 0, total / 2 + 1);
+        
+    }
+};
+
 // Much cleaner. 90% 100%
 class Solution {
 private:
@@ -14,11 +60,12 @@ private:
             if (k == 1) {
                 return min(nums1[start1], nums2[start2]);
             }
-            //Careful here. When k <= 3, each should contribute only 1 (starter) element.
+            // Careful here. When k is odd, we first get rid of floor(k/2) elements
+            // eg. When k = 3, each should contribute only 1 (starter) element.
             int guess1 = start1 + k/2 - 1;
             int guess2 = start2 + k/2 - 1;
             if (guess2 >= nums2.size() || (guess1 < nums1.size() && nums1[guess1] < nums2[guess2])) {
-                // skip k/2 element, when k <= 3, skip starter
+                // skip k/2 element, when k = 3, skip only the starter
                 start1 += k/2;
             } else {
                 start2 += k/2;

@@ -1,4 +1,26 @@
 class Solution {
+private:
+    int expand(string& s, int i, int j) {
+        int count = 0;
+        while (i >= 0 && j < s.length() && s[i] == s[j]) {
+            count ++;
+            i --;
+            j ++;
+        }
+        return count;
+    }
+public:
+    int countSubstrings(string s) {
+        int cnt = 0;
+        for (int i = 0; i < s.length(); i++) {
+            cnt += expand(s, i, i);
+            cnt += expand(s, i, i + 1);
+        }
+        return cnt;
+    }
+};
+
+class Solution {
 public:
     int countSubstrings(string s) {
         int cnt = s.length();

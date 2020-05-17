@@ -1,4 +1,26 @@
 class Solution {
+public:
+    vector<string> letterCombinations(string digits) {
+        if (digits.length() == 0) {
+            return {};
+        }
+        vector<string> m {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
+        vector<string> res {""};
+        for (const char c : digits) {
+            int i = c - '0';
+            vector<string> cur {};
+            for (const string& s : res) {
+                for (const char c : m[i]) {
+                    cur.push_back(s + c);
+                }
+            }
+            res.swap(cur);
+        }
+        return res;
+    }
+};
+
+class Solution {
 private:
     vector<vector<char>> letter_map {
         {'a', 'b', 'c'},

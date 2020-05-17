@@ -1,3 +1,50 @@
+class Solution {
+private:
+    bool _isValid(string s, int& lp, int& rp) {
+        lp = 0;
+        rp = 0;
+        for (const char c : s) {
+            if (c == '(') {
+                lp ++;
+            } else if (c == ')') {
+                if (lp > 0) {
+                    lp --;
+                } else {
+                    rp ++;
+                }
+            }
+        }
+        return lp == 0 && rp == 0;
+    }
+    void _dfs(string s, int start, int lp, int rp, vector<string>& res) {
+        //careful!
+        if (lp == 0 && rp == 0) {
+            if (_isValid(s, lp, rp)) {
+                res.push_back(s);
+            }
+            return;
+        }
+        for (int i = start; i < s.length(); i++) {
+            if (s[i] == '(' && lp > 0 && (i == 0 || s[i] != s[i-1])) {
+                _dfs(s.substr(0, i) + s.substr(i + 1), i, lp - 1, rp, res);
+            } else if (s[i] == ')' && rp > 0 && (i == 0 || s[i] != s[i-1])) {
+                _dfs(s.substr(0, i) + s.substr(i + 1), i, lp, rp - 1, res);
+            }
+        }
+    }
+public:
+    vector<string> removeInvalidParentheses(string s) {
+        int lp = 0;
+        int rp = 0;
+        if (_isValid(s, lp, rp)) {
+            return {s};
+        }
+        vector<string> res;
+        _dfs(s, 0, lp, rp, res);
+        return res;
+    }
+};
+
 //DFS
 class Solution {
 public:

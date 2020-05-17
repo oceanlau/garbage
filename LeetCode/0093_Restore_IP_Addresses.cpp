@@ -1,3 +1,67 @@
+class Solution {
+private:
+    void _bt(string s, int& min_len, int& max_len, int remaining, vector<string>& ips, string ip) {
+        if (remaining == 1) {
+            if (isValid(s)) {
+                ip += '.' + s;
+                ips.push_back(ip);
+            }
+            return;
+        }
+        //careful
+        for (int i = min_len; i <= max_len && i < s.length(); i++) {
+            string seg = s.substr(0, i);
+            if (isValid(seg)) {
+                string tmp = ip;
+                if (ip == "") {
+                    ip = seg;
+                } else {
+                    ip += '.' + seg;
+                }
+                _bt(s.substr(i), min_len, max_len, remaining - 1, ips, ip);
+                //careful
+                ip = tmp;
+            }
+        }
+    }
+    bool isValid(string s) {
+        if (s.length() > 3 || s.length() == 0) {
+            return false;
+        }
+        if (s.length() > 1 && s[0] == '0'){
+            return false;
+        }
+        int seg = stoi(s);
+        if (seg > 255) {
+            return false;
+        }
+        return true;
+    }
+public:
+    vector<string> restoreIpAddresses(string s) {
+        int min_len = 1;
+        int max_len = 3;
+        if (s.length() < 4) {
+            return {};
+        } else if (s.length() > 10) {
+            if (s.length() == 12) {
+                min_len = 3;
+            } else {
+                min_len = 2;
+            }
+        } else if (s.length() < 6) {
+            if (s.length() == 4) {
+                max_len = 1;
+            } else {
+                max_len = 2;
+            }
+        }
+        vector<string> ips;
+        _bt(s, min_len, max_len, 4, ips, "");
+        return ips;
+    }
+};
+
 //not char buffer then, 100% 91.67%
 class Solution {
     private:
