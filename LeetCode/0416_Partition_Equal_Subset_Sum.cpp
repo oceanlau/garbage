@@ -1,3 +1,33 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        //for each num for each running_sums, insert a new one, skip those > sum / 2
+        unordered_set<int> running_sums;
+        int sum = 0;
+        for (const int num : nums) {
+            sum += num;
+        }
+        if (sum % 2 == 1) {
+            return false;
+        }
+        int target = sum / 2;
+        for (const int num : nums) {
+            if (num > target) {
+                return false;
+            }
+            int running_sums_size = running_sums.size();
+            for (auto it = running_sums.begin(); it != running_sums.end() && running_sums_size > 0; it++, running_sums_size--) {
+                running_sums.insert(*it + num);
+            }
+            running_sums.insert(num);
+            if (running_sums.count(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+};
+
 //97% 88% Copied! Early stopping!
 class Solution {
 public:

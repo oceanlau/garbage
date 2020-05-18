@@ -1,5 +1,3 @@
-// Other solutions ============================================================
-// Even cleaner. Instead of getting rid of els in nums2 when els in nums1 are not enough, we use a min to get rid of the one we want.
 // Perfect case would be each vector contributes half into the final answer
 // But maybe one array could contribute more than others
 // So when doing bin search, we could only get rid of the half, with smaller mid value, at one time
@@ -44,6 +42,8 @@ public:
     }
 };
 
+// The above one is even cleaner. Instead of getting rid of els in nums2 when els in nums1 are not enough, we use a min to get rid of the one we want.
+// Other solutions ============================================================
 // Much cleaner. 90% 100%
 class Solution {
 private:

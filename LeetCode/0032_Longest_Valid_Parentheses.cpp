@@ -1,3 +1,31 @@
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        vector<int> dp(s.length(), 0);
+        int longest = 0;
+        for (int i = 1; i < s.length(); i++) {
+            if (s[i] == ')') {
+                if (s[i - 1] == '(') {
+                    dp[i] = 2;
+                    if (i > 1) {
+                        dp[i] += dp[i-2];
+                    }
+                } else if (dp[i - 1] > 0){
+                    int matching_location = i - dp[i - 1] - 1;
+                    if (matching_location >= 0 && s[matching_location] == '(') {
+                        dp[i] = dp[i - 1] + 2;
+                        if (-- matching_location >= 0) {
+                            dp[i] += dp[matching_location];
+                        }
+                    }
+                }
+                longest = max(longest, dp[i]);
+            }
+        }
+        return longest;
+    }
+};
+
 //dp
 class Solution {
 public:
