@@ -7,7 +7,10 @@
 ![2. Data Models and Query Languages](./assets/Chapter+2.+_Data+Models+and+Query+Languages.png)
 
 ## 3. Storage and Retrieval
-![](./assets/Chapter+3.+Storage+and+Retrieval.png)
+![3. Storage and Retrieval](./assets/Chapter+3.+Storage+and+Retrieval.png)
+
+## 4. Encoding and Evolution
+![4. Encoding and Evolution](Chapter+4._Encoding+and+Evolution.png)
 
 ## 8. The Trouble with Distributed Systems
 
