@@ -10,7 +10,7 @@
 ![3. Storage and Retrieval](./assets/Chapter+3.+Storage+and+Retrieval.png)
 
 ## 4. Encoding and Evolution
-![4. Encoding and Evolution](Chapter+4._Encoding+and+Evolution.png)
+![4. Encoding and Evolution](./assets/Chapter+4._Encoding+and+Evolution.png)
 
 ## 8. The Trouble with Distributed Systems
 
