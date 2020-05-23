@@ -30,12 +30,40 @@
 
   - Word Ladders: [127. Word Ladder](https://leetcode.com/problems/word-ladder/), [126. Word Ladder II](https://leetcode.com/problems/word-ladder-ii/)
 
+- Others:
+  - $$O(1)$$ space BFS: [116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/)
+  - Reverse thinking DFS traversal (pass range to parent): [333. Largest BST Subtree](https://leetcode.com/problems/largest-bst-subtree/)
+
 ### Binary Search
+
+- Basic practice:
+  - [875. Koko Eating Bananas](https://leetcode.com/problems/koko-eating-bananas/)
 
 - Bin search on multiple array or high dimensional data:
 
-  - [4. Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/): :white_check_mark:[My answer](https://github.com/oceanlau/writings/blob/master/LeetCode/0004_Median_of_Two_Sorted_Arrays.cpp). Get rid of a lesser half at a time. Reset target nth point.
+  - [4. Median of Two Sorted Arrays](https://leetcode.com/problems/median-of-two-sorted-arrays/): :white_check_mark: [My answer](https://github.com/oceanlau/writings/blob/master/LeetCode/0004_Median_of_Two_Sorted_Arrays.cpp). Get rid of a lesser half at a time. Reset target nth point.
+
+- Bin search you don't see:
+
+  - [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). Use bin search to find the answers, use greedy accumulator to prove the answer.
+
+### Sort
+
+- MergeSort and $$O(1)$$ space MergeSort: [148. Sort List](https://leetcode.com/problems/sort-list/)
 
 ### Subsets
 
-- [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/). DP.
+- [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/). DP. `dp[i][j]` can `nums[0...i]` sum to `j`.
+- [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). DP. `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts.
+- [548. Split Array with Equal Sum](https://leetcode.com/problems/split-array-with-equal-sum/). Not DP. Straight forward for each middle point, check if left two quarters and right two quarters can get same sum.
+
+### Monotonic Order Data Structure
+
+- [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/). Deque.
+
+### $$O(n^2)$$ Dynamic Programming
+
+- [435. Non-overlapping Intervals](). Look back. Actually greedy brings it down to $$O(n)$$.
+- [403. Frog Jump](https://leetcode.com/problems/frog-jump/). Look forward.
+- [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). DP. `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts. $$O(mn^2)$$
+
