@@ -1,3 +1,35 @@
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        vector<int> tails;
+        for (const int n : nums) {
+            if (tails.empty() || n > tails.back()) {
+                tails.push_back(n);
+            } else {
+                int l = 0;
+                int r = tails.size() - 1;
+                while (r - l > 1) {
+                    int mid = l + (r - l) / 2;
+                    if (tails[mid] == n) {
+                        l = mid;
+                        r = mid;
+                    } else if (tails[mid] > n) {
+                        r = mid;
+                    } else {
+                        l = mid + 1;
+                    }
+                }
+                if (tails[l] >= n) {
+                    tails[l] = n;
+                } else {
+                    tails[r] = n;
+                }
+            }
+        }
+        return tails.size();
+    }
+};
+
 //O(nlogn) 99% 11%
 class Solution {
 public:
