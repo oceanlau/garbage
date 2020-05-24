@@ -59,6 +59,7 @@
 - [1027. Longest Arithmetic Sequence](https://leetcode.com/problems/longest-arithmetic-sequence/). DP. `dp[i]{d, l}` Diff -> length for all LASs ending at i.
 
 #### Medium and Hard
+- [446. Arithmetic Slices II - Subsequence](https://leetcode.com/problems/arithmetic-slices-ii-subsequence/). DP. Good comparison with 1027. `dp[i]{d, n}` Diff -> count for all pair (tricky design here) of numbers ending at i.
 - [416. Partition Equal Subset Sum](https://leetcode.com/problems/partition-equal-subset-sum/). DP. `dp[i][j]`: can `nums[0...i]` sum to `j`.
 - [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). DP. `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts.
 - [548. Split Array with Equal Sum](https://leetcode.com/problems/split-array-with-equal-sum/). Not DP. Straight forward for each middle point, check if left two quarters and right two quarters can get same sum.
@@ -70,9 +71,9 @@
 
 ### $$O(n^2)$$ Dynamic Programming
 
-- [435. Non-overlapping Intervals](). Look back. Actually greedy brings it down to $$O(n)$$.
-- [403. Frog Jump](https://leetcode.com/problems/frog-jump/). Look forward.
-- [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). DP. `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts. $$O(mn^2)$$
-- [1027. Longest Arithmetic Sequence](https://leetcode.com/problems/longest-arithmetic-sequence/). DP. `dp[i]{d, l}` Diff -> length for all LASs ending at i.
-- [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/). Not optimal.
+- [435. Non-overlapping Intervals](https://leetcode.com/problems/non-overlapping-intervals/). `dp[i]` means the maximum number of non-overlapping intervals ending at interval `i` . But actually greedy brings it down to $$O(n)$$.
+- [403. Frog Jump](https://leetcode.com/problems/frog-jump/). A dp that looks forward. For each stone, we record a set of jump distances k that lands on it
+- [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts. $$O(mn^2)$$
+- [1027. Longest Arithmetic Sequence](https://leetcode.com/problems/longest-arithmetic-sequence/). `dp[i]{d, l}` Diff -> length for all LASs ending at i.
+- [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/). $$O(n^2)$$ DP not optimal. Use bin search to update an array of smallest ending numbers of LISs.
 
