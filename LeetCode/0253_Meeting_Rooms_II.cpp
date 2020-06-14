@@ -1,6 +1,27 @@
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
+        int rooms = 0;
+        // turn to min heap
+        auto comp = [](const vector<int>& l, const vector<int>& r){
+            return l[1] > r[1];
+        };
+        priority_queue<vector<int>, vector<vector<int>>, decltype(comp)> releases(comp);
+        sort(intervals.begin(), intervals.end());
+        for (const vector<int>& interval : intervals) {
+            while (!releases.empty() && releases.top()[1] <= interval[0]) {
+                releases.pop();
+            }
+            releases.push(interval);
+            rooms = max(rooms, (int)releases.size());
+        }
+        return rooms;
+    }
+};
+
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
         sort(intervals.begin(), intervals.end());
         priority_queue<int, vector<int>, greater<int>> sessions;
         int rooms = 0;

@@ -1,3 +1,38 @@
+class Solution {
+private:
+    int findkth(vector<int>& nums1, int i, vector<int>& nums2, int j, int k) {
+        if (i == nums1.size()) {
+            return nums2[j + k - 1];
+        }
+        if (j == nums2.size()) {
+            return nums1[i + k - 1];
+        }
+        if (k == 1) {
+            return min(nums1[i], nums2[j]);
+        }
+        int contrib1 = i + k / 2 - 1;
+        if (contrib1 >= nums1.size()) {
+            contrib1 = nums1.size() - 1;
+        }
+        int contrib2 = j + k / 2 - 1;
+        if (contrib2 >= nums2.size()) {
+            contrib2 = nums2.size() - 1;
+        }
+        if (nums1[contrib1] <= nums2[contrib2]) {
+            return findkth(nums1, contrib1 + 1, nums2, j, k - (contrib1 - i + 1));
+        }
+        return findkth(nums1, i, nums2, contrib2 + 1, k - (contrib2 - j + 1));
+    }
+public:
+    double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
+        int cnt = nums1.size() + nums2.size();
+        if (cnt % 2 == 1) {
+            return findkth(nums1, 0, nums2, 0, cnt / 2 + 1);
+        }
+        return (findkth(nums1, 0, nums2, 0, cnt / 2) + findkth(nums1, 0, nums2, 0, cnt / 2 + 1)) / 2.0;
+    }
+};
+
 // Perfect case would be each vector contributes half into the final answer
 // But maybe one array could contribute more than others
 // So when doing bin search, we could only get rid of the half, with smaller mid value, at one time

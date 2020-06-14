@@ -1,3 +1,32 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+private:
+    bool valid(TreeNode* node, TreeNode* l_bound, TreeNode* u_bound) {
+        if (node == NULL) {
+            return true;
+        }
+        if (l_bound && node->val <= l_bound->val) {
+            return false;
+        }
+        if (u_bound && node->val >= u_bound->val) {
+            return false;
+        }
+        return valid(node->left, l_bound, node) && valid(node->right, node, u_bound);
+    }
+public:
+    bool isValidBST(TreeNode* root) {
+        return valid(root, NULL, NULL);
+    }
+};
+
 //62% 97%
 /**
  * Definition for a binary tree node.

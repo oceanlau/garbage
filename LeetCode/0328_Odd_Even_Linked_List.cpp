@@ -3,6 +3,42 @@
  * struct ListNode {
  *     int val;
  *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* oddEvenList(ListNode* head) {
+        if (!head) {
+            return head;
+        }
+        ListNode* node = head;
+        ListNode* evenhead = node->next;
+        ListNode* evennode = evenhead;
+        while (evennode) {
+            ListNode* nextodd = evennode->next;
+            node->next = nextodd;
+            if (nextodd) {
+                //make sure node is not null
+                node = node->next;
+                evennode->next = nextodd->next;
+            } else {
+                evennode->next = NULL;
+            }
+            evennode = evennode->next;
+        }
+        node->next = evenhead;
+        return head;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
  *     ListNode(int x) : val(x), next(NULL) {}
  * };
  */

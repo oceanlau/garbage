@@ -2,6 +2,43 @@ class Solution {
 public:
     int myAtoi(string str) {
         int sign = 0;
+        int val = 0;
+        for (const char c : str) {
+            if (c == ' ') {
+                if (sign != 0) {
+                    break;
+                }
+            } else if (c == '-' || c == '+') {
+                if (sign != 0) {
+                    break;
+                }
+                sign = c == '+' ? 1 : -1;
+            } else if (isdigit(c)) {
+                if (sign == 0) {
+                    sign = 1;
+                }
+                // handles overflow
+                if (val > INT_MAX / 10 || (val == INT_MAX / 10 && (c - '0') > INT_MAX % 10)) {
+                    if (sign == 1) {
+                        return INT_MAX;
+                    } else {
+                        return INT_MIN;
+                    }
+                }
+                val *= 10;
+                val += (c - '0');
+            } else {
+                break;
+            }
+        }
+        return sign * val;
+    }
+};
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        int sign = 0;
         int before = 0;
         for (int i = 0; i < str.length(); i++) {
             if (str[i] == ' ') {

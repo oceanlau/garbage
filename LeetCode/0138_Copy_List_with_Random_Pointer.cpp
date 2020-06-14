@@ -5,6 +5,64 @@ public:
     int val;
     Node* next;
     Node* random;
+    
+    Node(int _val) {
+        val = _val;
+        next = NULL;
+        random = NULL;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* copyRandomList(Node* head) {
+        if (!head) {
+            return NULL;
+        }
+        Node* cur = head;
+        while (cur) {
+            Node* copy = new Node(cur->val);
+            Node* original_next = cur->next;
+            cur->next = copy;
+            copy->next = original_next;
+            cur = original_next;
+        }
+        cur = head;
+        while (cur) {
+            Node* random = cur->random;
+            if (random) {
+                cur->next->random = random->next;
+            } else {
+                cur->next->random = NULL;
+            }
+            cur = cur->next->next;
+        }
+        Node* newhead = head->next;
+        cur = head;
+        Node* newcur = cur->next;
+        while (cur) {
+            cur->next = cur->next->next;
+            cur = cur->next;
+            //careful
+            if (!newcur->next) {
+                break;
+            }
+            newcur->next = newcur->next->next;
+            newcur = newcur->next;
+        }
+        return newhead;
+        
+    }
+};
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* next;
+    Node* random;
 
     Node() {}
 

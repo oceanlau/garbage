@@ -1,5 +1,62 @@
 class Solution {
 public:
+    vector<vector<int>> dp;
+    bool isMatch(string s, string p) {
+        dp.resize(s.length() + 1, vector<int> (p.length() + 1, -1));
+        return isMatch(0, s, 0, p);
+    }
+    int isMatch(int i, string s, int j, string p) {
+        if (dp[i][j] != -1) {
+            return dp[i][j];
+        }
+        if (j == p.length()) {
+            dp[i][j] = (i == s.length());
+        } else if (j < p.length() - 1 && p[j + 1] == '*') {
+            if (i < s.length() && (s[i] == p[j] || p[j] == '.')) {
+                dp[i][j] = isMatch(i, s, j + 2, p)
+                           || isMatch(i + 1, s, j + 2, p)
+                           || isMatch(i + 1, s, j, p);
+            } else {
+                dp[i][j] = isMatch(i, s, j + 2, p);
+            }
+        } else if (i < s.length() && (s[i] == p[j] || p[j] == '.')) {
+            dp[i][j] = isMatch(i + 1, s, j + 1, p);
+        } else {
+            dp[i][j] = 0;
+        }
+        return dp[i][j];
+    }
+};
+
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        // backtrack, read two char at p a time
+        bool canskip = false;
+        bool thismatch = false;
+        if (p.length() > 1 && p[1] == '*') {
+            canskip = true;
+        } else if (p.length() == 0) {
+            return s.length() == 0;
+        }
+        if (s.length() > 0 && (p[0] == '.' || s[0] == p[0])) {
+            thismatch = true;
+        }
+        if (canskip && thismatch) {
+            return isMatch(s.substr(1), p)
+                || isMatch(s.substr(1), p.substr(2))
+                || isMatch(s, p.substr(2));
+        } else if (canskip) {
+            return isMatch(s, p.substr(2));
+        } else if (thismatch) {
+            return isMatch(s.substr(1), p.substr(1));
+        }
+        return false;
+    }
+};
+
+class Solution {
+public:
     bool isMatch(string s, string p) {
         vector<vector<bool>> dp(s.length() + 1, vector<bool> (p.length() + 1, false));
         dp[0][0] = true;

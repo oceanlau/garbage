@@ -1,5 +1,32 @@
 class Solution {
 private:
+    void gen(vector<string>& res, string& cur, int l, int r) {
+        if (l == r && l == 0) {
+            res.push_back(cur);
+            return;
+        }
+        if (l > 0) {
+            cur += '(';
+            gen(res, cur, l - 1, r);
+            cur.pop_back();
+        }
+        if (r > l) {
+            cur += ')';
+            gen(res, cur, l, r - 1);
+            cur.pop_back();
+        }
+    }
+public:
+    vector<string> generateParenthesis(int n) {
+        vector<string> res;
+        string cur = "";
+        gen(res, cur, n, n);
+        return res;
+    }
+};
+
+class Solution {
+private:
     void _bt(vector<string>& results, string cur, int r_allowed, int l, int r) {
         if (l == r && r == 0) {
             results.push_back(cur);
@@ -76,6 +103,29 @@ private:
     vector<vector<string>> cache;
 };
 
+class Solution {
+public:
+    //wrong thinking, no (())(())
+    vector<string> generateParenthesis(int n) {
+        if (n < 1) {
+            return {};
+        }
+        if (n == 1) {
+            return {"()"};
+        }
+        vector<string> res = generateParenthesis(n - 1);
+        int s = res.size();
+        for (int i = 0; i < s; i++) {
+            string cur = res[i];
+            if ("()" + cur != cur + "()") {
+                res.push_back("()" + cur);
+            }
+            res.push_back(cur + "()");
+            res[i] = "(" + cur + ")";
+        }
+        return res;
+    }
+};
 
 // Wrong Thinking
 
