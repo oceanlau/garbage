@@ -12,7 +12,7 @@
 
   Binary Tree
 
-  N-ary Tree
+  N-ary Tree: [582. Kill Process](https://leetcode.com/problems/kill-process/)
 
 - Serialize and Deserialize Tree:
 

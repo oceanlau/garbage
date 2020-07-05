@@ -1,3 +1,44 @@
+class Solution {
+public:
+    // greater or equal than target (return last idx of target if equal or first idx if greater)
+    int findGE (vector<int>& nums, int target) {
+        int l = 0;
+        int r = nums.size() - 1;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            if (nums[mid] == target) {
+                l = mid;
+            } else if (nums[mid] > target) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        if (nums[l] >= target) {
+            if (nums[r] == target) {
+                return r;
+            }
+            return l;
+        } else if (nums[r] < target) {
+            return -1;
+        }
+        return r;
+    }
+    vector<int> searchRange(vector<int>& nums, int target) {
+        if (nums.size() == 0) {
+            return {-1, -1};
+        }
+        int r = findGE(nums, target);
+        if (r == -1 || nums[r] != target) {
+            return {-1, -1};
+        }
+        int l = findGE(nums, target - 1);
+        if (nums[l] == target - 1) {
+            l += 1;
+        }
+        return {l, r};
+    }
+};
 
 class Solution {
 private:

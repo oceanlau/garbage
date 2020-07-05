@@ -21,6 +21,66 @@ public:
     }
 };
 */
+
+class Solution {
+private:
+    // return tail
+    Node* _dfs(Node* node, Node*& head) {
+        Node* cur_tail = NULL;
+        if (node->left) {
+            cur_tail = _dfs(node->left, head);
+            cur_tail->right = node;
+            node->left = cur_tail;
+        }
+        if (head == NULL || node->val < head->val) {
+            head = node;
+        }
+        cur_tail = node;
+        if (node->right) {
+            Node* cur_head = NULL;
+            cur_tail = _dfs(node->right, cur_head);
+            node->right = cur_head;
+            cur_head->left = node;
+        }
+        return cur_tail;
+        
+    }
+public:
+    Node* treeToDoublyList(Node* root) {
+        if (root == NULL) {
+            return NULL;
+        }
+        Node* head = NULL;
+        Node* tail = _dfs(root, head);
+        tail->right = head;
+        head->left = tail;
+        return head;
+    }
+};
+
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    Node* left;
+    Node* right;
+
+    Node() {}
+
+    Node(int _val) {
+        val = _val;
+        left = NULL;
+        right = NULL;
+    }
+
+    Node(int _val, Node* _left, Node* _right) {
+        val = _val;
+        left = _left;
+        right = _right;
+    }
+};
+*/
 class Solution {
 private:
     void _dfs(Node* node, Node*& DLL_root, Node*& DLL_last) {

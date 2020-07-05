@@ -1,6 +1,39 @@
 class Solution {
 public:
     string decodeString(string s) {
+        // ]: pop stack, merge into last stack
+        // [: put number and empty string into stack
+        // isalpha: append to top of stack
+        // init stack with 1, ""
+        int num = 0;
+        stack<pair<int, string>> st;
+        st.emplace(1, "");
+        for (const char c : s) {
+            if (isdigit(c)) {
+                num = num * 10 + (c - '0');
+            } else if (c == '[') {
+                st.emplace(num, "");
+                num = 0;
+            } else if (c == ']') {
+                auto last = st.top();
+                st.pop();
+                string tmp = "";
+                while (last.first > 0) {
+                    last.first --;
+                    tmp += last.second;
+                }
+                st.top().second += tmp;
+            } else {
+                st.top().second += c;
+            }
+        }
+        return st.top().second;
+    }
+};
+
+class Solution {
+public:
+    string decodeString(string s) {
         if (s == "") {
             return "";
         }

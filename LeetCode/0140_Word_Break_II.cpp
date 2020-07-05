@@ -1,4 +1,36 @@
 class Solution {
+private:
+    unordered_map<string, vector<string>> m;
+    vector<string> _dfs(string s, unordered_set<string>& dict) {
+        if (m.count(s)) {
+            return m[s];
+        }
+        vector<string> res;
+        for (int i = 1; i <= s.length(); i++) {
+            string prefix = s.substr(0, i);
+            if (!dict.count(prefix)) {
+                continue;
+            }
+            if (i == s.length()) {
+                res.push_back(prefix);
+                continue;
+            }
+            vector<string> suffixes = _dfs(s.substr(i), dict);
+            for (const string& suffix : suffixes) {
+                res.push_back(prefix + " " + suffix);
+            }
+        }
+        m[s] = res;
+        return res;
+    }
+public:
+    vector<string> wordBreak(string s, vector<string>& wordDict) {
+        unordered_set<string> dict(wordDict.begin(), wordDict.end());
+        return _dfs(s, dict);
+    }
+};
+
+class Solution {
 public:
     vector<string> wordBreak(string s, vector<string>& wordDict) {
         unordered_set<string> dict(wordDict.begin(), wordDict.end());
