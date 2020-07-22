@@ -4,6 +4,44 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    int maxParentToChildPathSumContaining(TreeNode* node, int& maxSum) {
+        int l_child = 0;
+        int r_child = 0;
+        if (node->left) {
+            l_child = max(l_child, maxParentToChildPathSumContaining(node->left, maxSum));
+        }
+        if (node->right) {
+            r_child = max(r_child, maxParentToChildPathSumContaining(node->right, maxSum));
+        }
+        int maxParentToChildPathSum = max(l_child, r_child) + node->val;
+        maxSum = max(maxSum, maxParentToChildPathSum);
+        maxSum = max(maxSum, l_child + r_child + node->val);
+        return maxParentToChildPathSum;
+    }
+public:
+    int maxPathSum(TreeNode* root) {
+        if (!root) {
+            return 0;
+        }
+        int maxSum = INT_MIN;
+        maxParentToChildPathSumContaining(root, maxSum);
+        return maxSum;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */

@@ -1,4 +1,64 @@
 class Solution {
+private:
+    string decompress(string s, int& i) {
+        int num = 0;
+        string cur = "";
+        while (i < s.length()) {
+            if (isdigit(s[i])) {
+                num = num * 10 + (s[i] - '0');
+            } else if (s[i] == '[') {
+                i ++;
+                string child = decompress(s, i);
+                while (num > 0) {
+                    cur += child;
+                    num --;
+                }
+            } else if (s[i] == ']') {
+                break;
+            } else {
+                cur += s[i];
+            }
+            i ++;
+        }
+        return cur;
+    }
+public:
+    string decodeString(string s) {
+        int i = 0;
+        return decompress(s, i);
+    }
+};
+
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<pair<int, string>> st;
+        st.emplace(1, "");
+        int repeat = 0;
+        for (const char c : s) {
+            if (isdigit(c)) {
+                repeat = repeat * 10 + (c - '0');
+            } else if (c == '[') {
+                st.emplace(repeat, "");
+                repeat = 0;
+            } else if (c == ']') {
+                auto last = st.top();
+                st.pop();
+                string last_string = "";
+                while (last.first > 0) {
+                    last_string += last.second;
+                    last.first --;
+                }
+                st.top().second += last_string;
+            } else {
+                st.top().second += c;
+            }
+        }
+        return st.top().second;
+    }
+};
+
+class Solution {
 public:
     string decodeString(string s) {
         // ]: pop stack, merge into last stack

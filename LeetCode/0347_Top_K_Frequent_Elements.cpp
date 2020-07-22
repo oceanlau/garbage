@@ -1,4 +1,47 @@
 class Solution {
+private:
+    int partition(vector<pair<int, int>>& num_freqs, int l, int r) {
+        int pivot_val = num_freqs[r].second;
+        for (int idx = l; idx < r; idx++) {
+            if (num_freqs[idx].second > pivot_val) {
+                swap(num_freqs[idx], num_freqs[l++]);
+            }
+        }
+        swap(num_freqs[l], num_freqs[r]);
+        return l;
+    }
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> freq;
+        for (const int num : nums) {
+            freq[num] ++;
+        }
+        vector<pair<int, int>> num_freqs (freq.begin(), freq.end());
+        if (num_freqs.empty()) {
+            return {};
+        }
+        int l = 0;
+        int r = num_freqs.size() - 1;
+        while (true) {
+            int nth = partition(num_freqs, l, r);
+            if (nth + 1 == k) {
+                break;
+            } else if (nth + 1 < k) {
+                l = nth + 1;
+            } else {
+                r = nth - 1;
+            }
+        }
+        vector<int> result;
+        while (k > 0) {
+            result.push_back(num_freqs[k - 1].first);
+            k --;
+        }
+        return result;
+    }
+};
+
+class Solution {
 public:
     vector<int> topKFrequent(vector<int>& nums, int k) {
         // O(n) build map size f(could be as large as n)

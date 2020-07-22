@@ -2,6 +2,49 @@ class Solution {
 public:
     int myAtoi(string str) {
         int sign = 0;
+        int num = 0;
+        for (const char c : str) {
+            if (c == ' ') {
+                if (sign != 0) {
+                    break;
+                }
+            } else if (c == '+') {
+                if (sign != 0) {
+                    break;
+                }
+                sign = 1;
+            } else if (c == '-') {
+                if (sign != 0) {
+                    break;
+                }
+                sign = -1;
+            } else if (isdigit(c)) {
+                if (sign == 0) {
+                    sign = 1;
+                }
+                int d = c - '0';
+                if (num > INT_MAX / 10 || (num == INT_MAX / 10 && d >= INT_MAX % 10)) {
+                    if (sign == 1) {
+                        return INT_MAX;
+                    } else if (sign == -1) {
+                        if (num > INT_MAX / 10 || d > INT_MAX % 10) {
+                            return INT_MIN;
+                        }
+                    }
+                }
+                num = num * 10 + d;
+            } else {
+                break;
+            }
+        }
+        return sign * num;
+    }
+};
+
+class Solution {
+public:
+    int myAtoi(string str) {
+        int sign = 0;
         int val = 0;
         for (const char c : str) {
             if (c == ' ') {

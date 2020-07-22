@@ -1,4 +1,20 @@
 class Solution {
+public:
+    int uniquePaths(int m, int n) {
+        if (m == 1 || n == 1) {
+            return 1;
+        }
+        vector<int> ways(n, 1);
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                ways[j] += ways[j - 1];
+            }
+        }
+        return ways.back();
+    }
+};
+
+class Solution {
 private:
     //grid m x n, starting from 0,0 (grid size 1x1)
     vector<vector<int>> _dp;

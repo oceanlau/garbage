@@ -1,5 +1,27 @@
 class Solution {
 private:
+    void _bt(int start, vector<int>& nums, vector<int>& subset, vector<vector<int>>& all_subset) {
+        if (start == nums.size()) {
+            return;
+        }
+        for (int i = start; i < nums.size(); i++) {
+            subset.push_back(nums[i]);
+            all_subset.push_back(subset);
+            _bt(i + 1, nums, subset, all_subset);
+            subset.pop_back();
+        }
+    }
+public:
+    vector<vector<int>> subsets(vector<int>& nums) {
+        vector<int> subset;
+        vector<vector<int>> all_subset {subset};
+        _bt(0, nums, subset, all_subset);
+        return all_subset;
+    }
+};
+
+class Solution {
+private:
     void _bt(vector<int>& nums, int start, vector<int>& subset, vector<vector<int>>& results) {
         subset.push_back(nums[start++]);
         results.push_back(subset);
