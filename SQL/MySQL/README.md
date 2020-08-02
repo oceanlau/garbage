@@ -1,5 +1,25 @@
 # MySQL
 
+## Type
+
+- char, varchar(50)
+- int(20)
+
+## Locking and Transaction (InnoDB)
+
+- ACID
+  - Atomicity: all succeed or all fail.
+  - Consistency: property of the application. Some invariants must always hold.
+  - Isolation: dealing with concurrency. Don't lost update.
+  - Durability: safety
+
+- Basic Locks:
+  - Shared lock: granted immediately unless there is an exclusive lock. Used to read.
+  - Exclusive lock: granted after all shared locks and exclusive locks are released. Used to update or delete.
+
+- Isolation levels: From loose to strict: READ UNCOMMITTED, READ COMMITTED, REPEATABLE READ (InnoDB default), and SERIALIZABLE
+
+
 ## Indexes (B-tree)
 
 Ref: [https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html](https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html)
@@ -9,6 +29,7 @@ Ref: [https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html](https://dev.my
 - If the table has a multiple-column index, any leftmost prefix of the index can be used by the optimizer to look up rows.
 - Covering index: If a query uses from a table only columns that are included in some index, the selected values can be retrieved from the index tree.
 - In InnoDB table, primary key is implicitly part of any index. (?)
+- Clustered index: row stored inside the index. InnoDB primary key default.
 
 ### WHERE
 
@@ -89,3 +110,19 @@ SELECT * FROM t1 ORDER BY k1, k2;
 
 - B-tree is ordered and hash index is not. So B-tree supports comparison operators while hash index only supports equality. Also B-tree can be used to speed up `ORDER BY` while hash index can not.
 - Leftmost prefixes of B-tree index are still indexes. Hash index can only use whole key.
+
+### Comparing InnoDB and MyISAM
+
+- InnoDB has row-level locking. MyISAM only has full table-level locking.
+- InnoDB supports transactions, which means you can commit and roll back. MyISAM does not.
+- ...
+
+The only MyISAM advantages left are:
+
+- Tables will be smaller on disk compared to uncompressed InnoDB tables.
+- The count(\*) is still much faster in MyISAM. There is a counter inside.
+
+## Some Details
+
+- mysqldump
+- binlog
