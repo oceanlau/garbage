@@ -1,6 +1,6 @@
 # MySQL
 
-## Indexes
+## Indexes (B-tree)
 
 Ref: [https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html](https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html)
 
@@ -11,11 +11,12 @@ Ref: [https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html](https://dev.my
 - In InnoDB table, primary key is implicitly part of any index. (?)
 
 ### WHERE
+
 - Index is used only when a prefix of the index is present in all sub `AND` clauses:
 
 ```SQL
 # INDEX idx (k1, k2, k3)
-... WHERE k1=1 AND k2=2 AND other_column=3
+... WHERE k1=1 AND k2=2 AND A=3
 ... WHERE k1=1 OR A=10 AND k1=2
 ... WHERE k1=1 AND k3=2 # only k1 used
 ... WHERE k1=1 AND k2=2 OR k1=3 AND k3=3; # only k1 used. k2 is not!
@@ -26,16 +27,16 @@ Ref: [https://dev.mysql.com/doc/refman/8.0/en/mysql-indexes.html](https://dev.my
 ... WHERE k1=1 OR k2=10 # Also not present in all sub `AND` clauses!
 
 ```
-- `LIKE` statement:Index is used if the argument to `LIKE` is a constant string that does not start with a wildcard character:
+- `LIKE` statement: Index is used if the argument to `LIKE` is a constant string that does not start with a wildcard character:
 
 ```SQL
-# INDEX idx (key_col)
-SELECT * FROM tbl_name WHERE key_col LIKE 'Patrick%';
-SELECT * FROM tbl_name WHERE key_col LIKE 'Pat%_ck%';
+# INDEX idx (k1)
+... WHERE k1 LIKE 'Patrick%';
+... WHERE k1 LIKE 'Pat%_ck%';
 
 # The following do not use index
-SELECT * FROM tbl_name WHERE key_col LIKE '%Patrick%';
-SELECT * FROM tbl_name WHERE key_col LIKE other_col;
+... WHERE k1 LIKE '%Patrick%';
+... WHERE k1 LIKE other_col;
 ```
 
 ### ORDER BY
@@ -83,3 +84,8 @@ SELECT * FROM t1 ORDER BY k1, k2;
 
 - `ORDER BY` columns from multiple indexes or are different from `WHERE` columns or are different from `GROUP BY` columns.
 - `ORDER BY` nonconsecutive parts of an index.
+
+### Comparing with Hash Index
+
+- B-tree is ordered and hash index is not. So B-tree supports comparison operators while hash index only supports equality. Also B-tree can be used to speed up `ORDER BY` while hash index can not.
+- Leftmost prefixes of B-tree index are still indexes. Hash index can only use whole key.
