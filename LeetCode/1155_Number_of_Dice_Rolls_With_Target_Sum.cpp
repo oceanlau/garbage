@@ -1,3 +1,31 @@
+const int MOD = pow(10, 9) + 7;
+class Solution {
+public:
+    int numRollsToTarget(int d, int f, int target) {
+        // dp[d][target] number of ways
+        vector<vector<int>> dp;
+        dp.resize(d, vector<int> (target + 1, 0));
+        for (int i = 0; i < d; i++) {
+            for (int j = 1; j <= target; j++) {
+                if (i == 0) {
+                    if (j > f) {
+                        break;
+                    }
+                    dp[i][j] = 1;
+                    continue;
+                }
+                int cur = 1;
+                while (cur <= min(f, j)) {
+                    dp[i][j] += (dp[i - 1][j - cur]) % MOD;
+                    dp[i][j] = dp[i][j] % MOD;
+                    cur ++;
+                }
+            }
+        }
+        return dp[d - 1][target];
+    }
+};
+
 class Solution {
 private:
     vector<vector<int>> _dp;

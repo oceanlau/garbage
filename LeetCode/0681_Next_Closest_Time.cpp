@@ -1,3 +1,61 @@
+class Solution {
+public:
+    string nextClosestTime(string time) {
+        set<char> digits;
+        for (const char digit : time) {
+            if (isdigit(digit)) {
+                digits.insert(digit);
+            }
+        }
+        char smallest = *(digits.begin());
+        char d = time[4];
+        auto it = digits.find(d);
+        while (it != digits.end() && *it == d) {
+            it ++;
+        }
+        if (it != digits.end()) {
+            time[4] = *it;
+            return time;
+        }
+        time[4] = smallest;
+        
+        d = time[3];
+        it = digits.find(d);
+        while (it != digits.end() && *it == d) {
+            it ++;
+        }
+        if (it != digits.end() && *it <= '5') {
+            time[3] = *it;
+            return time;
+        }
+        time[3] = smallest;
+        
+        d = time[1];
+        it = digits.find(d);
+        while (it != digits.end() && *it == d) {
+            it ++;
+        }
+        if (it != digits.end() && (time[0] < '2' || *it <= '4')) {
+            time[1] = *it;
+            return time;
+        }
+        time[1] = smallest;
+        
+        d = time[0];
+        it = digits.find(d);
+        while (it != digits.end() && *it == d) {
+            it ++;
+        }
+        if (it != digits.end() && *it <= '2') {
+            time[0] = *it;
+            return time;
+        }
+        time[0] = smallest;
+        
+        return time;
+    }
+};
+
 //rule based
 class Solution {
 public:

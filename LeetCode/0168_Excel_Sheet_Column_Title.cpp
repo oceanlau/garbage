@@ -1,6 +1,19 @@
 class Solution {
 public:
     string convertToTitle(int n) {
+        // Decimal to 26
+        string result;
+        while (n > 0) {
+            result = (char)((n - 1) % 26 + 'A') + result;
+            n = (n - 1) / 26;
+        }
+        return result;
+    }
+};
+
+class Solution {
+public:
+    string convertToTitle(int n) {
         string s;
         while (n != 0) {
             n -= 1;
