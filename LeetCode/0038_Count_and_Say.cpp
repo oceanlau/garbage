@@ -1,6 +1,29 @@
 class Solution {
 public:
     string countAndSay(int n) {
+        string cur = "1";
+        n --;
+        while (n > 0) {
+            string next = "";
+            char num = '0';
+            for (int i = 0; i < cur.length(); i++) {
+                num ++;
+                if (i + 1 == cur.length() || cur[i + 1] != cur[i]) {
+                    next += num;
+                    next += cur[i];
+                    num = '0';
+                }
+            }
+            cur = next;
+            n --;
+        }
+        return cur;
+    }
+};
+
+class Solution {
+public:
+    string countAndSay(int n) {
         string seq = "1";
         if (n == 1) {
             return seq;

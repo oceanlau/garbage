@@ -1,4 +1,37 @@
 class Solution {
+public:
+    string decodeString(string s) {
+        stack<pair<int, string>> st;
+        st.emplace(1, "");
+        int num = 0;
+        for (const char c : s) {
+            if (isdigit(c)) {
+                num = num * 10 + (c - '0');
+            } else if (isalpha(c)) {
+                st.top().second += c;
+            } else if (c == '[') {
+                st.emplace(num, "");
+                num = 0;
+            } else {
+                pair<int, string> cur = st.top();
+                st.pop();
+                while (cur.first > 0) {
+                    st.top().second += cur.second;
+                    cur.first --;
+                }
+            }
+        }
+        pair<int, string> cur = st.top();
+        string decoded = "";
+        while (cur.first > 0) {
+            decoded += cur.second;
+            cur.first --;
+        }
+        return decoded;
+    }
+};
+
+class Solution {
 private:
     string decompress(string s, int& i) {
         int num = 0;

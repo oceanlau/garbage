@@ -1,6 +1,36 @@
 class Solution {
 public:
     bool canTransform(string start, string end) {
+        int l = 0;
+        int r = 0;
+        for (int i = 0; i < start.length(); i ++) {
+            if (start[i] == 'L') {
+                l --;
+            } else if (start[i] == 'R') {
+                r ++;
+            }
+            if (l > 0 && r > 0) {
+                return false;
+            }
+            if (end[i] == 'L') {
+                l ++;
+            } else if (end[i] == 'R') {
+                r --;
+            }
+            if (l > 0 && r > 0) {
+                return false;
+            }
+            if (l < 0 || r < 0) {
+                return false;
+            }
+        }
+        return l == 0 && r == 0;
+    }
+};
+
+class Solution {
+public:
+    bool canTransform(string start, string end) {
         int i = 0;
         int j = 0;
         while (i < start.length() || j < end.length()) {

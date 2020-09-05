@@ -1,4 +1,34 @@
 class Solution {
+private:
+    void reverse(vector<int>& nums, int l, int r) {
+        while (l < r) {
+            swap(nums[l ++], nums[r --]);
+        }
+    }
+public:
+    void nextPermutation(vector<int>& nums) {
+        int i = nums.size();
+        if (i < 2) {
+            return;
+        }
+        i -= 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
+            i --;
+        }
+        if (i == -1) {
+            reverse(nums, 0, nums.size() - 1);
+        } else {
+            int j = i + 1;
+            while (j + 1 < nums.size() && nums[j + 1] > nums[i]) {
+                j ++;
+            }
+            swap(nums[i], nums[j]);
+            reverse(nums, i + 1, nums.size() - 1);
+        }
+    }
+};
+
+class Solution {
 public:
     void nextPermutation(vector<int>& nums) {
         if (nums.size() < 2) {

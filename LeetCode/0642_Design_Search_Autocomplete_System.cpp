@@ -1,3 +1,89 @@
+class AutocompleteSystem {
+private:
+    struct Node {
+        struct Comp {
+            bool operator()(const Node* l, const Node* r) const {
+                if (l->counter == r->counter) {
+                    return l->sentence < r->sentence;
+                }
+                return l->counter > r->counter;
+            }
+        };
+        vector<Node*> children = vector<Node*> (27, nullptr);
+        set<Node*, Comp> complete_sentences;
+        string sentence = "";
+        int counter = 0;
+    };
+    Node* _root = nullptr;
+    Node* _cur = nullptr;
+    string _cur_sentence = "";
+    void _add(const string& sentence, const int& time) {
+        Node* cur = _root;
+        vector<Node*> path;
+        for (const char c : sentence) {
+            int child_idx = 26;
+            if (isalpha(c)) {
+                child_idx = c - 'a';
+            }
+            if (!cur->children[child_idx]) {
+                cur->children[child_idx] = new Node();
+            }
+            path.push_back(cur->children[child_idx]);
+            cur = cur->children[child_idx];
+        }
+        for (Node* const step : path) {
+            if (step->complete_sentences.count(cur)) {
+                step->complete_sentences.erase(cur);
+            }
+        }
+        cur->sentence = sentence;
+        cur->counter += time;
+        for (Node* const step : path) {
+            step->complete_sentences.insert(cur);
+        }
+    }
+public:
+    AutocompleteSystem(vector<string>& sentences, vector<int>& times) {
+        _root = new Node();
+        _cur = _root;
+        for (int i = 0; i < sentences.size(); i++) {
+            _add(sentences[i], times[i]);
+        }
+    }
+    
+    vector<string> input(char c) {
+        vector<string> result;
+        if (c != '#') {
+            _cur_sentence += c;
+            int child_idx = 26;
+            if (isalpha(c)) {
+                child_idx = c - 'a';
+            }
+            if (!_cur->children[child_idx]) {
+                _cur->children[child_idx] = new Node();
+            }
+            _cur = _cur->children[child_idx];
+            for (auto it = _cur->complete_sentences.begin(); it != _cur->complete_sentences.end(); it ++) {
+                result.push_back((*it)->sentence);
+                if (result.size() == 3) {
+                    break;
+                }
+            }
+        } else {
+            _add(_cur_sentence, 1);
+            _cur_sentence = "";
+            _cur = _root;
+        }
+        return result;
+    }
+};
+
+/**
+ * Your AutocompleteSystem object will be instantiated and called as such:
+ * AutocompleteSystem* obj = new AutocompleteSystem(sentences, times);
+ * vector<string> param_1 = obj->input(c);
+ */
+
 struct Node {
     unordered_map<char, Node*> children;
     int cnt = 0;

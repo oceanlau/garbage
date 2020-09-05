@@ -1,5 +1,43 @@
 class Solution {
 private:
+    void _bt(int n, int row, vector<string>& solution, vector<vector<string>>& solutions, vector<bool>& col_occupied, vector<bool>& diag_occupied, vector<bool>& anti_diag_occupied) {
+        if (row == n) {
+            solutions.push_back(solution);
+            return;
+        }
+        for (int col = 0; col < n; col++) {
+            if (col_occupied[col] || diag_occupied[n - row + col] || anti_diag_occupied[row + col]) {
+                continue;
+            }
+            solution[row][col] = 'Q';
+            col_occupied[col] = true;
+            diag_occupied[n - row + col] = true;
+            anti_diag_occupied[row + col] = true;
+            _bt(n, row + 1, solution, solutions, col_occupied, diag_occupied, anti_diag_occupied);
+            solution[row][col] = '.';
+            col_occupied[col] = false;
+            diag_occupied[n - row + col] = false;
+            anti_diag_occupied[row + col] = false;
+        }
+    }
+public:
+    vector<vector<string>> solveNQueens(int n) {
+        // backtrack: each row, each pos
+        // if violates rules: col, diag, anti-diag already occupied, skip
+        // if not, update
+        vector<bool> col_occupied(n, false);
+        vector<bool> diag_occupied(2 * n - 1, false);
+        vector<bool> anti_diag_occupied(2 * n - 1, false);
+        
+        vector<string> solution(n, string(n, '.'));
+        vector<vector<string>> solutions;
+        _bt(n, 0, solution, solutions, col_occupied, diag_occupied, anti_diag_occupied);
+        return solutions;
+    }
+};
+
+class Solution {
+private:
     void _bt(int n,
              int row,
              vector<vector<string>>& solutions,

@@ -1,6 +1,41 @@
 class Solution {
 public:
     string reorganizeString(string S) {
+        unordered_map<char, int> counter;
+        char most_freq_char = ' ';
+        int most_freq = 0;
+        for (const char c : S) {
+            if (++counter[c] > most_freq) {
+                most_freq = counter[c];
+                most_freq_char = c;
+            }
+        }
+        if (most_freq > (S.length() + 1) / 2) {
+            return "";
+        }
+        int i = 0;
+        while (counter[most_freq_char] > 0) {
+            S[i] = most_freq_char;
+            i += 2;
+            counter[most_freq_char] --;
+        }
+        for (auto& p : counter) {
+            while (p.second > 0) {
+                if (i >= S.length()) {
+                    i = 1;
+                }
+                S[i] = p.first;
+                i += 2;
+                p.second --;
+            }
+        }
+        return S;
+    }
+};
+
+class Solution {
+public:
+    string reorganizeString(string S) {
         unordered_map<char, int> freq;
         int len = S.length();
         for(const char s : S) {

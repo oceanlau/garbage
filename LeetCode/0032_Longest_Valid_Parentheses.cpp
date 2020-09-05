@@ -1,6 +1,79 @@
 class Solution {
 public:
     int longestValidParentheses(string s) {
+        int max_len = 0;
+        int l = 0;
+        int r = 0;
+        int len = 0;
+        for (int i = 0; i < s.length(); i++) {
+            len ++;
+            if (s[i] == '(') {
+                l ++;
+            } else {
+                r ++;
+                if (r == l) {
+                    max_len = max(max_len, len);
+                } else if (r > l) {
+                    l = 0;
+                    r = 0;
+                    len = 0;
+                }
+            }
+        }
+        
+        l = 0;
+        r = 0;
+        len = 0;
+        for (int i = s.length() - 1; i >= 0; i--) {
+            len ++;
+            if (s[i] == ')') {
+                l ++;
+            } else {
+                r ++;
+                if (r == l) {
+                    max_len = max(max_len, len);
+                } else if (r > l) {
+                    l = 0;
+                    r = 0;
+                    len = 0;
+                }
+            }
+        }
+        
+        return max_len;
+    }
+};
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
+        stack<int> l_pos;
+        int max_len = 0;
+        int start_loc = -1;
+        for (int i = 0; i < s.length(); i++) {
+            char c = s[i];
+            if (c == '(') {
+                l_pos.push(i);
+            } else {
+                if (!l_pos.empty()) {
+                    l_pos.pop();
+                    int l = start_loc;
+                    if (!l_pos.empty()) {
+                        l = max(l, l_pos.top());
+                    }
+                    max_len = max(max_len, i - l);
+                } else {
+                    start_loc = i;
+                }
+            }
+        }
+        return max_len;
+    }
+};
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
         vector<int> dp(s.length(), 0);
         int longest = 0;
         for (int i = 1; i < s.length(); i++) {

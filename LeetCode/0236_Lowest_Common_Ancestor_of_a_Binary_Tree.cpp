@@ -7,6 +7,48 @@
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */
+class Solution {
+private:
+    int _lca(TreeNode* root, TreeNode* p, TreeNode* q, TreeNode*& lca) {
+        TreeNode* proposed = NULL;
+        int counter = 0;
+        if (root->left) {
+            counter += _lca(root->left, p, q, lca);
+        }
+        if (lca != NULL) {
+            return counter;
+        }
+        if (root->right) {
+            counter += _lca(root->right, p, q, lca);
+        }
+        if (lca != NULL) {
+            return counter;
+        }
+        if (root->val == p->val || root->val == q->val) {
+            counter += 1;
+        }
+        if (counter == 2) {
+            lca = root;
+        }
+        return counter;
+    }
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        TreeNode* lca = NULL;
+        _lca(root, p, q, lca);
+        return lca;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
 //DFS, first node return 2 (both found)
 class Solution {
 private:

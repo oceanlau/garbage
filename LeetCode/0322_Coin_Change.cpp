@@ -1,5 +1,38 @@
 class Solution {
 private:
+    void _bt(vector<int>& coins, vector<int>& dp, int amount) {
+        if (amount == 0 || dp[amount] != 0) {
+            return;
+        }
+        int num = INT_MAX;
+        for (int i = 0; i < coins.size(); i ++) {
+            if (coins[i] > amount) {
+                continue;
+            }
+            _bt(coins, dp, amount - coins[i]);
+            if (dp[amount - coins[i]] == -1) {
+                continue;
+            }
+            num = min(num, dp[amount - coins[i]] + 1);
+        }
+        if (num != INT_MAX) {
+            dp[amount] = num;
+        } else {
+            dp[amount] = -1;
+        }
+    }
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        // min number of coins to get to amount
+        vector<int> dp(amount + 1, 0);
+        sort(coins.rbegin(), coins.rend());
+        _bt(coins, dp, amount);
+        return dp[amount];
+    }
+};
+
+class Solution {
+private:
     int _min_coins_to_amount(int amount, vector<int>& coins, vector<int>& cache) {
         if (amount == 0) {
             return 0;
