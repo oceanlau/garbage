@@ -1,6 +1,32 @@
 class Solution {
 public:
     vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> mono_dec;
+        for (int i = 0; i < k - 1; i ++) {
+            while (!mono_dec.empty() && nums[mono_dec.back()] < nums[i]) {
+                mono_dec.pop_back();
+            }
+            mono_dec.push_back(i);
+        }
+        vector<int> result;
+        for (int i = k - 1; i < nums.size(); i++) {
+            //! empty careful k == 1!
+            if (!mono_dec.empty() && mono_dec.front() <= i - k) {
+                mono_dec.pop_front();
+            }
+            while (!mono_dec.empty() && nums[mono_dec.back()] < nums[i]) {
+                mono_dec.pop_back();
+            }
+            mono_dec.push_back(i);
+            result.push_back(nums[mono_dec.front()]);
+        }
+        return result;
+    }
+};
+
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
         deque<int> mono_dec_idxes;
         
         for (int i = 0; i < k - 1; i++) {

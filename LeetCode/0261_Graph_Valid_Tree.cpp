@@ -1,4 +1,72 @@
 class Solution {
+private:
+    vector<int> _parent;
+    int _total = 0;
+    int _f(int node) {
+        while (_parent[node] != node) {
+            node = _parent[node];
+        }
+        return node;
+    }
+    bool _u(int l, int r) {
+        int lp = _f(l);
+        int rp = _f(r);
+        if (lp == rp) {
+            return false;
+        }
+        _parent[rp] = lp;
+        return true;
+    }
+public:
+    bool validTree(int n, vector<vector<int>>& edges) {
+        _total = n;
+        _parent.resize(n, -1);
+        for (int i = 0; i < n; i++) {
+            _parent[i] = i;
+        }
+        for (const auto& e : edges) {
+            if (!_u(e[0], e[1])) {
+                return false;
+            }
+            _total --;
+        }
+        return _total == 1;
+    }
+};
+
+class Solution {
+private:
+    bool _dfs(unordered_map<int, vector<int>>& m, int cur, int parent, vector<bool>& visited, int& to_visit) {
+        to_visit --;
+        visited[cur] = true;
+        for (int i = 0; i < m[cur].size(); i ++) {
+            int child = m[cur][i];
+            if (child == parent) {
+                continue;
+            }
+            if (visited[child]) {
+                return false;
+            }
+            if (!_dfs(m, child, cur, visited, to_visit)) {
+                return false;
+            }
+        }
+        return true;
+    }
+public:
+    bool validTree(int n, vector<vector<int>>& edges) {
+        unordered_map<int, vector<int>> m;
+        for (const auto& e : edges) {
+            m[e[0]].push_back(e[1]);
+            m[e[1]].push_back(e[0]);
+        }
+        vector<bool> visited (n, false);
+        return _dfs(m, 0, -1, visited, n) && n == 0;
+    }
+};
+
+
+class Solution {
 public:
     bool validTree(int n, vector<vector<int>>& edges) {
         // a DFS should visit all nodes each exactly once

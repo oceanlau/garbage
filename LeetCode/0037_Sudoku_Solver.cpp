@@ -1,3 +1,61 @@
+class Solution {
+private:
+    bool _is_valid(int r, int c, int idx,
+                vector<vector<bool>>& col_rule,
+                vector<vector<bool>>& row_rule,
+                vector<vector<bool>>& block_rule) {
+        return !col_rule[c][idx] && !row_rule[r][idx] && !block_rule[(r / 3) * 3 + c / 3][idx];
+    }
+    bool _solve(vector<vector<int>>& unsolved,
+                int i,
+                vector<vector<char>>& board,
+                vector<vector<bool>>& col_rule,
+                vector<vector<bool>>& row_rule,
+                vector<vector<bool>>& block_rule) {
+        if (i == unsolved.size()) {
+            return true;
+        }
+        int r = unsolved[i][0];
+        int c = unsolved[i][1];
+        for (char ch = '1'; ch <= '9'; ch++) {
+            if (_is_valid(r, c, ch - '1', col_rule, row_rule, block_rule)) {
+                board[r][c] = ch;
+                col_rule[c][ch - '1'] = true;
+                row_rule[r][ch - '1'] = true;
+                block_rule[(r / 3) * 3 + c / 3][ch - '1'] = true;
+                if (_solve(unsolved, i + 1, board, col_rule, row_rule, block_rule)) {
+                    return true;
+                }
+                board[r][c] = '.';
+                col_rule[c][ch - '1'] = false;
+                row_rule[r][ch - '1'] = false;
+                block_rule[(r / 3) * 3 + c / 3][ch - '1'] = false;
+            }
+        }
+        return false;
+    }
+public:
+    void solveSudoku(vector<vector<char>>& board) {
+        vector<vector<bool>> col_rule (9, vector<bool> (9, false));
+        vector<vector<bool>> row_rule (9, vector<bool> (9, false));
+        vector<vector<bool>> block_rule (9, vector<bool> (9, false));
+        vector<vector<int>> unsolved;
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    int idx = board[i][j] - '1';
+                    col_rule[j][idx] = true;
+                    row_rule[i][idx] = true;
+                    block_rule[(i / 3) * 3 + j / 3][idx] = true;
+                } else {
+                    unsolved.push_back({i, j});
+                }
+            }
+        }
+        _solve(unsolved, 0, board, col_rule, row_rule, block_rule);
+    }
+};
+
 //brute force, no copy
 class Solution {
 public:

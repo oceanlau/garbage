@@ -1,6 +1,37 @@
 class Solution {
 public:
     int maximumMinimumPath(vector<vector<int>>& A) {
+        int R = A.size();
+        int C = A[0].size();
+        vector<vector<int>> dirs {{0, 1}, {1, 0}, {0, -1}, {-1, 0}};
+        priority_queue<vector<int>> next_steps;
+        int max_min_score = A[0][0];
+        next_steps.push({A[0][0], 0, 0});
+        A[0][0] = -1;
+        while (true) {
+            vector<int> cur = next_steps.top();
+            next_steps.pop();
+            max_min_score = min(cur[0], max_min_score);
+            if (cur[1] == R - 1 && cur[2] == C - 1) {
+                break;
+            }
+            for (const auto& d : dirs) {
+                int r = cur[1] + d[0];
+                int c = cur[2] + d[1];
+                if (r >= 0 && r < R && c >= 0 && c < C && A[r][c] >= 0) {
+                    next_steps.push({A[r][c], r, c});
+                    // set here to avoid dupe
+                    A[r][c] = -1;
+                }
+            }
+        }
+        return max_min_score;
+    }
+};
+
+class Solution {
+public:
+    int maximumMinimumPath(vector<vector<int>>& A) {
         int h = A.size();
         int w = A[0].size();
         vector<vector<int>> dirs {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};

@@ -1,3 +1,32 @@
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        if (b.length() > a.length()) {
+            swap(a, b);
+        }
+        int carry = 0;
+        for (int i = a.length() - 1, j = b.length() - 1; i >= 0 || j >= 0; i --, j --) {
+            int sum = a[i] - '0' + carry;
+            carry = 0;
+            if (j >= 0) {
+                sum += b[j] - '0';
+            }
+            if (sum > 1) {
+                carry = 1;
+            }
+            if (sum % 2) {
+                a[i] = '1';
+            } else {
+                a[i] = '0';
+            }
+        }
+        if (carry) {
+            a = '1' + a;
+        }
+        return a;
+    }
+};
+
 //80% 83%
 class Solution {
 public:
