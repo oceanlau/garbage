@@ -1,5 +1,43 @@
 class Solution {
 private:
+    void _dfs(int node, int parent, vector<int>& rank, int cur_rank, vector<int>& low, vector<vector<int>>& edges, vector<vector<int>>& critical) {
+        rank[node] = cur_rank;
+        low[node] = cur_rank;
+        for (const int child : edges[node]) {
+            if (child != parent) {
+                if (rank[child] == -1) {
+                    _dfs(child, node, rank, cur_rank + 1, low, edges, critical);
+                    low[node] = min(low[node], low[child]);
+                    if (low[child] > rank[node]) {
+                        critical.push_back({node, child});
+                    }
+                } else {
+                    low[node] = min(low[node], rank[child]);
+                }
+            }
+        }
+    }
+public:
+    vector<vector<int>> criticalConnections(int n, vector<vector<int>>& connections) {
+        vector<vector<int>> edges(n, vector<int> {});
+        for (const auto& conn : connections) {
+            edges[conn[0]].push_back(conn[1]);
+            edges[conn[1]].push_back(conn[0]);
+        }
+        vector<int> rank(n, -1);
+        vector<int> low(n, -1);
+        vector<vector<int>> critical;
+        for (int node = 0; node < n; node ++) {
+            if (rank[node] == -1) {
+                _dfs(node, -1, rank, 0, low, edges, critical);
+            }
+        }
+        return critical;
+    }
+};
+
+class Solution {
+private:
     // min rank found from cur node and its children
     int _dfs(int node, int depth, vector<vector<int>>& edges, vector<int>& rank, set<vector<int>>& res) {
         if (rank[node] >= 0) {
