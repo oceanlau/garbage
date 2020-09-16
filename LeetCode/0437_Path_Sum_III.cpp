@@ -4,6 +4,44 @@
  *     int val;
  *     TreeNode *left;
  *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+private:
+    int _dfs(TreeNode* node, int presum, unordered_map<int, int>& presums, const int sum) {
+        presum += node->val;
+        int cnt = presums[presum - sum];
+        presums[presum] ++;
+        if (node->left) {
+            cnt += _dfs(node->left, presum, presums, sum);
+        }
+        if (node->right) {
+            cnt += _dfs(node->right, presum, presums, sum);
+        }
+        presums[presum] --;
+        return cnt;
+    }
+public:
+    int pathSum(TreeNode* root, int sum) {
+        if (!root) {
+            return 0;
+        }
+        unordered_map<int, int> presums;
+        presums[0] = 1;
+        // Number of paths ending at this node and all children node
+        return _dfs(root, 0, presums, sum);
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
  *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
  * };
  */

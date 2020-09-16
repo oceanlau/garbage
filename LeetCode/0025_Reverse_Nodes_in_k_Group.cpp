@@ -10,6 +10,54 @@
  */
 class Solution {
 private:
+    pair<ListNode*, ListNode*> _reverse_k(ListNode*& node, const int k) {
+        ListNode* end = node;
+        ListNode* start = NULL;
+        int i = 0;
+        while (i < k) {
+            ListNode* next_node = node->next;
+            node->next = start;
+            start = node;
+            node = next_node;
+            if (++ i < k && node == NULL) {
+                ListNode* tmp_node = start;
+                _reverse_k(tmp_node, i);
+                return {end, start};
+            }
+        }
+        return {start, end};
+    }
+public:
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        ListNode* new_head = NULL;
+        ListNode* last_end = NULL;
+        ListNode* node = head;
+        while (node) {
+            pair<ListNode*, ListNode*> start_end = _reverse_k(node, k);
+            if (!new_head) {
+                new_head = start_end.first;
+            } else {
+                last_end->next = start_end.first;
+            }
+            start_end.second->next = node;
+            last_end = start_end.second;
+        }
+        return new_head;
+    }
+};
+
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+private:
     void reverseGroup(ListNode* node, int& k, ListNode*& seg_head, ListNode*& next_seg_head) {
         ListNode* prev = NULL;
         ListNode* next = NULL;

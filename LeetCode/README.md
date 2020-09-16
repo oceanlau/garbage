@@ -50,6 +50,10 @@
   - [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). Use bin search to find the answers, use greedy accumulator to prove the answer.
   - [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/). `tails[i]` means the smallest ending number of LIS length i. We update it going through nums and use binary search.
 
+### Quick Select
+
+- [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
+
 ### Sort
 
 - MergeSort and $$O(1)$$ space MergeSort: [148. Sort List](https://leetcode.com/problems/sort-list/)
