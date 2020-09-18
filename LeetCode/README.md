@@ -60,8 +60,8 @@
 
 ### Monotonic Order Data Structure
 
-- [496. Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/)
-- [503. Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/). A little tricky. Loop twice.
+- [496. Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) Tricky.
+- [503. Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/). Tricky. Loop twice.
 - [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/). Deque.
 
 ### $$O(n^2)$$ Dynamic Programming

@@ -1,3 +1,39 @@
+class Solution {
+public:
+    bool validPalindrome(string s) {
+        int n = s.length();
+        for (int i = 0; i <= n / 2; i ++) {
+            if (s[i] != s[n - i - 1]) {
+                int l = i;
+                int r = n - i - 1;
+                int nl = l + 1;
+                int nr = r;
+                bool flag = true;
+                while (nl < nr) {
+                    if (s[nl ++] != s[nr --]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                if (flag) {
+                    return true;
+                }
+                nl = l;
+                nr = r - 1;
+                flag = true;
+                while (nl < nr) {
+                    if (s[nl ++] != s[nr --]) {
+                        flag = false;
+                        break;
+                    }
+                }
+                return flag;
+            }
+        }
+        return true;
+    }
+};
+
 //See below. Code would be much simpler if we just use two pointer
 class Solution {
 private:
