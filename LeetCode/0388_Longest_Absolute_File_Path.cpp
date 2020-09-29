@@ -1,6 +1,40 @@
 class Solution {
 public:
     int lengthLongestPath(string input) {
+        string part;
+        stringstream input_ss (input);
+        vector<int> part_lens_presum;
+        int max_len = 0;
+        while (getline(input_ss, part,  '\n')) {
+            int part_nth = 0;
+            for (int i = 0; i < part.length(); i++) {
+                if (part[i] == '\t') {
+                    part_nth ++;
+                } else {
+                    break;
+                }
+            }
+            int part_len = part.length() - part_nth;
+            if (part_lens_presum.empty()) {
+                part_lens_presum.push_back(part_len);
+            } else if (part_lens_presum.size() < part_nth + 1) {
+                part_lens_presum.push_back(part_lens_presum.back() + part_len);
+            } else if (part_nth - 1 >= 0){
+                part_lens_presum[part_nth] = part_lens_presum[part_nth - 1] + part_len;
+            } else {
+                part_lens_presum[part_nth] = part_len;
+            }
+            if (part.find('.') != string::npos) {
+                max_len = max(max_len, part_lens_presum[part_nth] + part_nth);
+            }
+        }
+        return max_len;
+    }
+};
+
+class Solution {
+public:
+    int lengthLongestPath(string input) {
         // 顺序读
         // [lv1 len, lv2 len, file len] cur len
         // [lv1 len, lv2-2 len, lv3-2 len, file len] cur len

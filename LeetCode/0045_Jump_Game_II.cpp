@@ -1,3 +1,46 @@
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if (nums.size() < 2) {
+            return 0;
+        }
+        int max_jump = 0;
+        int last_max_jump = -1;
+        int steps = 0;
+        while (max_jump < nums.size() - 1) {
+            int new_max_jump = max_jump;
+            for (int i = last_max_jump + 1; i <= max_jump; i++) {
+                new_max_jump = max(new_max_jump, i + nums[i]);
+            }
+            last_max_jump = max_jump;
+            max_jump = new_max_jump;
+            steps ++;
+        }
+        return steps;
+    }
+};
+
+// Slow. Only need to greedy find max jump like in jump game I
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        if (nums.size() < 2) {
+            return 0;
+        }
+        vector<int> dp (nums.size(), INT_MAX);
+        dp[0] = 0;
+        for (int i = 0; i < nums.size(); i ++) {
+            for (int j = 1; j <= nums[i] && i + j < nums.size(); j ++) {
+                dp[i + j] = min(dp[i] + 1, dp[i + j]);
+                if (i + j == nums.size() - 1) {
+                    return dp[i + j];
+                }
+            }
+        }
+        return dp.back();
+    }
+};
+
 //BFS
 class Solution {
 public:

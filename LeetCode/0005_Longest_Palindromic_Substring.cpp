@@ -1,5 +1,38 @@
 class Solution {
 private:
+    // starting index, len
+    pair<int, int> expand(string& s, int i, int j, int len) {
+        while (i >= 0 && j < s.length() && s[i] == s[j]) {
+            len += 2;
+            i --;
+            j ++;
+        }
+        return make_pair(i + 1, len);
+    }
+public:
+    string longestPalindrome(string s) {
+        if (s.length() == 0) {
+            return "";
+        }
+        int longest = 1;
+        string longest_str (1, s[0]);
+        for (int i = 0; i < s.length(); i ++) {
+            pair<int, int> result = expand(s, i - 1, i + 1, 1);
+            pair<int, int> result2 = expand(s, i, i + 1, 0);
+            if (result2.second > result.second) {
+                result = result2;
+            }
+            if (result.second > longest) {
+                longest = result.second;
+                longest_str = s.substr(result.first, result.second);
+            }
+        }
+        return longest_str;
+    }
+};
+
+class Solution {
+private:
     int expand(string& s, int i, int j, string& longests) {
         int len = 0;
         if (i == j) {

@@ -1,4 +1,24 @@
 class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        vector<int> dp(amount + 1, -1);
+        dp[0] = 0;
+        for (int a = 1; a <= amount; a ++) {
+            for (const int c : coins) {
+                if (a - c >= 0 && dp[a - c] != -1) {
+                    if (dp[a] == -1) {
+                        dp[a] = dp[a - c] + 1;
+                    } else {
+                        dp[a] = min(dp[a], dp[a - c] + 1);
+                    }
+                }
+            }
+        }
+        return dp[amount];
+    }
+};
+
+class Solution {
 private:
     void _bt(vector<int>& coins, vector<int>& dp, int amount) {
         if (amount == 0 || dp[amount] != 0) {

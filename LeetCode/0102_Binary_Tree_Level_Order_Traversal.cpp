@@ -10,6 +10,43 @@
  * };
  */
 class Solution {
+private:
+    void _dfs(TreeNode* root, int depth, vector<vector<int>>& result) {
+        if (result.size() < depth + 1) {
+            result.push_back(vector<int> {root->val});
+        } else {
+            result[depth].push_back(root->val);
+        }
+        if (root->left) {
+            _dfs(root->left, depth + 1, result);
+        }
+        if (root->right) {
+            _dfs(root->right, depth + 1, result);
+        }
+    }
+public:
+    vector<vector<int>> levelOrder(TreeNode* root) {
+        if (!root) {
+            return {};
+        }
+        vector<vector<int>> result;
+        _dfs(root, 0, result);
+        return result;
+    }
+};
+
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
 public:
     vector<vector<int>> levelOrder(TreeNode* root) {
         stack<pair<TreeNode*, int>> st;

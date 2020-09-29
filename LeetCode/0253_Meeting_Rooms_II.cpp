@@ -1,6 +1,25 @@
 class Solution {
 public:
     int minMeetingRooms(vector<vector<int>>& intervals) {
+        vector<pair<int, int>> times;
+        for (const vector<int>& interval : intervals) {
+            times.emplace_back(interval[0], 1);
+            times.emplace_back(interval[1], -1);
+        }
+        int needed = 0;
+        int current = 0;
+        sort(times.begin(), times.end());
+        for (const pair<int, int> p : times) {
+            current += p.second;
+            needed = max(needed, current);
+        }
+        return needed;
+    }
+};
+
+class Solution {
+public:
+    int minMeetingRooms(vector<vector<int>>& intervals) {
         int rooms = 0;
         // turn to min heap
         auto comp = [](const vector<int>& l, const vector<int>& r){
