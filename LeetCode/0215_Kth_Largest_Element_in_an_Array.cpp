@@ -1,5 +1,39 @@
 class Solution {
 private:
+    int _partition(vector<int>& nums, int l, int r) {
+        int pivot_val = nums[r];
+        int larger_end = l;
+        int i = l;
+        while (i < r) {
+            if (nums[i] >= pivot_val) {
+                swap(nums[larger_end ++], nums[i]);
+            }
+            i ++;
+        }
+        swap(nums[larger_end], nums[r]);
+        return larger_end - l + 1;
+    }
+public:
+    int findKthLargest(vector<int>& nums, int k) {
+        int l = 0;
+        int r = nums.size() - 1;
+        while (l < r) {
+            int nth_largest = _partition(nums, l, r);
+            if (nth_largest == k) {
+                return nums[l + nth_largest - 1];
+            } else if (nth_largest < k) {
+                l += nth_largest;
+                k -= nth_largest;
+            } else {
+                r = l + nth_largest - 2;
+            }
+        }
+        return nums[l];
+    }
+};
+
+class Solution {
+private:
     int partition(vector<int>& nums, int l, int r) {
         int pivot_idx = l + (rand() % (r - l));
         swap(nums[r], nums[pivot_idx]);

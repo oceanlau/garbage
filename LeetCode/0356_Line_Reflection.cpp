@@ -1,3 +1,26 @@
+class Solution {
+public:
+    bool isReflected(vector<vector<int>>& points) {
+        int min_x = INT_MAX;
+        int max_x = INT_MIN;
+        unordered_set<string> x_ys;
+        for (int i = 0; i < points.size(); i ++) {
+            min_x = min(min_x, points[i][0]);
+            max_x = max(max_x, points[i][0]);
+            x_ys.insert(to_string(points[i][0]) + '_' + to_string(points[i][1]));
+        }
+        double mid = min_x + (max_x - min_x) / 2.0;
+        for (int i = 0; i < points.size(); i ++) {
+            int x = mid + (mid - points[i][0]);
+            string new_x_y = to_string(x) + '_' + to_string(points[i][1]);
+            if (!x_ys.count(new_x_y)) {
+                return false;
+            }
+        }
+        return true;
+    }
+};
+
 //95% 100%
 class Solution {
 public:
