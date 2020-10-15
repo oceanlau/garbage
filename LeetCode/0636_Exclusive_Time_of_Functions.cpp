@@ -1,5 +1,35 @@
 class Solution {
 public:
+    vector<int> exclusiveTime(int n, vector<string>& logs) {
+        vector<int> exclusive_time (n, 0);
+        stack<pair<int, int>> starters; // id, start timestamp
+        for (const string& log : logs) {
+            stringstream ss(log);
+            string id;
+            string type;
+            string timestamp;
+            getline(ss, id, ':');
+            getline(ss, type, ':');
+            getline(ss, timestamp, ':');
+            int id_int = stoi(id);
+            int timestamp_int = stoi(timestamp);
+            if (type == "start") {
+                starters.push({id_int, timestamp_int});
+            } else {
+                int cur = timestamp_int - starters.top().second + 1;
+                starters.pop();
+                exclusive_time[id_int] += cur;
+                if (!starters.empty()) {
+                    exclusive_time[starters.top().first] -= cur;
+                }
+            }
+        }
+        return exclusive_time;
+    }
+};
+
+class Solution {
+public:
     struct Log {
         int id;
         string type;

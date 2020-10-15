@@ -36,6 +36,21 @@
   - $$O(1)$$ space BFS: [116. Populating Next Right Pointers in Each Node](https://leetcode.com/problems/populating-next-right-pointers-in-each-node/)
   - Reverse thinking DFS traversal (pass range to parent): [333. Largest BST Subtree](https://leetcode.com/problems/largest-bst-subtree/)
 
+### Monotonic Order Data Structure
+
+- [739. Daily Temperatures](https://leetcode.com/problems/daily-temperatures/). Easy.
+- [496. Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) Tricky.
+- [503. Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/). Tricky. Loop twice.
+- [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/). Deque.
+
+## Heap (Priority Queue)
+
+- Tricky: [632. Smallest Range Covering Elements from K Lists](https://leetcode.com/problems/smallest-range-covering-elements-from-k-lists/)
+
+### Sort
+
+- MergeSort and $$O(1)$$ space MergeSort: [148. Sort List](https://leetcode.com/problems/sort-list/)
+
 ### Binary Search
 
 - Basic practice:
@@ -53,16 +68,6 @@
 ### Quick Select
 
 - [347. Top K Frequent Elements](https://leetcode.com/problems/top-k-frequent-elements/)
-
-### Sort
-
-- MergeSort and $$O(1)$$ space MergeSort: [148. Sort List](https://leetcode.com/problems/sort-list/)
-
-### Monotonic Order Data Structure
-
-- [496. Next Greater Element I](https://leetcode.com/problems/next-greater-element-i/) Tricky.
-- [503. Next Greater Element II](https://leetcode.com/problems/next-greater-element-ii/). Tricky. Loop twice.
-- [239. Sliding Window Maximum](https://leetcode.com/problems/sliding-window-maximum/). Deque.
 
 ### $$O(n^2)$$ Dynamic Programming
 
@@ -86,3 +91,7 @@
 - [410. Split Array Largest Sum](https://leetcode.com/problems/split-array-largest-sum/). DP. `dp[i][j]` for minimum largest subarray sum when splitting `nums[0...i]` into `j` parts.
 - [548. Split Array with Equal Sum](https://leetcode.com/problems/split-array-with-equal-sum/). Not DP. Straight forward for each middle point, check if left two quarters and right two quarters can get same sum.
 - [300. Longest Increasing Subsequence](https://leetcode.com/problems/longest-increasing-subsequence/). `tails[i]` means the smallest ending number of LIS length i. We update it going through nums and use binary search.
+
+### Bit
+
+- XOR: [136. Single Number](https://leetcode.com/problems/single-number/)

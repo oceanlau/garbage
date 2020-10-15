@@ -1,3 +1,63 @@
+class Solution {
+public:
+    int pathSum(vector<int>& nums) {
+        if (nums.empty()) {
+            return 0;
+        }
+        queue<vector<int>> q;
+        q.push({1, (nums[0] % 100) / 10, nums[0] % 10});
+        int sum = 0;
+        int i = 1;
+        while (i < nums.size()) {
+            int depth = nums[i] / 100;
+            int position = (nums[i] % 100) / 10;
+            int val = nums[i] % 10;
+            int last_depth = q.front()[0];
+            int last_position = q.front()[1];
+            int last_path_sum = q.front()[2];
+            // No children (right part of tree)
+            if (depth != last_depth + 1) {
+                sum += last_path_sum;
+                q.pop();
+                continue;
+            }
+            // No children (left part of tree)
+            if (last_position * 2 - 1 != position && last_position * 2 != position) {
+                sum += last_path_sum;
+                q.pop();
+                continue;
+            }
+            // Left child
+            if (last_position * 2 - 1 == position) {
+                q.push({depth, position, last_path_sum + val});
+                i ++;
+            }
+            // Moved to right child
+            if (i < nums.size()) {
+                depth = nums[i] / 100;
+                // Careful, next one may not be a right child, may be next level
+                if (depth != last_depth + 1) {
+                    q.pop();
+                    continue;
+                }
+                position = (nums[i] % 100) / 10;
+                val = nums[i] % 10;
+            }
+            // Right child
+            if (last_position * 2 == position) {
+                q.push({depth, position, last_path_sum + val});
+                i ++;
+            }
+            q.pop();
+        }
+        while (!q.empty()) {
+            sum += q.front()[2];
+            q.pop();
+        }
+        return sum;
+    }
+};
+
 // 100% 66% complicated
 class Solution {
 public:

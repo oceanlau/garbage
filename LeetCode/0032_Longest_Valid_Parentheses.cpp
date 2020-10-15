@@ -1,6 +1,37 @@
 class Solution {
 public:
     int longestValidParentheses(string s) {
+        // longest_at
+        vector<int> dp(s.length(), 0);
+        int longest = 0;
+        for (int i = 1; i < s.length(); i ++) {
+            if (s[i] == ')') {
+                if (s[i - 1] == '(') {
+                    if (i - 2 >= 0) {
+                        dp[i] = 2 + dp[i - 2];
+                    } else {
+                        dp[i] = 2;
+                    }
+                } else if (i - 1 >= 0 && dp[i - 1] > 0) {
+                    if (i - dp[i - 1] - 1 >= 0) {
+                        if (s[i - dp[i - 1] - 1] == '(') {
+                            dp[i] = 2 + dp[i - 1];
+                            if (i - dp[i - 1] - 2 >= 0) {
+                                dp[i] += dp[i - dp[i - 1] - 2];
+                            }
+                        }
+                    }
+                }
+            }
+            longest = max(longest, dp[i]);
+        }
+        return longest;
+    }
+};
+
+class Solution {
+public:
+    int longestValidParentheses(string s) {
         int max_len = 0;
         int l = 0;
         int r = 0;

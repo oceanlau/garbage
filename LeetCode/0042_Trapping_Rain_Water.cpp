@@ -1,6 +1,32 @@
 class Solution {
 public:
     int trap(vector<int>& height) {
+        if (height.empty()) {
+            return 0;
+        }
+        int l = 0;
+        int r = height.size() - 1;
+        int result = 0;
+        int hlmax = 0;
+        int hrmax = 0;
+        while (l < r) {
+            if (height[l] <= height[r]) {
+                hlmax = max(hlmax, height[l]);
+                result += hlmax - height[l];
+                l ++;
+            } else {
+                hrmax = max(hrmax, height[r]);
+                result += hrmax - height[r];
+                r --;
+            }
+        }
+        return result;
+    }
+};
+
+class Solution {
+public:
+    int trap(vector<int>& height) {
         if (height.size() < 3) {
             return 0;
         }

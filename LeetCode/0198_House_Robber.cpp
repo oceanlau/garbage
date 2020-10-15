@@ -1,6 +1,20 @@
 class Solution {
 public:
     int rob(vector<int>& nums) {
+        int dont_rob = 0;
+        int rob = 0;
+        for (const int num : nums) {
+            int prev_rob = rob;
+            rob = num + dont_rob;
+            dont_rob = max(prev_rob, dont_rob);
+        }
+        return max(rob, dont_rob);
+    }
+};
+
+class Solution {
+public:
+    int rob(vector<int>& nums) {
         if (nums.size() == 0) {
             return 0;
         }

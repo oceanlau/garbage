@@ -1,6 +1,23 @@
 class Solution {
 public:
     void sortColors(vector<int>& nums) {
+        int l1 = 0;
+        int r1 = nums.size() - 1;
+        for (int i = 0; i <= r1;) {
+            if (nums[i] == 0) {
+                swap(nums[l1 ++], nums[i ++]); // i must >= l1
+            } else if (nums[i] == 2) {
+                swap(nums[r1 --], nums[i]);
+            } else {
+                i ++;
+            }
+        }
+    }
+};
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
         if (nums.size() == 0) {
             return;
         }
