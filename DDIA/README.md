@@ -12,6 +12,9 @@
 ## 4. Encoding and Evolution
 ![4. Encoding and Evolution](./assets/Chapter+4._Encoding+and+Evolution.png)
 
+## 5. Replication
+![5. Replication](./assets/Chapter+5._Replication.png)
+
 ## 6. Partitioning
 ![6. Partitioning](./assets/Chapter+6._Partitioning.png)
 
