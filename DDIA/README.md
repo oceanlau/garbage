@@ -12,6 +12,9 @@
 ## 4. Encoding and Evolution
 ![4. Encoding and Evolution](./assets/Chapter+4._Encoding+and+Evolution.png)
 
+## 6. Partitioning
+![6. Partitioning](./assets/Chapter+6._Partitioning.png)
+
 ## 8. The Trouble with Distributed Systems
 
 ![8. The Trouble with Distributed Systems](./assets/Chapter+8.+_The+Trouble+with+Distributed+Systems.png)
