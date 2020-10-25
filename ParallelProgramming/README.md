@@ -26,10 +26,12 @@ My notes after taking Randal Burns's JHU CS 601.320/420/620 Parallel Programming
 
    Speedup upper limit is $$\frac{1}{1-p+\frac{p}{\infty}} = \frac{1}{1-p}$$
 
-   - Estimating scalability based on the original implementation of the serial program
-   - Estimating Amdahl's number, the proportion of the parts that can be parallel
+   Amdahl's Law usage:
 
-3. Parallel Efficiency: Measures the efficiency of putting in more resources
+   - Estimating scalability based on the original implementation of the serial program
+   - Estimating Amdahl's number, the proportion of the parts that can be parallelized
+
+3. Parallel Efficiency: Measures the efficiency of resources. It helps us decide how many resources we should put in.
 
    $$E = \frac{S(n)}{n} = \frac{T(1)}{nT(n)}$$
 
@@ -79,7 +81,7 @@ RDD is **a distributed memory abstraction** that lets programmers perform **in-m
      - Wide: one parent partition may be used by multiple child partitions. All parent partitions must be available and shuffled to the correct child node before next step.
      - Narrow: one parent partition is used by at most one child partition. This is easily pipelined. Also it is easier to recover.
    - The persistence and partitioning strategy can be configured in RDDs.
-3. Spark Interface of RDD: transformations + actions (return values to application or export data to a storage, examples are `reduce`, `count`, `collect`, `save`)
+3. Spark Interface of RDD: transformations + **actions** (return values to application or export data to a storage, examples are `reduce`, `count`, `collect`, `save`)
    - Lazy computation: pipelined transformations, only computed when there is an action.
    - Persist: Encourages memory reuse. May still spill to disk if not enough memory.
 4. Implementations:

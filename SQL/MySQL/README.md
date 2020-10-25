@@ -10,8 +10,10 @@
 - ACID
   - Atomicity: all succeed or all fail.
   - Consistency: property of the application. Some invariants must always hold.
-  - Isolation: dealing with concurrency. Don't lost update.
-  - Durability: safety
+  - Isolation: dealing with concurrency. Don't lose update.
+  - Durability: safety of data.
+
+- BASE (Basically Available, Soft state, Eventual consistency)
 
 - Basic Locks:
   - Shared lock: granted immediately unless there is an exclusive lock. Used to read.
