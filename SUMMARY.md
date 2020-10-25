@@ -4,8 +4,8 @@
 
 ## Languages
 
-* [Python](Python/README.md)
 * [PHP (Laravel)](PHP/Laravel/README.md)
+* [Python](Python/README.md)
 
 ## Topics
 
@@ -16,4 +16,5 @@
   * [Classification and Clustering](InformationRetrieval/classification_and_clustering.md)
 * [Operating Systems](OperatingSystems/README.md)
 * [Parallel Programming](ParallelProgramming/README.md)
+
 

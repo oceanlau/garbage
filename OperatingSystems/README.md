@@ -29,15 +29,73 @@ The layer between applications and hardware. Manage hardware (protection), ensur
 
 ## Processes
 
-A program in execution. Multiprogramming ensure higher throughput and higer hardware utilization.
+A program in execution. Multiprogramming ensure higher throughput and higher hardware utilization.
 
-- Process components: address space, code, data, execution stack, program counter (PC) indicating next instruction, some general registers and set of resources (opened files, network conns). Each process has its own view of the machine.
+- Process components: address space (code, data, execution stack), program counter (PC) indicating next instruction, some general registers and set of resources (opened files, network conns). Each process has its own view of the machine.
   - The data structure: Process Control Block (PCB). It contains process state, process id, program counter, registers, address space, open files, etc.
+  - Inter-Process Communication (IPC): Passing message through kernel, sharing physical memory region, asyncrhonous signals or alert.
+
 - OS point of view
-  - OS usually maintains a queue of process for each state. Most processes are in the waiting state, waiting for I/O. There may be many wait queues for each type of wait.
-  - Scheduling, preemption described later in Threads.
+  - OS usually maintains a queue of process for each state. Usually most processes will be in the waiting state, waiting for I/O. There may be many wait queues for each type of wait.
+  - Scheduling, preemption described later in Thread.
   - Context switch: Usually starts with saving program counter, integer registers, etc. Then changes virtual address translations.
+
 - Programmer point of view
   - Unix fork() duplicate current process, return child pid to parent process and return 0 to newly created child process.
   - Unix exec() stops current process and loads new program, so it won't return unless there is a problem. Pintos exec() is fork() + exec() and it will return child pid.
   - Compared to Windows CreateProcess(), fork() has no argument so it's much easier to use.
+
+## Thread
+
+- Separate execution state from process concept. 
+  - Process is static holding address space and attributes like privileges and resources. Thread is dynamic holding program counter, stack pointer and other register values.
+  - Thread is the unit of scheduling.
+  - Threads share heap, code, data, files. But have its own registers, stack.
+  - The data structure: Thread Control Block (TCB).
+  - thread_create() allocates TCB, stack, put function name and arguments onto the stack (calling convention) and finally put thread on the ready list.
+
+-  Kernel level thread and User level thread:
+  - Kernel level thread: Must go through kernel, so it is often slower to create. Same features (priority, etc.) for every one. Requires fixed-size in the kernel.
+  - User level thread: Invisible to OS, so it cannot take advantage of multiple CPUs and may not be scheduled well.
+  - Solution: associate or multiplex user threads to kernel threads. (n:m mapping)
+
+- Scheduling
+  - yield(): One thread yield the CPU. Context switch to another thread. That thread return from its own yield() and continue.
+  - Non-preemptive scheduling: voluntarily yield
+  - Preemptive scheduling: Timer interrupt forces current thread to yield.
+
+- Context switch: save and restore context. Done at assembly. x86 examples below:
+  - Calling conventions: a standard on how functions should be implemented and called by the machine. Compilers compile code to assembly and set up stack and registers according to this standard.
+    - Stack:
+
+              +-----------------+
+              |                 |
+              |  arguments      |
+              |                 |
+              +-----------------+
+              |                 |
+              |  return addr    |
+              |                 |
+              +-----------------+
+              |                 |
+              |  old frame ptr  |
+              |                 |
+    fp +----> +-----------------+
+              |                 |
+              |  callee-saved   |
+              |  registers      |
+              |                 |
+              +-----------------+
+              |                 |
+              |  local vars     |
+              |  and temps      |
+              |                 |
+    sp +----> +-----------------+
+              |                 |
+              |                 |
+
+
+    - Registers:
+      - Caller-saved registers: %eax(return value), %edx, %ecx. Caller has saved them to the stack so callee function can freely modify these registers.
+      - Callee-saved registers: %ebx, %edi, %ebp, %esp. Restore to original before return.
+  - switch_threads(cur, next)
