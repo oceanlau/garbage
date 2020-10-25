@@ -1,6 +1,8 @@
 # Operating Systems
 
-The layer between applications and hardware. Manage hardware (protection), ensure high utilization of hardware (resource sharing) and provide abstractions to applications.
+Based on Prof. Ryan Huang's [Principles of Operating Systems course](https://www.cs.jhu.edu/~huang/cs318/fall20/index.html).
+
+OS: The layer between applications and hardware. Manage hardware (protection), ensure high utilization of hardware (resource sharing) and provide abstractions to applications.
 
 ## Hardware Support
 
@@ -100,4 +102,34 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
     - Registers:
       - Caller-saved registers: %eax(return value), %edx, %ecx. Caller has saved them to the stack so callee function can freely modify these registers.
       - Callee-saved registers: %ebx, %edi, %ebp, %esp. Restore to original before return.
+
   - switch_threads(cur, next)
+
+## Scheduling
+- Criteria: Throughput, turnaround time (start to finish), response time (request to first response) of processes. Secondary criterias are CPU utilization and process waiting time.
+  - Batch system often optimize for throughput and turnaround time. Interactive systems oftem optimize for response time.
+  - Non-goal: process starvation
+
+- Textbook scheduling
+  - First-in-first-out: non-preemptive in nature. Has convoy effect.
+  - Shortest job first: choose the job with smallest expected CPU burst. Provable optimal minimum average waiting time.
+    - Inspiration: most jobs have bursts of computation and long waiting time for I/O. We can overlap computation of one thread with I/O time of others to maximize throughput.
+    - Can be done preemptively or preemptively.
+    - Does not minimize average turnaround time.
+    - Can lead to unfairness or starvation.
+    - It is impossible to know the CPU burst time ahead. Solution: estimate based on the past.
+  - Round robin: each job is given a time slice called a quantum. Preempted and moved to FIFO queue after the quantum.
+    - Low average waiting time.
+    - Frequent context switch cost and high turnaround time.
+    - Quantum should be picked larger than most CPU bursts time.
+
+- Priority scheduling
+  - Avoid starvation: age the processes. Increase priority as waiting time increases. Decrease as CPU consumption increases.
+  - Avoid priority inversion (kind of like deadlock, but different in nature): high priority thread donates to low priority thread holding the resource.
+  - Combining algorithms: multiple queues each with different algorithm. E.g. multiple-level feedback queues (MLFQ). 
+    - MLFQ: Optimize turnaround time for batch jobs and minimize response time for interactive jobs.
+      - Each queue has different priority. Within each queue we use RR.
+      - Change priority based on the past. Interactive jobs has high priority. Batch jobs that used up a quantum was demoted.
+      - Aovoid starvation and cheating: Periodically boost priority for jobs that haven't been scheduled. Also the demotion strategy can account for job's total run time at a priority level.
+
+- Advanced scheduling
