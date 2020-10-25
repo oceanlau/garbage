@@ -67,32 +67,34 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
 - Context switch: save and restore context. Done at assembly. x86 examples below:
   - Calling conventions: a standard on how functions should be implemented and called by the machine. Compilers compile code to assembly and set up stack and registers according to this standard.
     - Stack:
+       ```
 
-              +-----------------+
-              |                 |
-              |  arguments      |
-              |                 |
-              +-----------------+
-              |                 |
-              |  return addr    |
-              |                 |
-              +-----------------+
-              |                 |
-              |  old frame ptr  |
-              |                 |
-    fp +----> +-----------------+
-              |                 |
-              |  callee-saved   |
-              |  registers      |
-              |                 |
-              +-----------------+
-              |                 |
-              |  local vars     |
-              |  and temps      |
-              |                 |
-    sp +----> +-----------------+
-              |                 |
-              |                 |
+                 +-----------------+
+                 |                 |
+                 |  arguments      |
+                 |                 |
+                 +-----------------+
+                 |                 |
+                 |  return addr    |
+                 |                 |
+                 +-----------------+
+                 |                 |
+                 |  old frame ptr  |
+                 |                 |
+       fp +----> +-----------------+
+                 |                 |
+                 |  callee-saved   |
+                 |  registers      |
+                 |                 |
+                 +-----------------+
+                 |                 |
+                 |  local vars     |
+                 |  and temps      |
+                 |                 |
+       sp +----> +-----------------+
+                 |                 |
+                 |                 |
+       ```
 
 
     - Registers:
