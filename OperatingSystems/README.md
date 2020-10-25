@@ -106,6 +106,7 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
   - switch_threads(cur, next)
 
 ## Scheduling
+
 - Criteria: Throughput, turnaround time (start to finish), response time (request to first response) of processes. Secondary criterias are CPU utilization and process waiting time.
   - Batch system often optimize for throughput and turnaround time. Interactive systems oftem optimize for response time.
   - Non-goal: process starvation
@@ -133,3 +134,25 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
       - Aovoid starvation and cheating: Periodically boost priority for jobs that haven't been scheduled. Also the demotion strategy can account for job's total run time at a priority level.
 
 - Advanced scheduling
+
+## Synchronization
+
+Threads may share resources and may need to coordinate their execution.
+
+Stack data are not shared. Global variables, static objects (both in static data segments) and dynamic objects (in heap) are shared.
+
+The compiler might change the sequence of execution of your code. Threads may interleave executions arbitrarily.
+
+- Mutual exclusion
+  - Safety property: if one thread is in critical section, then no other is.
+
+  - Liveness property:
+    - Progress: any one outside critical section can enter. Those inside will eventually leave.
+    - Bounded waiting (no starvation): any one waiting for critical section will eventually enter.
+
+  - Performance: small overhead.
+
+- Locks: spinlock or mutex. Need hardware support to implement.
+  - Atomic instructions: test-and-set. Can be used to implement spinlocks.
+  - Disabling interrupts: no context switch anymore. Disabled only within acquire() and release().
+
