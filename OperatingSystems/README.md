@@ -4,7 +4,7 @@ The layer between applications and hardware. Manage hardware (protection), ensur
 
 ## Hardware Support
 
-- Manipulate privileged machine state (protected instructions and registers).
+- Protection.
   - Dual mode: user/kernel. Recorded in the register. Modern CPU may have more than 2 levels (x86:4, ARMv7:8).
   - Protected instructions: directly access I/O devices, manipulate memory management state, manipulate protected control registers, halt.
   - Memory protection: translate virtual address at Memory Mangement Unit (MMU).
