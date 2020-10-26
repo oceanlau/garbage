@@ -70,7 +70,6 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
   - Calling conventions: a standard on how functions should be implemented and called by the machine. Compilers compile code to assembly and set up stack and registers according to this standard.
     - Stack:
        ```
-
                  +-----------------+
                  |                 |
                  |  arguments      |
@@ -152,7 +151,53 @@ The compiler might change the sequence of execution of your code. Threads may in
 
   - Performance: small overhead.
 
-- Locks: spinlock or mutex. Need hardware support to implement.
+- Locks: spinlock or mutex. Need hardware support to implement:
   - Atomic instructions: test-and-set. Can be used to implement spinlocks.
   - Disabling interrupts: no context switch anymore. Disabled only within acquire() and release().
 
+## Semaphores and Monitors
+
+- Semaphore: a counter and a waiting queue. P() waits and then decreases the counter. V() Increases the counter and signals others.
+  - Mutex semaphore (binary semaphore) vs counting semaphore: Limit the counter (number of access).
+
+- Condition variables: wait for some condition.
+  - Can be implemented with semaphore. What is special about C/V:
+    - It must acquire lock before modifying the variable. 
+    - The signal (or broadcase) has no history, unlike semaphore::signal. So it must atomically release the lock and started waiting to avoid missing the signal.
+  - Two flavors:
+    - Hoare: signal() immediately switches from caller to a waiting thread and guarantees the condition holds.
+    - Mesa: signal() merely places a waiter on the ready queue and continue its own execution. The ready thread must recheck the condition when run.
+
+- Monitor: programming language construct that controls access to shared data. It encapsulates the procedures on that shared data.
+  - Only one thread can execute within a monitor at a time.
+  - C/V can be used within Monitor without lock.
+
+- Classic problems: Readers/Writers problem, Bounded Buffers problem.
+
+## Deadlock
+
+- Classic problem: Dining philosophers problem.
+- Definition: every process in a set of processes is waiting for another one in the set.
+  - Exists with all kinds of synchronization methods. One thing to remember is that it is always dangerous to hold locks while crossing the bourdary:
+  ```
+  lock(a);
+  foo() // Internally using C/V. Will not release a when waiting.
+  unlock(a);
+  ```
+- Conditions for deadlock. All 4 are needed for dealock to occur.
+  - Mutual exclusion
+  - Hold and wait
+  - No preemption: critical sections are not aborted externally
+  - Circular wait: can be shown with resource allocation graph
+
+- Dealing with deadlock:
+  - Ignore it.
+  - Prevention. Eliminating one condition.
+    - Dealing with Mutual exclusion: buy more resources, split or copy resources. One less philosopher would solve the dining philosophers problem.
+    - Dealing with Hold and wait: wait on all resource at once. Need to know all in advance.
+    - Dealing with No preemption: give up resource to another, like virtual memory manangement
+    - Dealing with Circular wait: single lock for entire system or partial ordering of resources.
+  - Avoidance: System only grants resource requests if it knows that the process can obtain all resources it needs in future requests. Need to know all resources needed in advance. Not pratical. There is a Banker's algorithm. But it causes low resource utilization.
+  - Detection and recovery: implemented in VMS, MySQL.
+    - Detection: traverse resource allocation graph. But it may be expensive.
+    - Recovery: abort all/one process, preempt resource (force release. Tricky to implement).
