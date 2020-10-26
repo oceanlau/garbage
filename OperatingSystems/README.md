@@ -46,6 +46,7 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
   - Unix fork() duplicate current process, return child pid to parent process and return 0 to newly created child process.
   - Unix exec() stops current process and loads new program, so it won't return unless there is a problem. Pintos exec() is fork() + exec() and it will return child pid.
   - Compared to Windows CreateProcess(), fork() has no argument so it's much easier to use.
+  - wait(). [Wait for all child processes to finish](https://stackoverflow.com/questions/19461744/how-to-make-parent-wait-for-all-child-processes-to-finish).
 
 ## Thread
 
@@ -114,7 +115,7 @@ A program in execution. Multiprogramming ensure higher throughput and higher har
   - First-in-first-out: non-preemptive in nature. Has convoy effect.
   - Shortest job first: choose the job with smallest expected CPU burst. Provable optimal minimum average waiting time.
     - Inspiration: most jobs have bursts of computation and long waiting time for I/O. We can overlap computation of one thread with I/O time of others to maximize throughput.
-    - Can be done preemptively or preemptively.
+    - Can be done non-preemptively or preemptively.
     - Does not minimize average turnaround time.
     - Can lead to unfairness or starvation.
     - It is impossible to know the CPU burst time ahead. Solution: estimate based on the past.
@@ -152,7 +153,7 @@ The compiler might change the sequence of execution of your code. Threads may in
   - Performance: small overhead.
 
 - Locks: spinlock or mutex. Need hardware support to implement:
-  - Atomic instructions: test-and-set. Can be used to implement spinlocks.
+  - Atomic instructions: test-and-set. Set to true but return old flag value. Break out of while loop if old value is different from new value. Can also be implemented using atomic swap. This is used to implement spinlocks.
   - Disabling interrupts: no context switch anymore. Disabled only within acquire() and release().
 
 ## Semaphores and Monitors
