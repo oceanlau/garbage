@@ -7,10 +7,12 @@
 ![2. Data Models and Query Languages](./assets/Chapter+2.+_Data+Models+and+Query+Languages.png)
 
 ## 3. Storage and Retrieval
-![3. Storage and Retrieval](./assets/Chapter+3.+Storage+and+Retrieval.png)
+![3. Storage and Retrieval](./assets/Chapter+3._Storage+and+Retrieval.png)
 
 ## 4. Encoding and Evolution
 ![4. Encoding and Evolution](./assets/Chapter+4._Encoding+and+Evolution.png)
+
+A note on B-tree lightweight lock for concurrency control: My intuition is that we can use a R/W lock on the nodes we visited.
 
 ## 5. Replication
 ![5. Replication](./assets/Chapter+5._Replication.png)
@@ -20,9 +22,10 @@
 
 ### Consistent hashing
 
+A hashing strategy for easier rebalancing. Used both in data partitioning and request load balancing.
+
 Map nodes and keys into a same space using a same hash function. A key would be stored on the node with a successor hashed value. Concatenate the begin and the end of this hashed space so every key has a node successor.
 
-Used both in data partitioning and request load balancing.
 
 ### Other view of paritioning
 
