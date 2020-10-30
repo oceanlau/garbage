@@ -45,6 +45,9 @@ Map nodes and keys into a same space using a same hash function. A key would be 
   - Rebalancing
 
 
+## 7. Transactions
+![7. Transactions](./assets/chapter+7._Transactions.png)
+
 ## 8. The Trouble with Distributed Systems
 
 ![8. The Trouble with Distributed Systems](./assets/Chapter+8.+_The+Trouble+with+Distributed+Systems.png)
