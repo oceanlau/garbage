@@ -161,10 +161,13 @@ The compiler might change the sequence of execution of your code. Threads may in
 - Semaphore: a counter and a waiting queue. P() waits and then decreases the counter. V() Increases the counter and signals others.
   - Mutex semaphore (binary semaphore) vs counting semaphore: Limit the counter (number of access).
 
-- Condition variables: wait for some condition.
+- Condition variables (C/V): wait for some condition.
   - Can be implemented with semaphore. What is special about C/V:
     - It must acquire lock before modifying the variable. 
     - The signal (or broadcase) has no history, unlike semaphore::signal. So it must atomically release the lock and started waiting to avoid missing the signal.
+
+    To implement broadcast and the no history property, we must use a queue of semaphores to implement C/V. The queue is protected by the lock.
+
   - Two flavors:
     - Hoare: signal() immediately switches from caller to a waiting thread and guarantees the condition holds.
     - Mesa: signal() merely places a waiter on the ready queue and continue its own execution. The ready thread must recheck the condition when run.
@@ -202,3 +205,40 @@ The compiler might change the sequence of execution of your code. Threads may in
   - Detection and recovery: implemented in VMS, MySQL.
     - Detection: traverse resource allocation graph. But it may be expensive.
     - Recovery: abort all/one process, preempt resource (force release. Tricky to implement).
+
+## Virtual Memory
+
+- Goal
+  - Abstraction for programming
+  - Allocate scarce memory resources.
+
+- Issues with naive approach of allocating memory:
+  - Protection
+  - Transparency: a process doesn't require specific physical memory address but does often require large amounts of contiguous space
+  - Resource exhaustion: sum of all processes memories is often larger than physical memory
+- Solution:
+  - Protection between processes
+  - Give each process its own virtual address space. Process does not see the physical memory addresses. A Memory-Management Unit (MMU) translates and allocate them.
+  - This space is often larger than the available physical memory.
+
+- Implementation:
+  - For each process, records a base and a bound register for translation. Good performance, cheap space overhead but hard to grow or share memory.
+  - Segmentation: many bases and bounds (segments) in a table. Each virtual address is a segment number and offset concatenated together. Need translation (MMU hardware), not completely transparent (?), external (if use variable-sized segment) and internal fragmentation  (if use fixed-sized segment) waste space.
+  - Alternative to hardware MMU: language-level protection (Java), software fault isolation (Google Native Client).
+
+- Paging: fixed-sized segment. Usually 4K.
+  - Virtual address: 4B, 32 bits. Least significant 12 bits ($$ = \log_{2} 4K $$) are offset. Rest 20 sigificant bits are virtual page number.
+  - Page table: maps virtual page number to physical page number, along with flags.
+  - Page table entry: 12 bits (?) flags + 20 bits physical page number
+
+- x86 Pageing
+  - Enabled by control register %cr0. %cr3 points to a 4KB size page directory.
+  - Page directory: 1024 page directory entries (4KB / 4B page directory entry size).
+  - Page directory entry: Most significant 20 bits are base physical address of a page table. Rest are flags.
+  - Page table: 1024 page table entries. Each page table covers 4MB ($$ = 4K * 1024 $$) memory space.
+  - Page table entry: Most significant 20 bits are base physical address. Rest are flags.
+  - Virtual address: Most significant 10 bits are page directory number, middle 10 bits are virtual page number, least 12 bits are offset.
+
+- Good and bad:
+  - Easy to allocate, no external fragmentation, easy to swap out.
+  - Still has internal fragmentation, memory reference overhead (hardware cache), memory space overhead (page the page table)
