@@ -328,3 +328,24 @@ Choose which page to evict.
 - Slab allocation: useful when allocating many instances of same struct. A slab is multiple pages of contiguous physical memory. A cache is multiple slabs and only for one kind of object. Then we can use bitmap to manage and avoid internal fragmentation. Used in FreeBSD and Linux, implemented on top of buddy page allocator.
 - Simple, Fast Segregated Free Lists. TCMalloc. Use lists and tree to record free block of different sizes. Fast small alloc without size tag. But might waste space when keeping the data structure.
 - Inside `malloc()` move heap (program break) up by some size using `sbrk()`. But it is tricky to return memory to the system because we might not be freeing the last object. In reality we use `mmap()` and `munmap()`.
+
+## I/O and Disks
+
+- I/O device interfaces
+  - Port: The usual connection point.
+  - Bus: PCI/PCIe, expansion bus for slower devices.
+  - Controller: electronics that operate port, bus or directly on devices.
+- Control:
+  - I/O instructions: `in` and `out` instructions on x86. Read and write device interface registers.
+  - Memory-mapped I/O: device registers appear as memory locations
+- Status: Polling vs Interrupts: If the device is really fast (network card), polling is better.
+- Data: programmed I/O v.s. direct memory access (DMA). DMA avoids data copying to memory. CPU only handles control requests. Let the device read and write memory.
+- Use abstraction to handles different devices. E.g. File system > Block layer > Driver > Hard Drive
+- Hard disk
+  - Provide 512B (~ 4KB) atomically write.
+  - Seek (move head to the right track) cost most. Can be 4-10 ms. Rotate time can be 4ms if 7200 RPM. Transfer time is only 5us. So disk is good for sequential bad for random read.
+  - Disk scheduling
+    - First come first served
+    - Shortest seek time first: can cause starvation.
+    - Elevator (SCAN). SSTF but next seek must be in the same direction. Good locality and bounded waiting. But cylinders in the middle get better service and might miss locality SSTF could exploit. CSCAN: Only sweep in one direction. Very commonly used algorithm in Unix.
+- Flash memory: faster but limited number of overwrites (wear out) and limited durability.
