@@ -303,3 +303,28 @@ Choose which page to evict.
 - How to decide the memory space to each process?
   - Fixed space: replace its own pages. Might be too good/bad to some processes.
   - Variable space: global replacement. One process might ruin all others.
+
+## Dynamic Memory Allocation
+
+- Stack allocation and Heap allocation (our focus).
+- Problem with the naive approach: random allocation and free create fragmentation. Allocator cannot move regions already assigned to users.
+- Some thoughts:
+  - Fragmentation comes from different lifetime and sizes of requested block.
+  - Important placement choice: Split large block (causes internal fragmentation), coalescing small blocks (causes external fragmentation).
+- Best fit:
+  - Search freelist and find block closest in size to the request.
+  - Problem: sawdust. Small fragments every where. Not serious in practice.
+- First fit:
+  - LIFO: free object on front of list. Simple, good locality but high fragmentation.
+  - Address Sort: easy coalescing. Good locality. Used in practice. Roughly like sorting list by size. Operationally similar to best fit. Serious sawdust at the beginning.
+  - FIFO: similar to address sort according to statistics.
+- Worst fit: fight sawdust by find blocks to split that maximize leftover size. In real life seems to ensure that no large blocks around.
+- Next fit: use first fit and remember last position. Tends to break down entire list in real life.
+- Buddy systems: Round up allocations to power of 2 to make management faster. Used by Linux, FreeBSD.
+- Memory usage patterns
+  - Ramps
+  - Peaks: use Arena allocation. Allocate just by moving pointer and free together. Save size tag space (?).
+  - Plateaus
+- Slab allocation: useful when allocating many instances of same struct. A slab is multiple pages of contiguous physical memory. A cache is multiple slabs and only for one kind of object. Then we can use bitmap to manage and avoid internal fragmentation. Used in FreeBSD and Linux, implemented on top of buddy page allocator.
+- Simple, Fast Segregated Free Lists. TCMalloc. Use lists and tree to record free block of different sizes. Fast small alloc without size tag. But might waste space when keeping the data structure.
+- Inside `malloc()` move heap (program break) up by some size using `sbrk()`. But it is tricky to return memory to the system because we might not be freeing the last object. In reality we use `mmap()` and `munmap()`.
