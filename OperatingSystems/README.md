@@ -226,19 +226,60 @@ The compiler might change the sequence of execution of your code. Threads may in
   - Segmentation: many bases and bounds (segments) in a table. Each virtual address is a segment number and offset concatenated together. Need translation (MMU hardware), not completely transparent (?), external (if use variable-sized segment) and internal fragmentation  (if use fixed-sized segment) waste space.
   - Alternative to hardware MMU: language-level protection (Java), software fault isolation (Google Native Client).
 
-- Paging: fixed-sized segment. Usually 4K.
+- Paging: fixed-sized segment. Usually 4K, an empirical choice.
   - Virtual address: 4B, 32 bits. Least significant 12 bits ($$ = \log_{2} 4K $$) are offset. Rest 20 sigificant bits are virtual page number.
   - Page table: maps virtual page number to physical page number, along with flags.
   - Page table entry: 12 bits (?) flags + 20 bits physical page number
 
-- x86 Pageing
+- Good and bad:
+  - Easy to allocate, no external fragmentation, easy to swap out.
+  - Still has internal fragmentation, memory reference overhead (improve by hardware cache), memory space overhead (per process, 32 bits address space and 4K page need $$ 4B * 2^32 / 2^12 = 4MB $$ size page table. Can improve by paging the page table.)
+
+## Virtual Memory Optimization
+
+- How to reduce memory space overhead? Hierarchical page table. Some sub page tables don't need to be allocated. Use two-level x86 Paging as example:
   - Enabled by control register %cr0. %cr3 points to a 4KB size page directory.
-  - Page directory: 1024 page directory entries (4KB / 4B page directory entry size).
+  - Page directory: 1024 page directory entries ($$ 4KB / 4B $$ page directory entry size). $$ 1024 * 4B = 4KB$$ size page directory.
   - Page directory entry: Most significant 20 bits are base physical address of a page table. Rest are flags.
-  - Page table: 1024 page table entries. Each page table covers 4MB ($$ = 4K * 1024 $$) memory space.
+  - Page table: 1024 page table entries. Each page table covers 4MB ($$ = 4K * 1024 $$) memory space. Each page table is $$ 1024 * 4B = 4KB$$ in size.
   - Page table entry: Most significant 20 bits are base physical address. Rest are flags.
   - Virtual address: Most significant 10 bits are page directory number, middle 10 bits are virtual page number, least 12 bits are offset.
 
-- Good and bad:
-  - Easy to allocate, no external fragmentation, easy to swap out.
-  - Still has internal fragmentation, memory reference overhead (hardware cache), memory space overhead (page the page table)
+  Though we might use $$4KB + 4KB * 1024$$ for this two level page table (4KB larger than previous approach), most of the secondary page tables are not allocated.
+
+  Also we are paging the page table, we won't page the outer page table to stop recursion (called wiring). Also we need special code when paging the OS address space.
+
+- How to reduce memory reference overhead? Translation lookaside buffer (TLB, a hardware cache). Managed by MMU. Caches virtual page number to page table entry value (to include flags).
+  - Loaded either by hardware (x86 MMU) or software (MIPS, Alpha, Sparc, PowerPC OS)
+  - OS ensures consistency (invalidates if protection bit changes, context switches). (Usually hardware) Implements eviction policy like Last-Not-Used.
+
+- Swap: paging in and out from disk. Designs: Page eviction if memory is full v.s. demand paging (all pages are default in disk until accessed).
+
+- Page faults: when a process accesses a page that was evicted.
+  1. When the OS evicts a page, it sets the PTE as invalid and stores the location
+  of the page in the swap file in the PTE
+  2. When a process accesses the page, the invalid PTE causes a trap (page fault)
+  3. The trap will run the OS page fault handler
+  4. Handler uses the invalid PTE to locate page in swap file
+  5. Reads page into a physical frame, updates PTE to point to it
+  6. Restarts process
+  
+- Summary cases:
+  1. Read from TLB
+  2. TLB misses. Load from page table by MMU or OS. Might be recursive if the page table is paged.
+  3. TLB misses. If the page is invalid, page is not in physical memory, protection fault (read/write operation not permitted), causes a page fault.
+    - Page is invalid, protection fault. Sends segmentation fault to process.
+    - Page is not in physical memory. Sends page fault to OS for loading.
+
+- Sharing: PTEs points to a same physical frame.
+  - Need to update all PTEs when evicting a frame.
+  - Pointer inside the shared region usually should not point to address outside the region.
+  - Even if the pointer only points to address inside the region, if we don't force virtual addresses to shared region exactly the same, we would have a problem. To conclude:
+    - Same virtual addresses: Might have conflict, but pointers inside the region are valid.
+    - Different virtual addresses: Flexible, but pointers inside the region are invalid.
+
+- Copy on write: When `fork()`, child virtual address space points to read-only parent pages. Parent and child only copies the page when there is a write (which causes a protection fault).
+
+- Memory mapped file: `mmap()` in Unix. Binds a file to a virtual memory region. Load into memory when a file segment is accessed. Writes back when a page is evicted.
+  - Good: uniform access for files and memory, less copying (page is never read or written if it is not accessed or dirty).
+  - Bad: Less control over data movement, does not generalize to streamed I/O.
