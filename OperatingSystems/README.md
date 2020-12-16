@@ -233,7 +233,7 @@ The compiler might change the sequence of execution of your code. Threads may in
 
 - Good and bad:
   - Easy to allocate, no external fragmentation, easy to swap out.
-  - Still has internal fragmentation, memory reference overhead (improve by hardware cache), memory space overhead (per process, 32 bits address space and 4K page need $$ 4B * 2^32 / 2^12 = 4MB $$ size page table. Can improve by paging the page table.)
+  - Still has internal fragmentation, memory reference overhead (improve by hardware cache), memory space overhead (per process, 32 bits address space and 4K page need $$ 4B * 2^{32} / 2^{12} = 4MB $$ size page table. Can improve by paging the page table.)
 
 ## Virtual Memory Optimization
 
@@ -256,6 +256,7 @@ The compiler might change the sequence of execution of your code. Threads may in
 - Swap: paging in and out from disk. Designs: Page eviction if memory is full v.s. demand paging (all pages are default in disk until accessed).
 
 - Page faults: when a process accesses a page that was evicted.
+
   1. When the OS evicts a page, it sets the PTE as invalid and stores the location
   of the page in the swap file in the PTE
   2. When a process accesses the page, the invalid PTE causes a trap (page fault)
@@ -265,6 +266,7 @@ The compiler might change the sequence of execution of your code. Threads may in
   6. Restarts process
   
 - Summary cases:
+
   1. Read from TLB
   2. TLB misses. Load from page table by MMU or OS. Might be recursive if the page table is paged.
   3. TLB misses. If the page is invalid, page is not in physical memory, protection fault (read/write operation not permitted), causes a page fault.
@@ -283,3 +285,21 @@ The compiler might change the sequence of execution of your code. Threads may in
 - Memory mapped file: `mmap()` in Unix. Binds a file to a virtual memory region. Load into memory when a file segment is accessed. Writes back when a page is evicted.
   - Good: uniform access for files and memory, less copying (page is never read or written if it is not accessed or dirty).
   - Bad: Less control over data movement, does not generalize to streamed I/O.
+
+## Page Replacement
+
+Choose which page to evict.
+
+- Some thoughs:
+  - Locality: temporal locality (recently referencied pages are more likely to be referenced again), spatial locality.
+  - 80/20 rule. 20% "hot" memory.
+- FIFO
+  - Belady's Anomaly: more physical memory does not always mean fewer faults.
+- Optimal algorithm: Belady's algorithm. Evict a page that is "never" touched again. Used as a yardstick.
+- LRU
+  - Straw Man LRU: keep a timer value on PTEs. Large overhead. Using a doubly-linked list is also expensive.
+  - Clock algorithm
+  - Use a second clock hand for large memory
+- How to decide the memory space to each process?
+  - Fixed space: replace its own pages. Might be too good/bad to some processes.
+  - Variable space: global replacement. One process might ruin all others.
