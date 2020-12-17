@@ -349,3 +349,40 @@ Choose which page to evict.
     - Shortest seek time first: can cause starvation.
     - Elevator (SCAN). SSTF but next seek must be in the same direction. Good locality and bounded waiting. But cylinders in the middle get better service and might miss locality SSTF could exploit. CSCAN: Only sweep in one direction. Very commonly used algorithm in Unix.
 - Flash memory: faster but limited number of overwrites (wear out) and limited durability.
+
+## File Systems
+
+- Main tasks
+  - Don’t go away (ever)
+  - Associate bytes with name (files)
+  - Associate names with each other (directories)
+  - Can implement file systems on disk, over network, in memory, in non-volatile ram (NVRAM), on tape, w/ paper.
+- Trends and observation
+  - Disk bandwidth, cost/bit and also CPU/memory improves exponentially
+  - Seek time and rotational delay is the bottleneck
+  - Major goal of FS design: operations have as few disk accesses as possible and minimal space overhead of content (file metadata)
+  - Content in a file, files in a directory tend to be used together
+- File: named bytes on disk. Has properties (flags, timestamps) and type (encoded in the name or contents).
+  - Compare FS to VM: Both are doing mapping, CPU time not a big deal in FS but need to limit disk accesses. 
+  - File access methods: sequential, random, indexed (file is like a structured kv), record (file is like an array)
+  - Index node or inode: The structure that tracks a file's sectors.
+- Sector allocation scheme
+  - Contiguous allocation: inode records location and size. Like VM segmentation this causes external fragmentation.
+  - Linked files: inode records the location of first block. Each block points to the next block in the file. This is in fact random accesses on disk. Bad for both reading the whole file and random access within the file.
+  - DOS FS: Put the links (including starting block position and end of file) in fixed-size file allocation table rather than content blocks. Easier for caching.
+  - Indexed files: Each file has an array holding pointers to all the content blocks. Good for random access now. But this array itself may need large chunk of contiguous space. Same problem as the single layer page table in VM.
+  - Multi-level indexed files (Unix inodes): First 12 pointers in the array are direct blocks pointing to the content block. Then single, double, triple indirect pointers. Plus some file metadata.
+- Inode array: location and size fixed when disk initialized. The index of an inode in this array is called i-number.
+- Directory: logical locations of the files. Directory itself is a file. Content is the file names and their i-numbers.
+  - `/`, `.`, `..` provided by the FS.
+  - `~`, `*` provided by the shell program.
+- Hard link and soft link
+  - Hard link, synonym: `ln`. File not removed until all synonyms are removed. Inode of the file keeps a reference count.
+  - Soft link, symbolic link: `ln -s`. File may even not exist at all. Reference count unchanged.
+- File Buffer Cache: system wide blocks r/w cache. Compete with VM for memory. Also needs replacement algorithms.
+  - Write cache: periodically flush to disk or forced to flush by `fsync`.
+  - Read cache: often read ahead to exploit locality
+- File sharing: concurrency control and protection
+  - Access control list: for each file, maintain a list of users and their permitted actions. Easier to manage, but can be bad for performance if there are too many users.
+  - Capabilities: The permitted actions on each file of a user.
+  - In Unix, ACL is used on files, capabilities are used in file descriptors.
