@@ -397,3 +397,11 @@ Choose which page to evict.
 - Log-structured File System: Writes are append-only. Optimize for smaller and random writes. Also not agnostic to disk geometry.
   - How to read latest: use inode map. inode number -> latest inode location. inode map are segmented.
   - Disk cleaning
+
+## File System Crash Consistency
+
+- Bitmap, inode, data blocks. Different writes before the crash leaves different inconsistent states. Some are not fixable. Some can be fixed by tools like file system checker (FSCK).
+- Journaling
+  - Physical journaling: write full transaction to journal space.
+  - Logical journaling: write logical record of the operation
+  - Different types: Data journaling, Metadata journaling, ordered mode
