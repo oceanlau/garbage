@@ -368,7 +368,7 @@ Choose which page to evict.
   - Index node or inode: The structure that tracks a file's sectors.
 - Sector allocation scheme
   - Contiguous allocation: inode records location and size. Like VM segmentation this causes external fragmentation.
-  - Linked files: inode records the location of first block. Each block points to the next block in the file. This is in fact random accesses on disk. Bad for both reading the whole file and random access within the file.
+  - Linked files: inode records the location of first block. A free list records empty blocks. Each content block points to the next block in the file. This is in fact random accesses on disk. Bad for both reading the whole file and random access within the file.
   - DOS FS: Put the links (including starting block position and end of file) in fixed-size file allocation table rather than content blocks. Easier for caching.
   - Indexed files: Each file has an array holding pointers to all the content blocks. Good for random access now. But this array itself may need large chunk of contiguous space. Same problem as the single layer page table in VM.
   - Multi-level indexed files (Unix inodes): First 12 pointers in the array are direct blocks pointing to the content block. Then single, double, triple indirect pointers. Plus some file metadata.
@@ -386,3 +386,14 @@ Choose which page to evict.
   - Access control list: for each file, maintain a list of users and their permitted actions. Easier to manage, but can be bad for performance if there are too many users.
   - Capabilities: The permitted actions on each file of a user.
   - In Unix, ACL is used on files, capabilities are used in file descriptors.
+
+## Advanced File Systems
+
+- Original Unix FS only gets 2% of disk maximum transfer rate when reading from disk. Because the blocks are too small (and large number of the indexes. Cause lots of disk access), free list is unorganized and often fragmented, inodes and content blocks are far away, the locality of files inside a directory is not utilized.
+- Fast File System for BSD Unix:
+  - Larger block size: tradeoff between bandwidth and fragmentation. Improve by split block like malloc.
+  - Free list: use bitmap
+  - Locality: try to put file inode and content blocks, files inside the same directory in the same cylinder group. Each group now works as a mini FS.
+- Log-structured File System: Writes are append-only. Optimize for smaller and random writes. Also not agnostic to disk geometry.
+  - How to read latest: use inode map. inode number -> latest inode location. inode map are segmented.
+  - Disk cleaning
