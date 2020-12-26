@@ -6,6 +6,7 @@
 
 * [PHP (Laravel)](PHP/Laravel/README.md)
 * [Python](Python/README.md)
+* [Fluent Python](Python/fluent_python.md)
 
 ## Topics
 
